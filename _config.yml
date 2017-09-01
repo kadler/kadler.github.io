@@ -18,14 +18,51 @@ description: > # this means to ignore newlines until "baseurl:"
   Ramblings of an Open Source dude working on IBM i.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://kadler.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+author: Kevin Adler
 twitter_username: kadler_ibm
 github_username:  kadler
+github_source: kadler.github.io
 
-# Build settings
+# Pagination settings
+paginate: 5                           # number of posts to show per page
+paginate_path: "/posts/page:num/"  # link scheme for articles, should be letf as is
+
+# Navigation settings
+# Used to define the navigation menu items
+# > Title is the tile of the navigation item, url the url and desc is the tooltip
+navigation:
+  - title: Posts
+    url: /posts/
+    desc: Stuffs I write about
+  #- title: Projects
+    #url: /projects/
+    #desc: Stuffs I like to do
+  - title: About
+    url: /about/
+    desc: Learn about me
+
+# Used by Jekyll to recognize what is a post and what is a page
+defaults:
+  -
+    scope:
+      path: ''
+      type: posts
+    values:
+      layout: post
+
+# Markdown parser settings
 markdown: kramdown
-theme: minima
-gems:
-  - jekyll-feed
+# Build settings
+include:
+  - _pages                  # all your pages can be put inside pages (except articles)
 exclude:
+  - README.md
+  - vendor
   - Gemfile
   - Gemfile.lock
+
+github: [metadata]
+#theme: minima
+gems:
+  - jekyll-feed
+  - jekyll-paginate
