@@ -14,7 +14,7 @@ When you execute a program on Unix systems, this flows through a function called
 - the loader in the kernel (SLIC)
 - the linker (ld)
 
-The loaderwill load the program objects in to memory, while the linker will find the shared libraries that the program depends on and has them loaded as well as a bunch of other things that we don't care about for this. In AIX/PASE there's also the Runtime Dynamic Linker, but we can ignore that for now as well.
+The loader will load the program objects in to memory, while the linker will find the shared libraries that the program depends on and has them loaded as well as a bunch of other things that we don't care about for this. In AIX/PASE there's also the Runtime Dynamic Linker, but we can ignore that for now as well.
 
 ## Drafting our MVP
 So to start, let's look at a "simple" example. This is a program which doesn't link to any shared libraries. One might call it an "MVP": **M**inimum **V**iable **P**rogram. You might think this basic program looks like this:
