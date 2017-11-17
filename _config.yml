@@ -52,6 +52,8 @@ defaults:
 
 # Markdown parser settings
 markdown: kramdown
+highlighter: rouge
+
 # Build settings
 include:
   - _pages                  # all your pages can be put inside pages (except articles)

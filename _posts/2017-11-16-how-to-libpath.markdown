@@ -7,7 +7,7 @@ desc:   Find out how the search path gets created in an AIX/PASE binary
 
 In my last blog I showed how the `LIBPATH` gets used and also how the runtime search path in the binary gets used. `LIBPATH` is obviously set as an environment variable, but how does that runtime search path get generated? Let's explore!
 
-```
+```c
 #include <stdio.h>
 
 int main(int argc, char** argv)
@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 
 Above is a pretty standard "Hello World" program in C. Let's compile it and look at its search path
 
-```
+```bash
 $ gcc -o hello hello.c
 
 $ dump -H hello
@@ -58,7 +58,7 @@ If we canonicalize the relative paths, they then become:
 ## "It's a bypass! Gotta build bypasses!"
 Let's bypass GCC and link the binary ourselves:
 
-```
+```bash
 $ gcc -c -o hello.o hello.c
 
 $ ld -o hello hello.o /QOpenSys/usr/lib/crt0.o -lc
@@ -66,7 +66,7 @@ $ ld -o hello hello.o /QOpenSys/usr/lib/crt0.o -lc
 
 We have to link in `crt0.o` as we define a `main()` function, but the default entry point for a program is `__start` on AIX, so there's a special glue module that does the necessary setup from the `__start` entry point to call `main()`. We also need to link with `libc`, to get access to `printf`. Let's look at the `dump` output now:
 
-```
+```bash
 $ dump -H hello
 
 hello:
@@ -88,7 +88,7 @@ INDEX  PATH                          BASE                MEMBER
 
 See now it has only added the default search path, since we did not pass any additional `-L` arguments to `ld`. Let's see what happens when we add a path:
 
-```
+```bash
 $ ld -o hello hello.o /QOpenSys/usr/lib/crt0.o -lc -L/this/path/is/bad/and/you/should/feel/bad
 
 $ dump -H hello
@@ -112,7 +112,7 @@ INDEX  PATH                          BASE                MEMBER
 
 Boom! We added a path to the runtime search path. Sometimes you really don't want this, though. Let's say you're compiling a library and an application. The library is called `libfoo.a` and the binary is called `foo`. While building, you first build `libfoo.a` in to the current directory, then you go to build `foo`. Since `foo` needs to link to `libfoo`, you need to tell `ld` where to find it during build time. You might do something like this:
 
-```
+```bash
 $ ld -o foo foo.o /QOpenSys/usr/lib/crt0.o -L. -lfoo -lc
 
 $ dump -H foo
@@ -139,7 +139,7 @@ Now when you install the application, you copy `foo` in to `/usr/bin` and `libfo
 
 So lets say we don't want to include these paths in our finished binary? How do we get rid of them. Well, `ld` has an option `-bnolibpath` that takes care of that:
 
-```
+```bash
 $ ld -o foo foo.o /QOpenSys/usr/lib/crt0.o -L. -lfoo -lc
 
 $ dump -H foo
@@ -164,7 +164,7 @@ INDEX  PATH                          BASE                MEMBER
 
 One thing to know about the -bnolibpath option is that it isn't hard-coded to `/usr/lib:/lib`, but will use the value of the `LIBPATH` environment variable if it is set:
 
-```
+```bash
 $ LIBPATH=/QOpenSys/usr/lib ld -o foo foo.o /QOpenSys/usr/lib/crt0.o -L. -lfoo -lc -bnolibpath
 
 $ dump -H foo
@@ -189,7 +189,7 @@ INDEX  PATH                          BASE                MEMBER
 
 Or you can use the `-blibpath` option to explicitly set it:
 
-```
+```bash
 $ ld -o foo foo.o /QOpenSys/usr/lib/crt0.o -L. -lfoo -lc -blibpath:/opt/mypath:/QOpenSys/usr/lib
 
 $ dump -H foo
@@ -214,7 +214,7 @@ INDEX  PATH                          BASE                MEMBER
 
 There's one other thing to know: you can also hard-code the path to a specific library so that it will not use the search path at all. You do this by passing the full path to the library as an input to `ld` instead of having `ld` find it via the `-l` option:
 
-```
+```bash
 $ ld -o hello hello.o /QOpenSys/usr/lib/crt0.o /QOpenSys/usr/lib/libc.a
 
 $ dump -H hello
@@ -239,7 +239,7 @@ INDEX  PATH                          BASE                MEMBER
 You can see above that the `PATH` field is set for index 2, so now `libc.a` will always be loaded from `/QOpenSys/usr/lib/libc.a` and will ignore the runtime search path as well as the `LIBPATH` environment variable. If that's not what you want, you can tell the linker to ignore qualified library paths given on the command line and always search for these at runtime with the `-bnoipath` option:
 
 
-```
+```bash
 $ ld -o hello hello.o /QOpenSys/usr/lib/crt0.o /QOpenSys/usr/lib/libc.a -bnoipath
 
 $ dump -H hello
@@ -263,7 +263,7 @@ INDEX  PATH                          BASE                MEMBER
 
 Ok, so we've learned about the `-bnolibpath`, `-blibpath`, and `-bnoipath` `ld` options, but most of the time we're not going to be calling `ld` directly, but instead we let our compiler handle calling the linker. How do we tell `gcc` to customize these options? Well, `gcc` has a way to pass linker flags to `ld` via the `-Wl,` option. Just prefix the linker option with `-Wl,` and pass it to `gcc`:
 
-```
+```bash
 $ gcc -o hello hello.c -Wl,-bnolibpath
 
 $ dump -H hello
