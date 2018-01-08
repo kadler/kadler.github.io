@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: single
 title:  "First Post"
 date:   2016-12-23 15:23:24 -0600
 desc:   First post... 

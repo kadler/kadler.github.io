@@ -18,41 +18,76 @@ description: > # this means to ignore newlines until "baseurl:"
   Ramblings of an Open Source dude working on IBM i.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://kadler.github.io" # the base hostname & protocol for your site, e.g. http://example.com
-author: Kevin Adler
-twitter_username: kadler_ibm
-github_username:  kadler
+
 github_source: kadler.github.io
 
+# Site Author
+author:
+  name             : "Kevin Adler"
+  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  bio              : "Open Source Dude"
+  location         : "Rochester, MN"
+  email            :
+  uri              :
+  home             : # null (default), "absolute or relative url to link to author home"
+  bitbucket        : "kadler"
+  codepen          :
+  dribbble         :
+  flickr           :
+  facebook         :
+  foursquare       :
+  github           : "kadler"
+  gitlab           :
+  google_plus      :
+  keybase          :
+  instagram        :
+  lastfm           :
+  linkedin         : "kevin-adler-19038a15" # "john-doe-12345678" (the last part of your profile url, e.g. https://www.linkedin.com/in/john-doe-12345678)
+  pinterest        :
+  soundcloud       :
+  stackoverflow    : # "123456/username" (the last part of your profile url, e.g. https://stackoverflow.com/users/123456/username)
+  steam            : # "steamId" (the last part of your profile url, e.g. https://steamcommunity.com/id/steamId/)
+  tumblr           :
+  twitter          : "kadler_ibm"
+  vine             :
+  weibo            :
+  xing             :
+  youtube          : # "https://youtube.com/c/MichaelRoseDesign"
+
+
+# permalink: /:categories/:title/
 # Pagination settings
 paginate: 5                           # number of posts to show per page
-paginate_path: "/posts/page:num/"  # link scheme for articles, should be letf as is
+# paginate_path: "/page:num/"  # link scheme for articles, should be letf as is
 
-# Navigation settings
-# Used to define the navigation menu items
-# > Title is the tile of the navigation item, url the url and desc is the tooltip
-navigation:
-  - title: Posts
-    url: /posts/
-    desc: Stuffs I write about
-  #- title: Projects
-    #url: /projects/
-    #desc: Stuffs I like to do
-  - title: About
-    url: /about/
-    desc: Learn about me
+category_archive:
+  type: liquid
+  path: /categories/
 
 # Used by Jekyll to recognize what is a post and what is a page
 defaults:
   -
     scope:
       path: ''
+      type: pages
+    values:
+      layout: single
+      author_profile: true 
+  # _posts
+  - scope:
+      path: ""
       type: posts
     values:
-      layout: post
+      layout: single
+      author_profile: true
+      read_time: true
+      related: true
 
 # Markdown parser settings
 markdown: kramdown
 highlighter: rouge
+
+timezone: America/Chicago
 
 # Build settings
 include:
@@ -64,7 +99,11 @@ exclude:
   - Gemfile.lock
 
 github: [metadata]
-#theme: minima
-gems:
+remote_theme: mmistakes/minimal-mistakes
+
+minimal_mistakes_skin: "dark"
+
+plugins:
   - jekyll-feed
   - jekyll-paginate
+  - jekyll-redirect-from
