@@ -56,6 +56,8 @@ author:
 
 
 # permalink: /:categories/:title/
+permalink: /:year/:month/:day/:title.html
+
 # Pagination settings
 paginate: 5                           # number of posts to show per page
 # paginate_path: "/page:num/"  # link scheme for articles, should be letf as is
