@@ -95,6 +95,7 @@ timezone: America/Chicago
 include:
   - _pages                  # all your pages can be put inside pages (except articles)
 exclude:
+  - _drafts
   - README.md
   - vendor
   - Gemfile
