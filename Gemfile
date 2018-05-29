@@ -15,7 +15,7 @@ group :jekyll_plugins do
    gem "github-pages"
    gem "jekyll-feed", "~> 0.6"
    gem "jekyll-paginate"
-   #gem "jekyll-compose"
+   gem "jekyll-compose"
    gem "jekyll-remote-theme"
    gem 'jekyll-redirect-from'
 end
