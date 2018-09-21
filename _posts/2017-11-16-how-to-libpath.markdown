@@ -141,7 +141,7 @@ Now when you install the application, you copy `foo` in to `/usr/bin` and `libfo
 So lets say we don't want to include these paths in our finished binary? How do we get rid of them. Well, `ld` has an option `-bnolibpath` that takes care of that:
 
 ```bash
-$ ld -o foo foo.o /QOpenSys/usr/lib/crt0.o -L. -lfoo -lc
+$ ld -o foo foo.o /QOpenSys/usr/lib/crt0.o -bnolibpath -L. -lfoo -lc
 
 $ dump -H foo
 
@@ -166,7 +166,7 @@ INDEX  PATH                          BASE                MEMBER
 One thing to know about the -bnolibpath option is that it isn't hard-coded to `/usr/lib:/lib`, but will use the value of the `LIBPATH` environment variable if it is set:
 
 ```bash
-$ LIBPATH=/QOpenSys/usr/lib ld -o foo foo.o /QOpenSys/usr/lib/crt0.o -L. -lfoo -lc -bnolibpath
+$ LIBPATH=/QOpenSys/usr/lib ld -o foo foo.o /QOpenSys/usr/lib/crt0.o -bnolibpath -L. -lfoo -lc
 
 $ dump -H foo
 
@@ -241,7 +241,7 @@ You can see above that the `PATH` field is set for index 2, so now `libc.a` will
 
 
 ```bash
-$ ld -o hello hello.o /QOpenSys/usr/lib/crt0.o /QOpenSys/usr/lib/libc.a -bnoipath
+$ ld -o hello hello.o /QOpenSys/usr/lib/crt0.o -bnoipath /QOpenSys/usr/lib/libc.a
 
 $ dump -H hello
 
