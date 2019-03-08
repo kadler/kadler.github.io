@@ -30,15 +30,15 @@ hello:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x0000000b       0x0000002b       0x000000d3       
+0x00000001       0x0000000b       0x0000002b       0x000000d3
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x0000032c       0x00000039       0x000003ff       
+0x00000002       0x0000032c       0x00000039       0x000003ff
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      /QOpenSys/opt/freeware/bin/../lib/gcc/powerpc-ibm-aix7.1.0.0/4.8.3:/QOpenSys/opt/freeware/bin/../lib/gcc:/QOpenSys/opt/freeware/bin/../lib/gcc/powerpc-ibm-aix7.1.0.0/4.8.3/../../..:/usr/lib:/lib                                         
+INDEX  PATH                          BASE                MEMBER
+0      /QOpenSys/opt/freeware/bin/../lib/gcc/powerpc-ibm-aix7.1.0.0/4.8.3:/QOpenSys/opt/freeware/bin/../lib/gcc:/QOpenSys/opt/freeware/bin/../lib/gcc/powerpc-ibm-aix7.1.0.0/4.8.3/../../..:/usr/lib:/lib
 1                                    libc.a              shr.o
 ```
 
@@ -75,15 +75,15 @@ hello:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x00000008       0x00000010       0x0000001e       
+0x00000001       0x00000008       0x00000010       0x0000001e
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x000001a0       0x00000039       0x000001be       
+0x00000002       0x000001a0       0x00000039       0x000001be
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      /usr/lib:/lib                                                         
+INDEX  PATH                          BASE                MEMBER
+0      /usr/lib:/lib
 1                                    libc.a              shr.o
 ```
 
@@ -99,15 +99,15 @@ hello:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x00000008       0x00000010       0x00000048       
+0x00000001       0x00000008       0x00000010       0x00000048
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x000001a0       0x00000039       0x000001e8       
+0x00000002       0x000001a0       0x00000039       0x000001e8
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      /this/path/is/bad/and/you/should/feel/bad:/usr/lib:/lib                                         
+INDEX  PATH                          BASE                MEMBER
+0      /this/path/is/bad/and/you/should/feel/bad:/usr/lib:/lib
 1                                    libc.a              shr.o
 ```
 
@@ -123,15 +123,15 @@ foo:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x00000008       0x00000010       0x00000048       
+0x00000001       0x00000008       0x00000010       0x00000048
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x000001a0       0x00000039       0x000001e8       
+0x00000002       0x000001a0       0x00000039       0x000001e8
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      .:/usr/lib:/lib                                         
+INDEX  PATH                          BASE                MEMBER
+0      .:/usr/lib:/lib
 1                                    libc.a              shr.o
 2                                    libfoo.a            shr.o
 ```
@@ -150,15 +150,15 @@ foo:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x00000008       0x00000010       0x00000048       
+0x00000001       0x00000008       0x00000010       0x00000048
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x000001a0       0x00000039       0x000001e8       
+0x00000002       0x000001a0       0x00000039       0x000001e8
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      /usr/lib:/lib                                           
+INDEX  PATH                          BASE                MEMBER
+0      /usr/lib:/lib
 1                                    libc.a              shr.o
 2                                    libfoo.a            shr.o
 ```
@@ -175,15 +175,15 @@ foo:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x00000008       0x00000010       0x00000048       
+0x00000001       0x00000008       0x00000010       0x00000048
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x000001a0       0x00000039       0x000001e8       
+0x00000002       0x000001a0       0x00000039       0x000001e8
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      /QOpenSys/usr/lib                                       
+INDEX  PATH                          BASE                MEMBER
+0      /QOpenSys/usr/lib
 1                                    libc.a              shr.o
 2                                    libfoo.a            shr.o
 ```
@@ -200,15 +200,15 @@ foo:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x00000008       0x00000010       0x00000048       
+0x00000001       0x00000008       0x00000010       0x00000048
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x000001a0       0x00000039       0x000001e8       
+0x00000002       0x000001a0       0x00000039       0x000001e8
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      /opt/mypath:/QOpenSys/usr/lib                           
+INDEX  PATH                          BASE                MEMBER
+0      /opt/mypath:/QOpenSys/usr/lib
 1                                    libc.a              shr.o
 2                                    libfoo.a            shr.o
 ```
@@ -225,15 +225,15 @@ hello:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x00000008       0x00000010       0x00000048       
+0x00000001       0x00000008       0x00000010       0x00000048
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x000001a0       0x00000039       0x000001e8       
+0x00000002       0x000001a0       0x00000039       0x000001e8
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      /usr/lib:/lib                                                         
+INDEX  PATH                          BASE                MEMBER
+0      /usr/lib:/lib
 1      /QOpenSys/usr/lib             libc.a              shr.o
 ```
 
@@ -250,15 +250,15 @@ hello:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x00000008       0x00000010       0x00000048       
+0x00000001       0x00000008       0x00000010       0x00000048
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x000001a0       0x00000039       0x000001e8       
+0x00000002       0x000001a0       0x00000039       0x000001e8
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      /usr/lib:/lib                                                         
+INDEX  PATH                          BASE                MEMBER
+0      /usr/lib:/lib
 1                                    libc.a              shr.o
 ```
 
@@ -274,15 +274,15 @@ hello:
                         ***Loader Section***
                       Loader Header Information
 VERSION#         #SYMtableENT     #RELOCent        LENidSTR
-0x00000001       0x00000008       0x00000010       0x00000048       
+0x00000001       0x00000008       0x00000010       0x00000048
 
 #IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
-0x00000002       0x000001a0       0x00000039       0x000001e8       
+0x00000002       0x000001a0       0x00000039       0x000001e8
 
 
                         ***Import File Strings***
-INDEX  PATH                          BASE                MEMBER              
-0      /usr/lib:/lib                                                         
+INDEX  PATH                          BASE                MEMBER
+0      /usr/lib:/lib
 1                                    libc.a              shr.o
 ```
 
