@@ -102,7 +102,7 @@ exclude:
   - Gemfile.lock
 
 github: [metadata]
-remote_theme: mmistakes/minimal-mistakes
+remote_theme: "mmistakes/minimal-mistakes@4.15.2"
 
 minimal_mistakes_skin: "dark"
 
@@ -110,3 +110,4 @@ plugins:
   - jekyll-feed
   - jekyll-paginate
   - jekyll-redirect-from
+  - jekyll-include-cache
