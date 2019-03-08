@@ -111,3 +111,4 @@ plugins:
   - jekyll-paginate
   - jekyll-redirect-from
   - jekyll-include-cache
+  - jemoji

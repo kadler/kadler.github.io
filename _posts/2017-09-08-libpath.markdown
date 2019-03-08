@@ -56,7 +56,7 @@ This is practically the smallest program you can make. It's so small that some m
 Illegal instruction (core dumped)
 ```
 
-However, it does load and execute so it's definitely a program... Just not a very good one! 😉
+However, it does load and execute so it's definitely a program... Just not a very good one! :wink:
 
 ## Dumping the MVP
 
