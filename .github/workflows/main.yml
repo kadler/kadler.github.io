@@ -18,6 +18,8 @@ jobs:
       - name: Build the site
         run: bundle exec jekyll build
       - name: Deploy to GitHub Pages
+        env: 
+           GH_PAGES_TOKEN: ${{ secrets. GH_PAGES_TOKEN }}
         run: |
           cd _site
           git init
