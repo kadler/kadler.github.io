@@ -1,6 +1,9 @@
 name: Jekyll Deploy
 
-on: [push]
+on:
+  push:
+    branches:
+      - source
 
 jobs: 
   build_and_deploy:
@@ -18,7 +21,7 @@ jobs:
       - name: Build the site
         run: bundle exec jekyll build
       - name: Deploy to GitHub Pages
-        env: 
+        env:
            GH_PAGES_TOKEN: ${{ secrets. GH_PAGES_TOKEN }}
         run: |
           cd _site
@@ -27,4 +30,4 @@ jobs:
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git add .
           git commit -m 'Action build'
-          git push --force "https://x-access-token:${GH_PAGES_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" master:gh-pages
+          git push --force "https://x-access-token:${GH_PAGES_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" master:master
