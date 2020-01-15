@@ -3,6 +3,8 @@ main:
     url: /posts/
   - title: "Categories"
     url: /categories/
+  - title: "Archive"
+    url: /year-archive/
   # - title: "Pages"
   #   url: /pages/
   - title: "About"
