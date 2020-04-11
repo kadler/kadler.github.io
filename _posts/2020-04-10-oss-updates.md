@@ -48,7 +48,7 @@ As we have now migrated to all packages being built for 7.2+, the bootstrap was 
 
 Finally, the bootstrap install now includes `ca-certificates`/`ca-certificates-mozilla`, `yum-utils`, and `coreutils-gnu` packages by default.
 
-### ca-certicates
+### ca-certificates
 
 `ca-certificates` is a framework for managing various CA certificates in a central location. You can have multiple providers of certificates as well as multiple consumers of these certificates in different formats. Out of the box, `ca-certificates` knows how to generate trust stores for OpenSSL as well as Java Keystore (jks) files, but you can also add your own scripts to `/QOpenSys/etc/ca-certificates/update.d` to support different formats or trust store locations. Add your own internal or business partner's CA certificates in PEM or DER format to `/QOpenSys/etc/pki/trust/anchors` and run `update-ca-certificates` and all the configured trust stores will be updated for you.
 
