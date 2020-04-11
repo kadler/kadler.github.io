@@ -11,7 +11,7 @@ Well, I hadn't planned to take this long to get out another blog, but the world 
 ## Package Updates
 
 - nodejs (8) was updated to [8.17](https://nodejs.org/en/blog/release/v8.17.0/).
-- nodejs10 was updated to [10.19](https://nodejs.org/en/blog/release/v10.19.0/)
+- nodejs10 was updated to [10.18](https://nodejs.org/en/blog/release/v10.18.0/)
 - nodejs12 was updated to [12.14](https://nodejs.org/en/blog/release/v12.14.0/)
 
 NOTE: Node.js 8.17 is the last update for the 8.x version.
