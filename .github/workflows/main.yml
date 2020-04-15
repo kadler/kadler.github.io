@@ -5,7 +5,7 @@ on:
     branches:
       - source
   schedule:
-    - cron: "0 0 * * *"
+    - cron: "0 18 * * *"
 
 jobs: 
   build_and_deploy:
@@ -29,6 +29,8 @@ jobs:
           bundle install --jobs 4 --retry 3
       - name: Build the site
         run: bundle exec jekyll build
+        env:
+          TZ: UTC
       - name: Deploy to GitHub Pages
         env:
            GH_PAGES_TOKEN: ${{ secrets. GH_PAGES_TOKEN }}
