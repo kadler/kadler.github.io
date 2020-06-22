@@ -74,7 +74,7 @@ Python 2 went out of support at the end of 2019 and 2.7.18 was really only a cer
 - rpm was updated to [4.13.1](https://rpm.org/wiki/Releases/4.13.1) fixing [CVE-2017-7501](https://nvd.nist.gov/vuln/detail/CVE-2017-7501)
 - expat was updated to [2.2.9]() to fix [CVE-2019-15903](https://nvd.nist.gov/vuln/detail/CVE-2019-15903)
 - python3-dateutil was updated to [2.8.0](https://dateutil.readthedocs.io/en/stable/changelog.html#version-2-8-0-2019-02-04)
-- libutil was updated to [0.8.0](https://github.com/IBM/portlibfori/releases/tag/0.8.0) bringing initial support for the `backtrace_symbols_fd` function and a fix from Calvin Buckley to deal with signal handler stack frames. We later updated to [0.8.1](https://github.com/IBM/portlibfori/releases/tag/0.8.1) to fix an unforseen bug.
+- libutil was updated to [0.8.0](https://github.com/IBM/portlibfori/releases/tag/0.8.0) bringing initial support for the `backtrace_symbols_fd` function and a fix from Calvin Buckley to deal with signal handler stack frames.
 - db2util was updated to [1.0.10](https://github.com/IBM/ibmi-db2util/releases/tag/v1.0.10) bringing some JSON and CSV escaping fixes contributed by Liam Allen
 
 
