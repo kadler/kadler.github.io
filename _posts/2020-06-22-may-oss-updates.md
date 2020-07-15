@@ -38,7 +38,7 @@ PostgreSQL joins SQLite as another open source database available on IBM i from 
 If you're wondering why you'd want to use PostgreSQL on IBM i when Db2 exists out of the box, well I hear that Jesse Gorzinski will be talking all about that in a future entry on his [blog](https://www.ibmsystemsmag.com/Power-Systems/open-your-i-blog) :wink:.
 
 
-### udate-alternatives
+### update-alternatives
 
 update-alternatives is a utility which manages sets of symlinks of alternative versions of a package. This allows you to install multiple packages which could provide some command, say `node`, and then choose _which_ one of those packages will be the default. This is similar in concept to the rudimentary `nodever` script we have provided going all the way back to Node.js v4 shipped in 5733-OPS. update-alternatives is a much more general tool, however, and is more featureful to boot!
 
