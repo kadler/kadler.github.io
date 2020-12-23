@@ -3,6 +3,7 @@ layout: single
 title: IBM i Open Source Updates July 2020
 layout: single
 categories: ibmi-oss-updates
+classes: wide
 ---
 
 Been a while so let's get right to it.

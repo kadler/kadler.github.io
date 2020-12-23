@@ -3,6 +3,7 @@ layout: single
 title: IBM i Open Source Updates May 2020
 layout: single
 categories: ibmi-oss-updates
+classes: wide
 ---
 
 Well, I mentioned before that the May update was gonna be big and boy is it a doozy!

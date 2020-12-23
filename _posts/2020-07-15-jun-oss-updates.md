@@ -3,6 +3,7 @@ layout: single
 title: IBM i Open Source Updates June 2020
 layout: single
 categories: ibmi-oss-updates
+classes: wide
 ---
 
 Well, it's that time of the month again. Time to talk about all the OSS updates that's fit to print!

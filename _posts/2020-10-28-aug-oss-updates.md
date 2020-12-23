@@ -3,6 +3,7 @@ layout: single
 title: IBM i Open Source Updates August & September 2020
 layout: single
 categories: ibmi-oss-updates
+classes: wide
 ---
 
 While August had some big hitters, September was very quiet so I decided to only

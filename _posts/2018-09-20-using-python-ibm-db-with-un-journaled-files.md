@@ -2,6 +2,7 @@
 layout: single
 title: Using Python ibm_db with Un-journaled Tables
 categories: python ibm_db
+classes: wide
 ---
 When using the Python ibm_db package to interact with the Db2 for i database, you may run in to this error:
 

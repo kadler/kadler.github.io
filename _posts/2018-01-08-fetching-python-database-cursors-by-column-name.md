@@ -3,6 +3,7 @@ layout: single
 title: Fetching Python Database Cursors by Column Name
 date: 2018-01-08 19:29 -0600
 categories: python ibm_db
+classes: wide
 ---
 
 Today I got asked if you can index in to rows returned by `ibm_db_dbi` by column name. While this doesn't come out of the box<sup id="a1">[1](#f1)</sup>, it can be done pretty easily.

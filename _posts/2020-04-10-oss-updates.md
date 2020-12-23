@@ -3,6 +3,7 @@ layout: single
 title: IBM i Open Source Updates Jan 2020
 layout: single
 categories: ibmi-oss-updates
+classes: wide
 ---
 
 Well, I hadn't planned to take this long to get out another blog, but the world of OSS moves fast and things have been very busy around here. I'm planning on having more frequent updates than every other month. Let's start with what my team did in January.

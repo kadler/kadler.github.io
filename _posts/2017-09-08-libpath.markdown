@@ -4,6 +4,7 @@ title:  "LIBPATH... How Does It Work?"
 date:   2017-09-08 18:03:20 -05:00
 desc:   Explaining how AIX/PASE finds and loads shared libraries
 categories: libpath pase
+classes: wide
 ---
 
 So in the last entry, I described the differences between `PATH` and `LIBPATH`, but I didn't really explain how `LIBPATH` is actually used. I'm going to rectify that in this entry. First, though, we need to take a detour and learn how programs get loaded.

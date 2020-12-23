@@ -2,6 +2,7 @@
 layout: single
 title: Using System Naming in Python ibm_db
 categories: python ibm_db
+classes: wide
 ---
 Like last-week's post about commitment control in Python ibm_db, you may run in to this unexpected error as well:
 

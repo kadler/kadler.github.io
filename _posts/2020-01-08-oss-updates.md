@@ -3,6 +3,7 @@ layout: single
 title: IBM i Open Source Updates Dec 2019
 layout: single
 categories: ibmi-oss-updates
+classes: wide
 ---
 
 It's a new year and so I'm finally getting around to doing something that I've wanted to do for a while now: write a blog series about various updates about what the IBM i OSS team is doing. I'm not sure the cadence of these updates, but I'll try to keep them updated periodically. For this first one, I'm going to handle it a bit differently as the team has just gotten back from the holiday break so there's not much to share so far for this year, but November and December were very busy, so that's what I'm going to talk about here.

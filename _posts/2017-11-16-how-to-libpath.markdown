@@ -4,6 +4,7 @@ title:  "Mucking with the Runtime Library Search Path on PASE"
 date:   2017-11-17 12:13:14 -06:00
 desc:   Find out how the search path gets created in an AIX/PASE binary
 categories: libpath pase
+classes: wide
 ---
 
 In my last blog I showed how the `LIBPATH` gets used and also how the runtime search path in the binary gets used. `LIBPATH` is obviously set as an environment variable, but how does that runtime search path get generated? Let's explore!

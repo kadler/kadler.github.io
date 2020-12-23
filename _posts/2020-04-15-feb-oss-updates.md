@@ -3,6 +3,7 @@ layout: single
 title: IBM i Open Source Updates Feb 2020
 layout: single
 categories: ibmi-oss-updates
+classes: wide
 ---
 
 Wow, hasn't even been a week! In this blog entry, I'm going to go over what my team delivered in February.

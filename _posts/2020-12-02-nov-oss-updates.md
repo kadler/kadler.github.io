@@ -3,6 +3,7 @@ layout: single
 title: IBM i Open Source Updates October & November 2020
 layout: single
 categories: ibmi-oss-updates
+classes: wide
 ---
 
 October was a pretty slow month with mostly low-level improvements so I figured

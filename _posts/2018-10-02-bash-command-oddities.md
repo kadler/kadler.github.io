@@ -3,6 +3,7 @@ layout: single
 title: Bash Command Oddities
 layout: single
 categories: bash
+classes: wide
 ---
 
 Sometimes when using bash, you can run in to an oddity where it keeps running the "wrong" command. Let's go through a scenario:

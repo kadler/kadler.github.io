@@ -4,6 +4,7 @@ title:  "PATH vs LIBPATH"
 date:   2017-09-01 15:41:00 -0500
 desc:   The what's and why's of PATH and LIBPATH
 categories: libpath pase
+classes: wide
 ---
 
 I see this kind of tip suggested a lot when dealing with PASE issues:

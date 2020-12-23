@@ -4,6 +4,7 @@ title: Calling QSH utilities from PASE
 date: 2018-05-29 10:43 -0500
 desc: Using the program name argument for fun and for profit
 categories: pase qsh
+classes: wide
 ---
 QSH provides a wonderful utility called `db2` which allows you to run SQL queries from within the QSH shell, but what if you're in a QP2TERM shell or using SSH - what then?
 

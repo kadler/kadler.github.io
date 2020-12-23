@@ -3,6 +3,7 @@ layout: single
 title: IBM i Open Source Updates Mar 2020
 layout: single
 categories: ibmi-oss-updates
+classes: wide
 ---
 
 Alright folks, strap in because March was a busy month!
