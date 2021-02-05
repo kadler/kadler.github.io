@@ -129,8 +129,34 @@ QDEVELOP    USR
 QBLDSYS     USR  
 ```
 
-If that wasn't enough, if you ever forget what the command line arguments do, we
-have much better help text than the PASE or QSH equivalents :grin:
+And because we're using the the
+[LIBRARY_LIST_INFO](https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/rzajq/rzajqviewliblinfo.htm)
+SQL service, we get the schema name for free so I figured why not add a `-s`
+option?
+
+```text
+$ liblist -a LONGSCHEM
+CPC2196: Library LONGSCHEM added to library list.
+
+$ liblist -s
+QSYS        SYS  QSYS
+QSYS2       SYS  QSYS2
+QHLPSYS     SYS  QHLPSYS
+QUSRSYS     SYS  QUSRSYS
+QSHELL      PRD  QSHELL
+KADLER      CUR  KADLER
+LONGSCHEM   USR  longschemaname
+QGPL        USR  QGPL
+QTEMP       USR  QTEMP
+QDEVELOP    USR  QDEVELOP
+QBLDSYS     USR  QBLDSYS
+```
+
+Note that for compatibility with QSH liblist, the default output is kept the same.
+
+Finally, ff that wasn't enough, if you ever forget what the command line
+arguments do, we have much better help text than the PASE or QSH equivalents
+:grin:
 
 ```text
 $ cl --help
