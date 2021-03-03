@@ -174,7 +174,7 @@ This has been fixed by loading the various ILE syscalls from libc.a instead of /
 ### Other Updates
 
 - nodejs12 was updated to [12.19.1](https://nodejs.org/en/blog/release/v12.19.1/).
-- nodejs12 was updated to [14.15.1](https://nodejs.org/en/blog/release/v14.15.1/).
+- nodejs14 was updated to [14.15.1](https://nodejs.org/en/blog/release/v14.15.1/).
 - python3 was updated to [3.6.12](https://www.python.org/downloads/release/python-3612/)
 - libutil was updated to [0.9.0](https://github.com/IBM/portlibfori/releases/tag/0.9.0).
 - freetype was updated to 2.10.4
