@@ -17,7 +17,7 @@ title: Kevin's Ramblings
 description: > # this means to ignore newlines until "baseurl:"
   Ramblings of an Open Source dude working on IBM i.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://kadler.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://kadler.io"
 
 github_source: kadler.github.io
 
