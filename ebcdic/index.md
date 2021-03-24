@@ -68,6 +68,7 @@ permalink: /ebcdic/
 - [IBM-13121]({% link ebcdic/IBM-13121.md %})
 - [IBM-13124]({% link ebcdic/IBM-13124.md %})
 - [IBM-28709]({% link ebcdic/IBM-28709.md %})
+- [IBM-57777]({% link ebcdic/IBM-57777.md %})
 - [IBM-61175]({% link ebcdic/IBM-61175.md %})
 - [IBM-62211]({% link ebcdic/IBM-62211.md %})
 - [IBM-62224]({% link ebcdic/IBM-62224.md %})
