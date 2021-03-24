@@ -1,0 +1,393 @@
+
+<style>
+#ebcdic-table {
+    text-align: center;
+    font-size: large;
+    border-collapse: collapse;
+    color: black;
+}
+th {
+    font-weight: 700;
+    width: 3em;
+    background-color: #EEEEEE;
+}
+.th {
+    font-weight: 700;
+    width: 1.6em;
+    background-color: #EEEEEE;
+}
+.row {
+    height: 4em;
+}
+.glyph {
+    line-height: 1.6;
+}
+.control-code {
+    font-variant: small-caps;
+    font-family: monospace;
+    background-color: #F0FFF0;
+}
+.space-separator {
+    font-variant: small-caps;
+    font-family: monospace;
+    background-color: #F0FFF0;
+}
+.symbol {
+    background-color: #FFFFD7;
+}
+.punctuation {
+    background-color: #F4F4FF;
+}
+.number {
+    background-color: #FFF4F4;
+}
+.normal {
+    background-color: #FFFFFF;
+}
+.invariant {
+    border: 2px solid;
+}
+</style>
+<table id="ebcdic-table" border="1" frame="box">
+
+
+<tr>
+    <th class='th'></th>
+    <th>_0</th><th>_1</th><th>_2</th><th>_3</th>
+    <th>_4</th><th>_5</th><th>_6</th><th>_7</th>
+    <th>_8</th><th>_9</th><th>_A</th><th>_B</th>
+    <th>_C</th><th>_D</th><th>_E</th><th>_F</th>
+</tr>
+
+<tr class='row'>
+<td class='th'>_0</td>
+<td class="control-code"><span class='glyph'>NUL</span><br><small>0000</small></td>
+<td class="control-code"><span class='glyph'>SOH</span><br><small>0001</small></td>
+<td class="control-code"><span class='glyph'>STX</span><br><small>0002</small></td>
+<td class="control-code"><span class='glyph'>ETX</span><br><small>0003</small></td>
+<td class="control-code"><span class='glyph'>ST</span><br><small>009C</small></td>
+<td class="control-code"><span class='glyph'>HT</span><br><small>0009</small></td>
+<td class="control-code"><span class='glyph'>SSA</span><br><small>0086</small></td>
+<td class="control-code"><span class='glyph'>DEL</span><br><small>007F</small></td>
+<td class="control-code"><span class='glyph'>EPA</span><br><small>0097</small></td>
+<td class="control-code"><span class='glyph'>RI</span><br><small>008D</small></td>
+<td class="control-code"><span class='glyph'>SS2</span><br><small>008E</small></td>
+<td class="control-code"><span class='glyph'>VT</span><br><small>000B</small></td>
+<td class="control-code"><span class='glyph'>FF</span><br><small>000C</small></td>
+<td class="control-code"><span class='glyph'>CR</span><br><small>000D</small></td>
+<td class="control-code"><span class='glyph'>SO</span><br><small>000E</small></td>
+<td class="control-code"><span class='glyph'>SI</span><br><small>000F</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_1</td>
+<td class="control-code"><span class='glyph'>DLE</span><br><small>0010</small></td>
+<td class="control-code"><span class='glyph'>DC1</span><br><small>0011</small></td>
+<td class="control-code"><span class='glyph'>DC2</span><br><small>0012</small></td>
+<td class="control-code"><span class='glyph'>DC3</span><br><small>0013</small></td>
+<td class="control-code"><span class='glyph'>OSC</span><br><small>009D</small></td>
+<td class="control-code"><span class='glyph'>NEL</span><br><small>0085</small></td>
+<td class="control-code"><span class='glyph'>BS</span><br><small>0008</small></td>
+<td class="control-code"><span class='glyph'>ESA</span><br><small>0087</small></td>
+<td class="control-code"><span class='glyph'>CAN</span><br><small>0018</small></td>
+<td class="control-code"><span class='glyph'>EM</span><br><small>0019</small></td>
+<td class="control-code"><span class='glyph'>PU2</span><br><small>0092</small></td>
+<td class="control-code"><span class='glyph'>SS3</span><br><small>008F</small></td>
+<td class="control-code"><span class='glyph'>FS</span><br><small>001C</small></td>
+<td class="control-code"><span class='glyph'>GS</span><br><small>001D</small></td>
+<td class="control-code"><span class='glyph'>RS</span><br><small>001E</small></td>
+<td class="control-code"><span class='glyph'>US</span><br><small>001F</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_2</td>
+<td class="control-code"><span class='glyph'>PAD</span><br><small>0080</small></td>
+<td class="control-code"><span class='glyph'>HOP</span><br><small>0081</small></td>
+<td class="control-code"><span class='glyph'>BPH</span><br><small>0082</small></td>
+<td class="control-code"><span class='glyph'>NBH</span><br><small>0083</small></td>
+<td class="control-code"><span class='glyph'>IND</span><br><small>0084</small></td>
+<td class="control-code"><span class='glyph'>LF</span><br><small>000A</small></td>
+<td class="control-code"><span class='glyph'>ETB</span><br><small>0017</small></td>
+<td class="control-code"><span class='glyph'>ESC</span><br><small>001B</small></td>
+<td class="control-code"><span class='glyph'>HTS</span><br><small>0088</small></td>
+<td class="control-code"><span class='glyph'>HTJ</span><br><small>0089</small></td>
+<td class="control-code"><span class='glyph'>VTS</span><br><small>008A</small></td>
+<td class="control-code"><span class='glyph'>PLD</span><br><small>008B</small></td>
+<td class="control-code"><span class='glyph'>PLU</span><br><small>008C</small></td>
+<td class="control-code"><span class='glyph'>ENQ</span><br><small>0005</small></td>
+<td class="control-code"><span class='glyph'>ACK</span><br><small>0006</small></td>
+<td class="control-code"><span class='glyph'>BEL</span><br><small>0007</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_3</td>
+<td class="control-code"><span class='glyph'>DCS</span><br><small>0090</small></td>
+<td class="control-code"><span class='glyph'>PU1</span><br><small>0091</small></td>
+<td class="control-code"><span class='glyph'>SYN</span><br><small>0016</small></td>
+<td class="control-code"><span class='glyph'>STS</span><br><small>0093</small></td>
+<td class="control-code"><span class='glyph'>CCH</span><br><small>0094</small></td>
+<td class="control-code"><span class='glyph'>MW</span><br><small>0095</small></td>
+<td class="control-code"><span class='glyph'>SPA</span><br><small>0096</small></td>
+<td class="control-code"><span class='glyph'>EOT</span><br><small>0004</small></td>
+<td class="control-code"><span class='glyph'>SOS</span><br><small>0098</small></td>
+<td class="control-code"><span class='glyph'>SGCI</span><br><small>0099</small></td>
+<td class="control-code"><span class='glyph'>SCI</span><br><small>009A</small></td>
+<td class="control-code"><span class='glyph'>CSI</span><br><small>009B</small></td>
+<td class="control-code"><span class='glyph'>DC4</span><br><small>0014</small></td>
+<td class="control-code"><span class='glyph'>NAK</span><br><small>0015</small></td>
+<td class="control-code"><span class='glyph'>PM</span><br><small>009E</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_4</td>
+<td class="space-separator"><span class='glyph'>SP</span><br><small>0020</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="normal"><span class='glyph'>ﾠ</span><br><small>FFA0</small></td>
+<td class="normal"><span class='glyph'>ﾡ</span><br><small>FFA1</small></td>
+<td class="normal"><span class='glyph'>ﾢ</span><br><small>FFA2</small></td>
+<td class="normal"><span class='glyph'>ﾣ</span><br><small>FFA3</small></td>
+<td class="normal"><span class='glyph'>ﾤ</span><br><small>FFA4</small></td>
+<td class="normal"><span class='glyph'>ﾥ</span><br><small>FFA5</small></td>
+<td class="normal"><span class='glyph'>ﾦ</span><br><small>FFA6</small></td>
+<td class="normal"><span class='glyph'>ﾧ</span><br><small>FFA7</small></td>
+<td class="symbol"><span class='glyph'>¢</span><br><small>00A2</small></td>
+<td class="punctuation invariant"><span class='glyph'>.</span><br><small>002E</small></td>
+<td class="symbol invariant"><span class='glyph'><</span><br><small>003C</small></td>
+<td class="punctuation invariant"><span class='glyph'>(</span><br><small>0028</small></td>
+<td class="symbol invariant"><span class='glyph'>+</span><br><small>002B</small></td>
+<td class="symbol"><span class='glyph'>|</span><br><small>007C</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_5</td>
+<td class="punctuation invariant"><span class='glyph'>&</span><br><small>0026</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="normal"><span class='glyph'>ﾨ</span><br><small>FFA8</small></td>
+<td class="normal"><span class='glyph'>ﾩ</span><br><small>FFA9</small></td>
+<td class="normal"><span class='glyph'>ﾪ</span><br><small>FFAA</small></td>
+<td class="normal"><span class='glyph'>ﾫ</span><br><small>FFAB</small></td>
+<td class="normal"><span class='glyph'>ﾬ</span><br><small>FFAC</small></td>
+<td class="normal"><span class='glyph'>ﾭ</span><br><small>FFAD</small></td>
+<td class="normal"><span class='glyph'>ﾮ</span><br><small>FFAE</small></td>
+<td class="normal"><span class='glyph'>ﾯ</span><br><small>FFAF</small></td>
+<td class="punctuation"><span class='glyph'>!</span><br><small>0021</small></td>
+<td class="symbol"><span class='glyph'>$</span><br><small>0024</small></td>
+<td class="punctuation invariant"><span class='glyph'>*</span><br><small>002A</small></td>
+<td class="punctuation invariant"><span class='glyph'>)</span><br><small>0029</small></td>
+<td class="punctuation invariant"><span class='glyph'>;</span><br><small>003B</small></td>
+<td class="symbol"><span class='glyph'>¬</span><br><small>00AC</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_6</td>
+<td class="punctuation invariant"><span class='glyph'>-</span><br><small>002D</small></td>
+<td class="punctuation invariant"><span class='glyph'>/</span><br><small>002F</small></td>
+<td class="normal"><span class='glyph'>ﾰ</span><br><small>FFB0</small></td>
+<td class="normal"><span class='glyph'>ﾱ</span><br><small>FFB1</small></td>
+<td class="normal"><span class='glyph'>ﾲ</span><br><small>FFB2</small></td>
+<td class="normal"><span class='glyph'>ﾳ</span><br><small>FFB3</small></td>
+<td class="normal"><span class='glyph'>ﾴ</span><br><small>FFB4</small></td>
+<td class="normal"><span class='glyph'>ﾵ</span><br><small>FFB5</small></td>
+<td class="normal"><span class='glyph'>ﾶ</span><br><small>FFB6</small></td>
+<td class="normal"><span class='glyph'>ﾷ</span><br><small>FFB7</small></td>
+<td class="symbol"><span class='glyph'>¦</span><br><small>00A6</small></td>
+<td class="punctuation invariant"><span class='glyph'>,</span><br><small>002C</small></td>
+<td class="punctuation invariant"><span class='glyph'>%</span><br><small>0025</small></td>
+<td class="punctuation invariant"><span class='glyph'>_</span><br><small>005F</small></td>
+<td class="symbol invariant"><span class='glyph'>></span><br><small>003E</small></td>
+<td class="punctuation invariant"><span class='glyph'>?</span><br><small>003F</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_7</td>
+<td class="punctuation"><span class='glyph'>[</span><br><small>005B</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="normal"><span class='glyph'>ﾸ</span><br><small>FFB8</small></td>
+<td class="normal"><span class='glyph'>ﾹ</span><br><small>FFB9</small></td>
+<td class="normal"><span class='glyph'>ﾺ</span><br><small>FFBA</small></td>
+<td class="normal"><span class='glyph'>ﾻ</span><br><small>FFBB</small></td>
+<td class="normal"><span class='glyph'>ﾼ</span><br><small>FFBC</small></td>
+<td class="normal"><span class='glyph'>ﾽ</span><br><small>FFBD</small></td>
+<td class="normal"><span class='glyph'>ﾾ</span><br><small>FFBE</small></td>
+<td class="symbol"><span class='glyph'>`</span><br><small>0060</small></td>
+<td class="punctuation invariant"><span class='glyph'>:</span><br><small>003A</small></td>
+<td class="punctuation"><span class='glyph'>#</span><br><small>0023</small></td>
+<td class="punctuation"><span class='glyph'>@</span><br><small>0040</small></td>
+<td class="punctuation invariant"><span class='glyph'>'</span><br><small>0027</small></td>
+<td class="symbol invariant"><span class='glyph'>=</span><br><small>003D</small></td>
+<td class="punctuation invariant"><span class='glyph'>"</span><br><small>0022</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_8</td>
+<td class="punctuation"><span class='glyph'>]</span><br><small>005D</small></td>
+<td class="normal invariant"><span class='glyph'>a</span><br><small>0061</small></td>
+<td class="normal invariant"><span class='glyph'>b</span><br><small>0062</small></td>
+<td class="normal invariant"><span class='glyph'>c</span><br><small>0063</small></td>
+<td class="normal invariant"><span class='glyph'>d</span><br><small>0064</small></td>
+<td class="normal invariant"><span class='glyph'>e</span><br><small>0065</small></td>
+<td class="normal invariant"><span class='glyph'>f</span><br><small>0066</small></td>
+<td class="normal invariant"><span class='glyph'>g</span><br><small>0067</small></td>
+<td class="normal invariant"><span class='glyph'>h</span><br><small>0068</small></td>
+<td class="normal invariant"><span class='glyph'>i</span><br><small>0069</small></td>
+<td class="normal"><span class='glyph'>ￂ</span><br><small>FFC2</small></td>
+<td class="normal"><span class='glyph'>ￃ</span><br><small>FFC3</small></td>
+<td class="normal"><span class='glyph'>ￄ</span><br><small>FFC4</small></td>
+<td class="normal"><span class='glyph'>ￅ</span><br><small>FFC5</small></td>
+<td class="normal"><span class='glyph'>ￆ</span><br><small>FFC6</small></td>
+<td class="normal"><span class='glyph'>ￇ</span><br><small>FFC7</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_9</td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="normal invariant"><span class='glyph'>j</span><br><small>006A</small></td>
+<td class="normal invariant"><span class='glyph'>k</span><br><small>006B</small></td>
+<td class="normal invariant"><span class='glyph'>l</span><br><small>006C</small></td>
+<td class="normal invariant"><span class='glyph'>m</span><br><small>006D</small></td>
+<td class="normal invariant"><span class='glyph'>n</span><br><small>006E</small></td>
+<td class="normal invariant"><span class='glyph'>o</span><br><small>006F</small></td>
+<td class="normal invariant"><span class='glyph'>p</span><br><small>0070</small></td>
+<td class="normal invariant"><span class='glyph'>q</span><br><small>0071</small></td>
+<td class="normal invariant"><span class='glyph'>r</span><br><small>0072</small></td>
+<td class="normal"><span class='glyph'>ￊ</span><br><small>FFCA</small></td>
+<td class="normal"><span class='glyph'>ￋ</span><br><small>FFCB</small></td>
+<td class="normal"><span class='glyph'>ￌ</span><br><small>FFCC</small></td>
+<td class="normal"><span class='glyph'>ￍ</span><br><small>FFCD</small></td>
+<td class="normal"><span class='glyph'>ￎ</span><br><small>FFCE</small></td>
+<td class="normal"><span class='glyph'>ￏ</span><br><small>FFCF</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_A</td>
+<td class="punctuation"><span class='glyph'>‾</span><br><small>203E</small></td>
+<td class="symbol"><span class='glyph'>~</span><br><small>007E</small></td>
+<td class="normal invariant"><span class='glyph'>s</span><br><small>0073</small></td>
+<td class="normal invariant"><span class='glyph'>t</span><br><small>0074</small></td>
+<td class="normal invariant"><span class='glyph'>u</span><br><small>0075</small></td>
+<td class="normal invariant"><span class='glyph'>v</span><br><small>0076</small></td>
+<td class="normal invariant"><span class='glyph'>w</span><br><small>0077</small></td>
+<td class="normal invariant"><span class='glyph'>x</span><br><small>0078</small></td>
+<td class="normal invariant"><span class='glyph'>y</span><br><small>0079</small></td>
+<td class="normal invariant"><span class='glyph'>z</span><br><small>007A</small></td>
+<td class="normal"><span class='glyph'>ￒ</span><br><small>FFD2</small></td>
+<td class="normal"><span class='glyph'>ￓ</span><br><small>FFD3</small></td>
+<td class="normal"><span class='glyph'>ￔ</span><br><small>FFD4</small></td>
+<td class="normal"><span class='glyph'>ￕ</span><br><small>FFD5</small></td>
+<td class="normal"><span class='glyph'>ￖ</span><br><small>FFD6</small></td>
+<td class="normal"><span class='glyph'>ￗ</span><br><small>FFD7</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_B</td>
+<td class="symbol"><span class='glyph'>^</span><br><small>005E</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="punctuation"><span class='glyph'>\</span><br><small>005C</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="normal"><span class='glyph'>ￚ</span><br><small>FFDA</small></td>
+<td class="normal"><span class='glyph'>ￛ</span><br><small>FFDB</small></td>
+<td class="normal"><span class='glyph'>ￜ</span><br><small>FFDC</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_C</td>
+<td class="punctuation"><span class='glyph'>{</span><br><small>007B</small></td>
+<td class="normal invariant"><span class='glyph'>A</span><br><small>0041</small></td>
+<td class="normal invariant"><span class='glyph'>B</span><br><small>0042</small></td>
+<td class="normal invariant"><span class='glyph'>C</span><br><small>0043</small></td>
+<td class="normal invariant"><span class='glyph'>D</span><br><small>0044</small></td>
+<td class="normal invariant"><span class='glyph'>E</span><br><small>0045</small></td>
+<td class="normal invariant"><span class='glyph'>F</span><br><small>0046</small></td>
+<td class="normal invariant"><span class='glyph'>G</span><br><small>0047</small></td>
+<td class="normal invariant"><span class='glyph'>H</span><br><small>0048</small></td>
+<td class="normal invariant"><span class='glyph'>I</span><br><small>0049</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_D</td>
+<td class="punctuation"><span class='glyph'>}</span><br><small>007D</small></td>
+<td class="normal invariant"><span class='glyph'>J</span><br><small>004A</small></td>
+<td class="normal invariant"><span class='glyph'>K</span><br><small>004B</small></td>
+<td class="normal invariant"><span class='glyph'>L</span><br><small>004C</small></td>
+<td class="normal invariant"><span class='glyph'>M</span><br><small>004D</small></td>
+<td class="normal invariant"><span class='glyph'>N</span><br><small>004E</small></td>
+<td class="normal invariant"><span class='glyph'>O</span><br><small>004F</small></td>
+<td class="normal invariant"><span class='glyph'>P</span><br><small>0050</small></td>
+<td class="normal invariant"><span class='glyph'>Q</span><br><small>0051</small></td>
+<td class="normal invariant"><span class='glyph'>R</span><br><small>0052</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_E</td>
+<td class="symbol"><span class='glyph'>₩</span><br><small>20A9</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="normal invariant"><span class='glyph'>S</span><br><small>0053</small></td>
+<td class="normal invariant"><span class='glyph'>T</span><br><small>0054</small></td>
+<td class="normal invariant"><span class='glyph'>U</span><br><small>0055</small></td>
+<td class="normal invariant"><span class='glyph'>V</span><br><small>0056</small></td>
+<td class="normal invariant"><span class='glyph'>W</span><br><small>0057</small></td>
+<td class="normal invariant"><span class='glyph'>X</span><br><small>0058</small></td>
+<td class="normal invariant"><span class='glyph'>Y</span><br><small>0059</small></td>
+<td class="normal invariant"><span class='glyph'>Z</span><br><small>005A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+
+</tr>
+<tr class='row'>
+<td class='th'>_F</td>
+<td class="number invariant"><span class='glyph'>0</span><br><small>0030</small></td>
+<td class="number invariant"><span class='glyph'>1</span><br><small>0031</small></td>
+<td class="number invariant"><span class='glyph'>2</span><br><small>0032</small></td>
+<td class="number invariant"><span class='glyph'>3</span><br><small>0033</small></td>
+<td class="number invariant"><span class='glyph'>4</span><br><small>0034</small></td>
+<td class="number invariant"><span class='glyph'>5</span><br><small>0035</small></td>
+<td class="number invariant"><span class='glyph'>6</span><br><small>0036</small></td>
+<td class="number invariant"><span class='glyph'>7</span><br><small>0037</small></td>
+<td class="number invariant"><span class='glyph'>8</span><br><small>0038</small></td>
+<td class="number invariant"><span class='glyph'>9</span><br><small>0039</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>SUB</span><br><small>001A</small></td>
+<td class="control-code"><span class='glyph'>APC</span><br><small>009F</small></td>
+
+</tr>
+
+<tr>
+    <th class='th'></th>
+    <th>_0</th><th>_1</th><th>_2</th><th>_3</th>
+    <th>_4</th><th>_5</th><th>_6</th><th>_7</th>
+    <th>_8</th><th>_9</th><th>_A</th><th>_B</th>
+    <th>_C</th><th>_D</th><th>_E</th><th>_F</th>
+</tr>
+
+
+</table>
+

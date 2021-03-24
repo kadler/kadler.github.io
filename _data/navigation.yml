@@ -7,5 +7,7 @@ main:
     url: /year-archive/
   # - title: "Pages"
   #   url: /pages/
+  - title: "EBCDIC"
+    url: /ebcdic/
   - title: "About"
     url: /about/
