@@ -21,3 +21,6 @@ group :jekyll_plugins do
    gem "jekyll-include-cache"
    gem "jekyll-archives"
 end
+
+# See https://github.com/jekyll/jekyll/issues/8523
+gem "webrick", "~> 1.7"
