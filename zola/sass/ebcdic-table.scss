@@ -1,0 +1,63 @@
+.ebcdic-table table {
+    text-align: center;
+    font-size: large;
+    border-collapse: collapse;
+    color: black;
+    border: 1px solid black;
+    box-sizing: revert;
+}
+
+.ebcdic-table td {
+    border: 1px solid black;
+}
+
+.ebcdic-table th, .ebcdic-table .ebcdic-th {
+    font-weight: 700;
+    width: 3em;
+    background-color: #EEEEEE;
+    border: 1px solid black;
+    color: black;
+}
+
+.ebcdic-table .ebcdic-th {
+    width: 1.6em;
+}
+
+.ebcdic-table .ebcdic-row {
+    height: 4em;
+}
+.ebcdic-table .ebcdic-glyph {
+    line-height: 1.6;
+}
+
+.ebcdic-table .ebcdic-control-code {
+    font-variant: small-caps;
+    font-family: monospace;
+    background-color: #F0FFF0;
+}
+
+.ebcdic-table .ebcdic-space-separator {
+    font-variant: small-caps;
+    font-family: monospace;
+    background-color: #F0FFF0;
+}
+
+.ebcdic-table .ebcdic-symbol {
+    background-color: #FFFFD7;
+}
+
+.ebcdic-table .ebcdic-punctuation {
+    background-color: #F4F4FF;
+}
+
+.ebcdic-table .ebcdic-number {
+    background-color: #FFF4F4;
+}
+
+.ebcdic-table .ebcdic-normal {
+    background-color: #FFFFFF;
+}
+
+.ebcdic-table .ebcdic-invariant {
+    border: 2px solid black;
+}

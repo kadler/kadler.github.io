@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ get_url(path="ebcdic-table.css", trailing_slash=false) | safe }}">
+{% endblock extra_head %}
+
+{% block content %}
+    {%- set table = page.relative_path | replace(from=".md", to=".html") -%}
+    <div class="post">
+        {{ post_macros::header(page=page) }}
+        {% if page.description %}
+        <div>{{ page.description }}</div>
+        {% endif %}
+        {{ load_data(path=table) | safe }}
+    </div>
+{% endblock content %}

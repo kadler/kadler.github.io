@@ -1,3 +1,7 @@
+# zola
+public/
+
+# jekyll
 _site
 .sass-cache
 .jekyll-cache

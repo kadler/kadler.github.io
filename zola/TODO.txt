@@ -1,0 +1,13 @@
++ move posts under blog section
++ handle main page once blog is its own thing (about?)
++ clean up EBCDIC table formatting
++ improve EBCDIC index page formatting (needs more density)
++ page title is always blank
++ handle social media links
+- make content section wider
++ add manual summary breaks as appropriate
+- update deploy setup, see https://www.getzola.org/documentation/deployment/github-pages/
+- remove jekyll vestigial bits (.gitignore, ...)
+
+- add pages section for things that aren't blog posts?
+- year archive somehow?

@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+
+{% block content %}
+    <div class="post">
+        <h1 class="post-title">EBCDIC Code Pages</h1>
+
+        <ul>
+            {%- for page in section.pages %}
+            <li class="tag-list">
+                <a href="{{ page.permalink | safe }}">{{ page.title }}</a>
+                {% if page.description %}
+                - {{ page.description }}
+                {% endif %}
+            </li>
+            {% endfor -%}
+        </ul>
+        <div>
+            <h2 class="post-title">Terms</h2>
+            <ul>
+                <li>EBCDIC - Extended Binary Codeded Decimal Interchange Code</li>
+                <li>CCSID - Coded Character Set Identifier</li>
+                <li>CS - Character Set</li>
+                <li>CP - Code Page</li>
+                <li>SBCS - Single Byte Character Set</li>
+                <li>DBCS - Double Byte Character Set</li>
+                <li>MBCS - Mixed Byte Character Set (SBCS + DBCS via SI/SO)</li>
+                <li>SO - Shift Out. In MBCS EBCDIC, switches encoding from SBCS to DBCS</li>
+                <li>SI - Shift In. In MBCS EBCDIC, switches encoding from DBCS to SBCS</li>
+                <li>CECP - Country Extended Code Page</li>
+                <li>ECECP - Euro Country Extended Code Page</li>
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
