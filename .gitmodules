@@ -1,6 +1,3 @@
-[submodule "blog/themes/Zulma"]
-	path = blog/themes/Zulma
-	url = https://github.com/Worble/Zulma
 [submodule "zola/themes/terminimal"]
 	path = zola/themes/terminimal
 	url = https://github.com/pawroman/zola-theme-terminimal.git

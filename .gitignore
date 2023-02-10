@@ -1,11 +1,2 @@
 # zola
 public/
-
-# jekyll
-_site
-.sass-cache
-.jekyll-cache
-.jekyll-metadata
-*.swp
-.bundle
-vendor
