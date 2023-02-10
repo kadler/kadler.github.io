@@ -1,0 +1,630 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>IBM i Open Source Updates May 2021 - Kevin’s Ramblings</title>
+<meta name="description" content="May updates at the same time as April updates? Madness, I say!">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="IBM i Open Source Updates May 2021">
+<meta property="og:url" content="https://kadler.io/2021/06/04/may-oss-updates.html">
+
+
+  <meta property="og:description" content="May updates at the same time as April updates? Madness, I say!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-06-04T00:00:00-05:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2021/06/04/may-oss-updates.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="IBM i Open Source Updates May 2021">
+    <meta itemprop="description" content="May updates at the same time as April updates? Madness, I say!">
+    <meta itemprop="datePublished" content="June 04, 2021">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">IBM i Open Source Updates May 2021
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>May updates at the same time as April updates? Madness, I say!</p>
+      <h2 id="new-packages">
+        
+        
+          New Packages <a href="#new-packages"></a>
+        
+        
+      </h2>
+    
+      <h3 id="harfbuzz">
+        
+        
+          HarfBuzz <a href="#harfbuzz"></a>
+        
+        
+      </h3>
+
+<p><a href="https://harfbuzz.github.io/">HarfBuzz</a> is a text shaping library with quite a <a href="https://harfbuzz.github.io/why-is-it-called-harfbuzz.html">unique name</a>.</p>
+
+<p>I mentioned in April’s update that Pango used Harfbuzz for complex text shaping. Well, apparently in our haste to ship Pango we forgot to ship harfbuzz too. Whoops!</p>
+    
+      <h3 id="gnu-idn-library">
+        
+        
+          GNU IDN Library <a href="#gnu-idn-library"></a>
+        
+        
+      </h3>
+
+<p><a href="https://www.gnu.org/software/libidn/">GNU IDN</a> is a library which implements functions for handling internationalized hostnames. For example, this allows proper handling of the host name <r></r></p>
+    
+      <h2 id="package-updates">
+        
+        
+          Package Updates <a href="#package-updates"></a>
+        
+        
+      </h2>
+    
+      <h3 id="ccache">
+        
+        
+          Ccache <a href="#ccache"></a>
+        
+        
+      </h3>
+
+<p>Ccache now supports being used with GCC 10.</p>
+    
+      <h3 id="curl">
+        
+        
+          cURL <a href="#curl"></a>
+        
+        
+      </h3>
+
+<p>Curl has been built with brotli and libidn2, so these examples now work properly:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ curl --compressed https://httpbin.org/brotli 
+{
+  "brotli": true, 
+  "headers": {
+    "Accept": "*/*", 
+    "Accept-Encoding": "deflate, gzip, br", 
+    "Host": "httpbin.org", 
+    "User-Agent": "curl/7.76.1", 
+    "X-Amzn-Trace-Id": "Root=1-60ba8841-79dfa33d6c5a76b85b1d5863"
+  }, 
+  "method": "GET", 
+  "origin": "206.9.215.19"
+}
+
+curl -s 'https://räksmörgås.josefsson.org/' | head
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN"&gt;
+&lt;html&gt;
+  &lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8"&gt;
+  &lt;head&gt;
+    &lt;title&gt;Räksmörgås.josefßon.org aka xn--rksmrgs-5wao1o.josefsson.org&lt;/title&gt;
+  &lt;/head&gt;
+
+  &lt;body&gt;
+
+    &lt;h1&gt;Räksmörgås.josefßon.org aka xn--rksmrgs-5wao1o.josefsson.org&lt;/h1&gt;
+</code></pre></div></div>
+    
+      <h3 id="nodejs-10-12-14">
+        
+        
+          Node.js 10, 12, 14 <a href="#nodejs-10-12-14"></a>
+        
+        
+      </h3>
+
+<p>Versions of Node.js built on IBM i w/ GCC 6 cause the Node binary to export two C++ standard library functions. These functions are listed in node.exp, which is used for building C/C++ Node.js extensions. On Node.js 16, which is built with GCC 10, these functions are no longer exported by the node binary, causing problems for any extentions that expect the node binary to provide these functions (such as idb-connector).</p>
+
+<p>Node.js 10, 12, and 14 have been patched to no longer list these functions in the node.exp file. A version of idb-connector which is built with these fixed Node.js builds should be available shortly.</p>
+    
+      <h3 id="other-updates">
+        
+        
+          Other Updates <a href="#other-updates"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>openssl was updated to <a href="https://www.openssl.org/news/changelog.html#openssl-111">1.1.1k</a>.</li>
+</ul>
+    
+      <h2 id="closing">
+        
+        
+          Closing <a href="#closing"></a>
+        
+        
+      </h2>
+
+<p>Slower month in May, but still important updates.</p>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/ibmi-oss-updates" class="page__taxonomy-item" rel="tag">ibmi-oss-updates</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-06-04T00:00:00-05:00">June 04, 2021</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2021/06/04/apr-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates April 2021
+">Previous</a>
+    
+    
+      <a href="/2021/12/07/ibmi-repos.html" class="pagination--pager" title="IBM-provided Repositories and YUM Updates
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/02/21/jan-2022-oss-updates.html" rel="permalink">IBM i Open Source Updates January 2022
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

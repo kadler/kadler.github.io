@@ -1,0 +1,585 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>PATH vs LIBPATH - Kevin’s Ramblings</title>
+<meta name="description" content="I see this kind of tip suggested a lot when dealing with PASE issues:">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="PATH vs LIBPATH">
+<meta property="og:url" content="https://kadler.io/2017/09/01/path.html">
+
+
+  <meta property="og:description" content="I see this kind of tip suggested a lot when dealing with PASE issues:">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2017-09-01T15:41:00-05:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2017/09/01/path.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="PATH vs LIBPATH">
+    <meta itemprop="description" content="I see this kind of tip suggested a lot when dealing with PASE issues:">
+    <meta itemprop="datePublished" content="September 01, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">PATH vs LIBPATH
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>I see this kind of tip suggested a lot when dealing with PASE issues:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span>/my/path/bin:/other/path/bin:<span class="nv">$PATH</span>
+<span class="nb">export </span><span class="nv">LIBPATH</span><span class="o">=</span>/my/path/bin:/other/path/bin:<span class="nv">$LIBPATH</span>
+</code></pre></div></div>
+<p><img src="http://e.lvme.me/v8ccqht.jpg" alt="That's not how this works! That's not how any of this works!"></p>
+
+<p>This misguided suggestion bugs me to no end, so today I’m here to educate and clear up confusion over <code class="language-plaintext highlighter-rouge">LIBPATH</code>.</p>
+      <h2 id="were-on-the-road-path-to-nowhere">
+        
+        
+          We’re on the <del>Road</del> PATH to Nowhere <a href="#were-on-the-road-path-to-nowhere"></a>
+        
+        
+      </h2>
+
+<p>Let’s start by looking at the <code class="language-plaintext highlighter-rouge">PATH</code>. What is <code class="language-plaintext highlighter-rouge">PATH</code>?</p>
+
+<p><code class="language-plaintext highlighter-rouge">PATH</code> is an environment variable that is used by applications when they want to execute a program using an unqalified path to that application. For instance, you type in <code class="language-plaintext highlighter-rouge">ls</code> in your shell and hit enter. Because <code class="language-plaintext highlighter-rouge">ls</code> is not a qualified path, your shell<sup id="a1"><a href="#f1">1</a></sup> has to qualify the path to <code class="language-plaintext highlighter-rouge">ls</code> and it does so using the colon-separated list of directories given on the <code class="language-plaintext highlighter-rouge">PATH</code>. You can think of <code class="language-plaintext highlighter-rouge">PATH</code> as equivalent to the library list used by MI programs.</p>
+
+<p>So lets say your <code class="language-plaintext highlighter-rouge">PATH</code> looks like this:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/QOpenSys/usr/bin:/usr/ccs/bin:/QOpenSys/usr/bin/X11:/usr/sbin:/usr/bin
+</code></pre></div></div>
+
+<p>When you execute <code class="language-plaintext highlighter-rouge">ls</code>, each of these dirctories will be searched in the order specified for an executable file named <code class="language-plaintext highlighter-rouge">ls</code>:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">/QOpenSys/usr/bin</code></li>
+  <li><code class="language-plaintext highlighter-rouge">/usr/ccs/bin</code></li>
+  <li><code class="language-plaintext highlighter-rouge">/QOpenSys/usr/bin/X11</code></li>
+  <li><code class="language-plaintext highlighter-rouge">/usr/sbin</code></li>
+  <li><code class="language-plaintext highlighter-rouge">/usr/bin</code></li>
+</ul>
+
+<p>Once it find a file at one of those paths, it will try to execute it. We can easily see where a program is found using the <code class="language-plaintext highlighter-rouge">which</code> command:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>which <span class="nb">ls</span>
+/QOpenSys/usr/bin/ls
+</code></pre></div></div>
+<p>This means that when you type <code class="language-plaintext highlighter-rouge">ls</code>at the command prompt, <code class="language-plaintext highlighter-rouge">/QOpenSys/usr/bin/ls</code> will be executed.</p>
+
+<p>This colon-separated list of directories is a very powerful and useful tool and thus has been <del>stolen</del> appropriated by other utilities for their own use:</p>
+
+<ul>
+  <li>
+<code class="language-plaintext highlighter-rouge">PYTHONPATH</code> - list of directories to find Python modules</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">GEM_PATH</code> - list of directories to find Ruby Gems</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">CLASSPATH</code> - list of directories to find Java class files</li>
+  <li>
+<code class="language-plaintext highlighter-rouge">LIBPATH</code> - list of directories to find PASE/AIX shared libraries</li>
+  <li>…</li>
+</ul>
+    
+      <h2 id="path--classpath--libpath--">
+        
+        
+          PATH != CLASSPATH != LIBPATH != … <a href="#path--classpath--libpath--"></a>
+        
+        
+      </h2>
+<p>The thing to remember is that although these <code class="language-plaintext highlighter-rouge">PATH</code>-like variables look and act the same, their use is different. You would not normally expect Java <code class="language-plaintext highlighter-rouge">.class</code> files to exist in the same directory as Python <code class="language-plaintext highlighter-rouge">.py</code> files or Ruby <code class="language-plaintext highlighter-rouge">.rb</code> files or PASE binaries. This brings us back to <code class="language-plaintext highlighter-rouge">LIBPATH</code>: PASE shared libraries (<code class="language-plaintext highlighter-rouge">.a</code> and <code class="language-plaintext highlighter-rouge">.so</code> files) are normally stored in paths that end in <code class="language-plaintext highlighter-rouge">lib/</code> or <code class="language-plaintext highlighter-rouge">lib64/</code>, not <code class="language-plaintext highlighter-rouge">bin/</code> — <code class="language-plaintext highlighter-rouge">bin/</code> is where your programs live.</p>
+
+<p>You should never set your <code class="language-plaintext highlighter-rouge">LIBPATH</code> and <code class="language-plaintext highlighter-rouge">PATH</code> to the same thing or add the same paths to both, unless you’re doing something really odd, in which case I’d suggest you <em>not</em> do that and do something sensible instead. 😉</p>
+
+<p>In the next entries, I’ll talk about how AIX/PASE loading works, how <code class="language-plaintext highlighter-rouge">LIBAPTH</code> works, and why you should rarely need to set the <code class="language-plaintext highlighter-rouge">LIBPATH</code> at all anyway.</p>
+
+<p><b id="f1">1</b> Really, the hard works is probably done by <a href="https://www.ibm.com/support/knowledgecenter/en/ssw_aix_71/com.ibm.aix.basetrf1/exec.htm">execvp</a> <a href="#a1">↩</a></p>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/libpath" class="page__taxonomy-item" rel="tag">libpath</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/categories/pase" class="page__taxonomy-item" rel="tag">pase</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-09-01T15:41:00-05:00">September 01, 2017</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2016/12/23/first-post.html" class="pagination--pager" title="First Post
+">Previous</a>
+    
+    
+      <a href="/2017/09/08/libpath.html" class="pagination--pager" title="LIBPATH… How Does It Work?
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/02/21/jan-2022-oss-updates.html" rel="permalink">IBM i Open Source Updates January 2022
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

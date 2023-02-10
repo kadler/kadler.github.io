@@ -1,0 +1,756 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>IBM i Open Source Updates Mar 2020 - Kevin’s Ramblings</title>
+<meta name="description" content="Alright folks, strap in because March was a busy month!">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="IBM i Open Source Updates Mar 2020">
+<meta property="og:url" content="https://kadler.io/2020/04/22/mar-oss-updates.html">
+
+
+  <meta property="og:description" content="Alright folks, strap in because March was a busy month!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-04-22T00:00:00-05:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2020/04/22/mar-oss-updates.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="IBM i Open Source Updates Mar 2020">
+    <meta itemprop="description" content="Alright folks, strap in because March was a busy month!">
+    <meta itemprop="datePublished" content="April 22, 2020">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">IBM i Open Source Updates Mar 2020
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  5 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Alright folks, strap in because March was a busy month!</p>
+      <h2 id="new-packages">
+        
+        
+          New Packages <a href="#new-packages"></a>
+        
+        
+      </h2>
+    
+      <h3 id="tmux">
+        
+        
+          tmux <a href="#tmux"></a>
+        
+        
+      </h3>
+
+<p><a href="https://github.com/tmux/tmux/wiki">tmux</a> is a Terminal MUltipleXer. It allows you to create multiple sessions that are persistent - you can disconnect (or become disconnected, eg. wifi drops off) and then reconnect and everything will be as it was before. Within sessions you can have multiple windows which you can switch between and you can also have multiple panes within windows, showing multiple things on the screen at once.</p>
+
+<p>Here’s an example of a <code class="language-plaintext highlighter-rouge">tmux</code> session running that has 2 windows (window1 and window2, with window1 being visible) and 3 panes in window1:</p>
+
+<p><img src="/assets/images/tmux.png"></p>
+
+<p>If you want to get started with <code class="language-plaintext highlighter-rouge">tmux</code>, here’s some references:</p>
+<ul>
+  <li><a href="https://github.com/tmux/tmux/wiki/Getting-Started">https://github.com/tmux/tmux/wiki/Getting-Started</a></li>
+  <li><a href="https://linuxize.com/post/getting-started-with-tmux/">https://linuxize.com/post/getting-started-with-tmux/</a></li>
+  <li><a href="https://tmuxcheatsheet.com/">https://tmuxcheatsheet.com/</a></li>
+</ul>
+
+<p>I want to thank Calvin Buckley for figuring out how to make this work on IBM i.</p>
+    
+      <h3 id="python3-paramiko">
+        
+        
+          python3-paramiko <a href="#python3-paramiko"></a>
+        
+        
+      </h3>
+
+<p><a href="http://paramiko.org/">Paramiko</a> makes it easy to use SSH, SCP, and SFTP from within Python. Why is that important? Two reasons:</p>
+
+<p><strong>1. Easy remote access to XMLSERVICE</strong></p>
+
+<p>Traditionally for remote XMLSERVICE access, the options were basically the XMLSERVICE FastCGI plugin to Apache or over ODBC, but both have issues:</p>
+
+<ul>
+  <li>FastCGI requires creating an Apache instance (or glomming on to an existing one); adding security through authentication and SSL must be configured manually</li>
+  <li>ODBC requires installing the ODBC driver on all your systems as well as configuring DSNs</li>
+  <li>For IBM i Cloud instances both may require port-forwarding and other setup</li>
+</ul>
+
+<p>By-far the easiest way now to make remote XMLSERVICE calls (especially to IBM i instances in IBM Cloud) is through SSH and <code class="language-plaintext highlighter-rouge">xmlservice-cli</code> (part of <code class="language-plaintext highlighter-rouge">itoolkit-utils</code>). <a href="https://python-itoolkit.readthedocs.io/en/latest/api.html#ssh-transport">python-itoolkit</a> has supported this since v1.6 and requires Paramiko. The upcoming node-itoolkit v1.0 will also support SSH.</p>
+
+<p><strong>2. Programatic access to remote SSH resources</strong></p>
+
+<p>Many users use SSH/SFTP as part of their business procedures: pushing or pulling data to/from business partners, etc. Many times due to external requirements, users cannot use key-based authentication and must use passwords. It is difficult to automate SSH and SFTP using passwords so many users resort to things like <a href="/2020/04/15/feb-oss-updates.html#expect">expect</a> or other tools. Paramiko allows you to control exactly how you want to connect and supports password authentication. You control how and where you get the password from: hard code it, read it from an <a href="https://docs.python.org/3/library/os.html#os.environ">environment variable</a>, read it from a database entry, whatever — since it’s all Python, you can do whatever Python allows you to do.</p>
+
+<p>Here’s an example connecting to a system and running some commands through SSH as well as using SFTP:</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hostname</span> <span class="o">=</span> <span class="s">'ibmi.example.com'</span>
+<span class="n">username</span> <span class="o">=</span> <span class="s">'myuser'</span>
+<span class="n">password</span> <span class="o">=</span> <span class="s">'mypassword'</span>
+<span class="k">with</span> <span class="n">paramiko</span><span class="p">.</span><span class="n">SSHClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">ssh</span><span class="p">:</span>
+    <span class="n">ssh</span><span class="p">.</span><span class="n">set_missing_host_key_policy</span><span class="p">(</span><span class="n">paramiko</span><span class="p">.</span><span class="n">AutoAddPolicy</span><span class="p">())</span>
+    <span class="n">ssh</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+                <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+    
+    <span class="n">cmd</span> <span class="o">=</span> <span class="s">'system "DLTF MYLIB/MYFILE"'</span>
+    <span class="n">stdin</span><span class="p">,</span> <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">ssh</span><span class="p">.</span><span class="n">exec_command</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span>
+    <span class="n">messages</span> <span class="o">=</span> <span class="n">stdout</span><span class="p">.</span><span class="n">readlines</span><span class="p">()</span> <span class="o">+</span> <span class="n">stderr</span><span class="p">.</span><span class="n">readlines</span><span class="p">()</span>
+    
+    <span class="n">ok</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">"CPC2191"</span><span class="p">):</span>
+            <span class="n">ok</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="k">break</span>
+    
+    <span class="n">ftp</span> <span class="o">=</span> <span class="n">ssh</span><span class="p">.</span><span class="n">open_sftp</span><span class="p">()</span>
+
+    <span class="c1"># Get or put a local file directly
+</span>    <span class="n">ftp</span><span class="p">.</span><span class="n">put</span><span class="p">(</span><span class="s">"""C:\myfile.txt"""</span><span class="p">,</span> <span class="s">"/home/kadler/myfile.txt"</span><span class="p">)</span>
+    <span class="n">ftp</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">"/home/kadler/myfile.txt"</span><span class="p">,</span>
+            <span class="s">"/Users/kadler/myfile.txt"</span><span class="p">)</span>
+
+    <span class="c1"># Write a file programatically
+</span>    <span class="k">with</span> <span class="n">ftp</span><span class="p">.</span><span class="nb">file</span><span class="p">(</span><span class="s">"/home/kadler/test-sftp"</span><span class="p">,</span> <span class="s">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="nb">file</span><span class="p">:</span>
+        <span class="nb">file</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="s">"Hello from Paramiko!</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div></div>
+    
+      <h3 id="chsh">
+        
+        
+          chsh <a href="#chsh"></a>
+        
+        
+      </h3>
+
+<p>We’ve had numerous ways to set your login shell over the years. In fact, Jesse Gorzinski went over a few in his “Be Like a Turtle!” <a href="https://ibmsystemsmag.com/Power-Systems/8/2017/be-like-a-turtle">blog entry</a>, but none are as easy to use as the new <code class="language-plaintext highlighter-rouge">chsh</code>:</p>
+
+<div class="language-sh highlighter-rouge"><div class="highlight"><pre class="highlight"><code>yum <span class="nb">install </span>chsh
+
+chsh <span class="nt">-s</span> /QOpenSys/pkgs/bin/bash
+</code></pre></div></div>
+
+<p>No SQL to look up or execute, just a simple command to change your shell (or any user’s shell that you have <code class="language-plaintext highlighter-rouge">*USE</code> authority to).</p>
+    
+      <h3 id="pigz">
+        
+        
+          pigz <a href="#pigz"></a>
+        
+        
+      </h3>
+
+<p><a href="https://zlib.net/pigz/">pigz</a> is a parallelized version of <a href="http://gzip.org/">gzip</a>. If can take advantage of multiple CPU cores to speed up compression over standard <code class="language-plaintext highlighter-rouge">gzip</code>.</p>
+
+<p>This fulfills RFE <a href="http://www.ibm.com/developerworks/rfe/execute?use_case=viewRfe&amp;CR_ID=123949">123949</a>.</p>
+    
+      <h3 id="libuv">
+        
+        
+          libuv <a href="#libuv"></a>
+        
+        
+      </h3>
+
+<p><a href="https://github.com/libuv/libuv">libuv</a> is the asynchronous event and I/O library that underpins Node.js. Each Node.js release we’ve shipped going back to Node v0.x has included <code class="language-plaintext highlighter-rouge">libuv</code>. However, it was not made available as a separate library for other packages to use. We’ve found many other open source packages have wanted to make use of this library for their own needs, so we’re now shipping a standalone version.</p>
+    
+      <h3 id="help2man">
+        
+        
+          help2man <a href="#help2man"></a>
+        
+        
+      </h3>
+
+<p><a href="https://www.gnu.org/software/help2man/">help2man</a> is a package which generates <a href="https://en.wikipedia.org/wiki/Man_page">“man pages”</a> from command help text (ie. <code class="language-plaintext highlighter-rouge">foo --help</code>). It is used by 3 packages we ship: <code class="language-plaintext highlighter-rouge">flex</code>, <code class="language-plaintext highlighter-rouge">libtool</code>, and <code class="language-plaintext highlighter-rouge">rpmdevtools</code>. Without this package being available anyone wishing to build these packages from the source rpm would be unable to do so.</p>
+    
+      <h3 id="libevent">
+        
+        
+          libevent <a href="#libevent"></a>
+        
+        
+      </h3>
+
+<p>Like <code class="language-plaintext highlighter-rouge">libuv</code>, <a href="https://libevent.org/">libevent</a> is an asynchronous event library. This package seems to have rather unstable compatibility support and regularly changes its ABI. We recommend users use <code class="language-plaintext highlighter-rouge">libuv</code> instead, since it has a strong compatibility guarantee and is supported by our team upstream (soon to be included in the CI!). While we would rather packages use <code class="language-plaintext highlighter-rouge">libuv</code> over <code class="language-plaintext highlighter-rouge">libevent</code>, we make it available for those packages that require it, such as <code class="language-plaintext highlighter-rouge">tmux</code>.</p>
+    
+      <h2 id="package-updates">
+        
+        
+          Package Updates <a href="#package-updates"></a>
+        
+        
+      </h2>
+
+<ul>
+  <li>python3 was updated to <a href="https://docs.python.org/3.6/whatsnew/changelog.html#python-3-6-10-final">3.6.10</a>
+</li>
+  <li>cmake was updated to <a href="https://cmake.org/cmake/help/v3.16/release/3.16.html">3.16</a>
+</li>
+  <li>libutil was updated to <a href="https://github.com/IBM/portlibfori/releases/tag/0.7.0">0.7.0</a>
+</li>
+  <li>libarchive was updated to <a href="https://github.com/libarchive/libarchive/wiki/ReleaseNotes#libarchive-333">3.3.3</a> and now supports zstd compression.</li>
+  <li>activemq was updated to <a href="https://activemq.apache.org/activemq-51512-release">5.15.12</a>
+</li>
+</ul>
+    
+      <h2 id="package-fixes">
+        
+        
+          Package Fixes <a href="#package-fixes"></a>
+        
+        
+      </h2>
+    
+      <h3 id="less">
+        
+        
+          less <a href="#less"></a>
+        
+        
+      </h3>
+
+<p><code class="language-plaintext highlighter-rouge">less</code> is now linked with ncurses instead of the PASE curses library. This means that it has access to the ncurses terminfo database. The terminfo database supplied by PASE (files under <code class="language-plaintext highlighter-rouge">/QOpenSys/usr/share/lib/terminfo/</code>) only supported two terminals: <code class="language-plaintext highlighter-rouge">xterm</code> and <code class="language-plaintext highlighter-rouge">aixterm</code>. If there was no terminal definition found for your terminal (identified by <code class="language-plaintext highlighter-rouge">$TERM</code>), <code class="language-plaintext highlighter-rouge">less</code> would give the following warning and not work correctly:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-bash-4.4$ less test
+WARNING: terminal is not fully functional
+test  (press RETURN)
+</code></pre></div></div>
+
+<p>Newer versions of Linux terminal emulators, Terminal.app in macOS, and WSL on Windows now use <code class="language-plaintext highlighter-rouge">xterm-256color</code> instead of <code class="language-plaintext highlighter-rouge">xterm</code> to indicate they support more than the original 16 ANSI colors. Additionally, <code class="language-plaintext highlighter-rouge">tmux</code> uses <code class="language-plaintext highlighter-rouge">screen</code> for compatibility with GNU screen. However, neither <code class="language-plaintext highlighter-rouge">screen</code> nor <code class="language-plaintext highlighter-rouge">xterm-256-color</code> are terminals that are supported by PASE out of the box, so packages using the PASE curses library will not be able to properly function under these terminals. Linking to ncurses fixes this problem and gives those packages additional features to boot!</p>
+    
+      <h3 id="cmake">
+        
+        
+          cmake <a href="#cmake"></a>
+        
+        
+      </h3>
+
+<p>In addition to the version bump, <code class="language-plaintext highlighter-rouge">cmake</code> has been enhanced to set the proper <code class="language-plaintext highlighter-rouge">CMAKE_SYSTEM_PREFIX_PATH</code> for our IBM i Open Source environment. This means it will now by default search /QOpenSys/pkgs/lib for libraries and /QOpenSys/pkgs/include for header files. In addition, the <code class="language-plaintext highlighter-rouge">ccmake</code> binary is built with <code class="language-plaintext highlighter-rouge">ncurses</code>.</p>
+    
+      <h3 id="tar">
+        
+        
+          tar <a href="#tar"></a>
+        
+        
+      </h3>
+
+<p>A few bugs were fixed in GNU tar that snuck in when we rebuilt for IBM i 7.2:</p>
+
+<ul>
+  <li>Using <code class="language-plaintext highlighter-rouge">--newer</code> or <code class="language-plaintext highlighter-rouge">--after-date</code> would produce an error like so:</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ tar -cf test.tar --newer test mydir
+tar: test: Cannot stat: A system call received a parameter that is not valid.
+tar: Date sample file not found
+Try 'tar --help' or 'tar --usage' for more information.
+</code></pre></div></div>
+
+<ul>
+  <li>Using <code class="language-plaintext highlighter-rouge">-C</code> would produce an error like so:</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-bash-4.4$ tar -C /home/kadler -c -f test.tar /home/kadler/test
+tar: /home/kadler: Cannot open: Invalid argument
+tar: Error is not recoverable: exiting now
+</code></pre></div></div>
+
+<p>Both of these issues are now fixed with the latest version of tar-gnu.</p>
+    
+      <h2 id="closing">
+        
+        
+          Closing <a href="#closing"></a>
+        
+        
+      </h2>
+
+<p>Aaaaaaannnnnnnnndddddd we’re all caught up!</p>
+
+<p>Of course, next week is still April, so I wouldn’t have the April update then, so instead I’ll cover all the non-RPM stuff my team’s been up to.</p>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/ibmi-oss-updates" class="page__taxonomy-item" rel="tag">ibmi-oss-updates</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-04-22T00:00:00-05:00">April 22, 2020</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2020/04/15/feb-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates Feb 2020
+">Previous</a>
+    
+    
+      <a href="/2020/05/20/apr-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates Apr 2020
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/02/21/jan-2022-oss-updates.html" rel="permalink">IBM i Open Source Updates January 2022
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

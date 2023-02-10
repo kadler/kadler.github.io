@@ -1,0 +1,413 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>EBCDIC - Kevin’s Ramblings</title>
+<meta name="description" content="Ramblings of an Open Source dude working on IBM i.">
+
+
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="EBCDIC">
+<meta property="og:url" content="https://kadler.io/ebcdic/">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/ebcdic/">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/posts/" >Posts</a>
+            </li><li class="masthead__menu-item">
+              <a href="/categories/" >Categories</a>
+            </li><li class="masthead__menu-item">
+              <a href="/year-archive/" >Archive</a>
+            </li><li class="masthead__menu-item">
+              <a href="/ebcdic/" >EBCDIC</a>
+            </li><li class="masthead__menu-item">
+              <a href="/about/" >About</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="EBCDIC">
+    
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">EBCDIC
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <ul>
+  <li><a href="/ebcdic/IBM-037">IBM-037</a></li>
+  <li><a href="/ebcdic/IBM-256">IBM-256</a></li>
+  <li><a href="/ebcdic/IBM-273">IBM-273</a></li>
+  <li><a href="/ebcdic/IBM-277">IBM-277</a></li>
+  <li><a href="/ebcdic/IBM-278">IBM-278</a></li>
+  <li><a href="/ebcdic/IBM-280">IBM-280</a></li>
+  <li><a href="/ebcdic/IBM-284">IBM-284</a></li>
+  <li><a href="/ebcdic/IBM-285">IBM-285</a></li>
+  <li><a href="/ebcdic/IBM-290">IBM-290</a></li>
+  <li><a href="/ebcdic/IBM-297">IBM-297</a></li>
+  <li><a href="/ebcdic/IBM-420">IBM-420</a></li>
+  <li><a href="/ebcdic/IBM-423">IBM-423</a></li>
+  <li><a href="/ebcdic/IBM-424">IBM-424</a></li>
+  <li><a href="/ebcdic/IBM-425">IBM-425</a></li>
+  <li><a href="/ebcdic/IBM-500">IBM-500</a></li>
+  <li><a href="/ebcdic/IBM-833">IBM-833</a></li>
+  <li><a href="/ebcdic/IBM-836">IBM-836</a></li>
+  <li><a href="/ebcdic/IBM-838">IBM-838</a></li>
+  <li><a href="/ebcdic/IBM-870">IBM-870</a></li>
+  <li><a href="/ebcdic/IBM-871">IBM-871</a></li>
+  <li><a href="/ebcdic/IBM-875">IBM-875</a></li>
+  <li><a href="/ebcdic/IBM-880">IBM-880</a></li>
+  <li><a href="/ebcdic/IBM-905">IBM-905</a></li>
+  <li><a href="/ebcdic/IBM-918">IBM-918</a></li>
+  <li><a href="/ebcdic/IBM-924">IBM-924</a></li>
+  <li><a href="/ebcdic/IBM-1025">IBM-1025</a></li>
+  <li><a href="/ebcdic/IBM-1026">IBM-1026</a></li>
+  <li><a href="/ebcdic/IBM-1027">IBM-1027</a></li>
+  <li><a href="/ebcdic/IBM-1047">IBM-1047</a></li>
+  <li><a href="/ebcdic/IBM-1097">IBM-1097</a></li>
+  <li><a href="/ebcdic/IBM-1112">IBM-1112</a></li>
+  <li><a href="/ebcdic/IBM-1122">IBM-1122</a></li>
+  <li><a href="/ebcdic/IBM-1123">IBM-1123</a></li>
+  <li><a href="/ebcdic/IBM-1130">IBM-1130</a></li>
+  <li><a href="/ebcdic/IBM-1132">IBM-1132</a></li>
+  <li><a href="/ebcdic/IBM-1137">IBM-1137</a></li>
+  <li><a href="/ebcdic/IBM-1140">IBM-1140</a></li>
+  <li><a href="/ebcdic/IBM-1141">IBM-1141</a></li>
+  <li><a href="/ebcdic/IBM-1142">IBM-1142</a></li>
+  <li><a href="/ebcdic/IBM-1143">IBM-1143</a></li>
+  <li><a href="/ebcdic/IBM-1144">IBM-1144</a></li>
+  <li><a href="/ebcdic/IBM-1145">IBM-1145</a></li>
+  <li><a href="/ebcdic/IBM-1146">IBM-1146</a></li>
+  <li><a href="/ebcdic/IBM-1147">IBM-1147</a></li>
+  <li><a href="/ebcdic/IBM-1148">IBM-1148</a></li>
+  <li><a href="/ebcdic/IBM-1149">IBM-1149</a></li>
+  <li><a href="/ebcdic/IBM-1153">IBM-1153</a></li>
+  <li><a href="/ebcdic/IBM-1154">IBM-1154</a></li>
+  <li><a href="/ebcdic/IBM-1155">IBM-1155</a></li>
+  <li><a href="/ebcdic/IBM-1156">IBM-1156</a></li>
+  <li><a href="/ebcdic/IBM-1157">IBM-1157</a></li>
+  <li><a href="/ebcdic/IBM-1158">IBM-1158</a></li>
+  <li><a href="/ebcdic/IBM-1160">IBM-1160</a></li>
+  <li><a href="/ebcdic/IBM-1164">IBM-1164</a></li>
+  <li><a href="/ebcdic/IBM-1166">IBM-1166</a></li>
+  <li><a href="/ebcdic/IBM-1175">IBM-1175</a></li>
+  <li><a href="/ebcdic/IBM-4971">IBM-4971</a></li>
+  <li><a href="/ebcdic/IBM-5123">IBM-5123</a></li>
+  <li><a href="/ebcdic/IBM-5233">IBM-5233</a></li>
+  <li><a href="/ebcdic/IBM-8612">IBM-8612</a></li>
+  <li><a href="/ebcdic/IBM-9030">IBM-9030</a></li>
+  <li><a href="/ebcdic/IBM-12708">IBM-12708</a></li>
+  <li><a href="/ebcdic/IBM-13121">IBM-13121</a></li>
+  <li><a href="/ebcdic/IBM-13124">IBM-13124</a></li>
+  <li><a href="/ebcdic/IBM-28709">IBM-28709</a></li>
+  <li><a href="/ebcdic/IBM-57777">IBM-57777</a></li>
+  <li><a href="/ebcdic/IBM-61175">IBM-61175</a></li>
+  <li><a href="/ebcdic/IBM-62211">IBM-62211</a></li>
+  <li><a href="/ebcdic/IBM-62224">IBM-62224</a></li>
+  <li><a href="/ebcdic/IBM-62235">IBM-62235</a></li>
+  <li><a href="/ebcdic/IBM-62245">IBM-62245</a></li>
+  <li><a href="/ebcdic/IBM-62251">IBM-62251</a></li>
+</ul>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+      </footer>
+
+      
+
+      
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

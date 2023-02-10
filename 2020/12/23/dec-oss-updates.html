@@ -1,0 +1,794 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>IBM i Open Source Updates December 2020 - Kevin’s Ramblings</title>
+<meta name="description" content="Being the holiday and end of year season here in Rochester, things are wrappingup for the year so I figured I’d put out my December update now instead of nextmonth. Consider it an early Xmas present - just watch out for Santa’s bicyclegun! :wink:">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="IBM i Open Source Updates December 2020">
+<meta property="og:url" content="https://kadler.io/2020/12/23/dec-oss-updates.html">
+
+
+  <meta property="og:description" content="Being the holiday and end of year season here in Rochester, things are wrappingup for the year so I figured I’d put out my December update now instead of nextmonth. Consider it an early Xmas present - just watch out for Santa’s bicyclegun! :wink:">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-23T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2020/12/23/dec-oss-updates.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="IBM i Open Source Updates December 2020">
+    <meta itemprop="description" content="Being the holiday and end of year season here in Rochester, things are wrappingup for the year so I figured I’d put out my December update now instead of nextmonth. Consider it an early Xmas present - just watch out for Santa’s bicyclegun! :wink:">
+    <meta itemprop="datePublished" content="December 23, 2020">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">IBM i Open Source Updates December 2020
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  6 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Being the holiday and end of year season here in Rochester, things are wrapping
+up for the year so I figured I’d put out my December update now instead of next
+month. Consider it an early Xmas present - just watch out for Santa’s bicycle
+gun! <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20"></p>
+
+<p><img src="/assets/images/futurama-xmas.jpg" alt="Futurama Xmas"></p>
+      <h2 id="new-packages">
+        
+        
+          New Packages <a href="#new-packages"></a>
+        
+        
+      </h2>
+    
+      <h3 id="cronie">
+        
+        
+          cronie <a href="#cronie"></a>
+        
+        
+      </h3>
+
+<p><code class="language-plaintext highlighter-rouge">cron</code> has finally come to IBM i!
+<a href="https://github.com/cronie-crond/cronie">cronie</a> is a modern version of the cron
+daemon, used by the majority of Linux distributions and based off the original
+cron written by Paul Vixie.</p>
+
+<p>To start cron, simply run <code class="language-plaintext highlighter-rouge">crond</code> from a user with <code class="language-plaintext highlighter-rouge">*ALLOBJ</code> authority — it’ll
+fork off a process and keep itself running. From then on, the cron daemon will
+run the scheduled jobs at the appropriate time. Every minute, cron will look for
+updates to the config files: the main config at <code class="language-plaintext highlighter-rouge">/QOpenSys/etc/crontab</code>, files
+in <code class="language-plaintext highlighter-rouge">/QOpenSys/etc/cron.d</code>, and under configs in <code class="language-plaintext highlighter-rouge">/QOpenSys/var/spool/cron</code>.</p>
+
+<p><code class="language-plaintext highlighter-rouge">cron</code> stores its configuration in a custom format called a crontab. While this
+format was created specifically for cron, other cron-like tools sometime uses
+the same format too. An example looks like this:</p>
+
+<pre><code class="language-cron"># This is a crontab, which is a field based format
+# Anything after the hash is a comment
+#
+# The first 5 fields are space separated:
+# minute hour day_of_month month day_of_week
+#
+# Multiple values can be specified for each field using commas
+#
+# The last field is everything after the first 5 and is the
+# command string to execute.
+#
+# Examples:
+#
+# run every day at 3 am
+0 3 * * * bash -c 'echo hello!'
+
+# run at 10:19 pm on the 1st and 15th day of the month as well
+# as well as every Saturday
+19 22 1,15 * 6 bash -c 'echo This is a convoluted schedule'
+</code></pre>
+
+<p><a href="https://en.wikipedia.org/wiki/Cron#Overview">Wikipedia</a> has further details on
+the format or check the documentation by running <code class="language-plaintext highlighter-rouge">man 5 crontab</code> if you have
+man-db installed <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">.</p>
+
+<p>To be quite honest, I tend to forget the format for the time fields, especially
+the order of the “day of week” and “day of month” fields so I tend to use an
+<a href="https://crontab-generator.org/">online generator</a>.</p>
+
+<p>Users can create and edit their own crontabs with <code class="language-plaintext highlighter-rouge">crontab -e</code>. This will open
+the user’s default editor (using <code class="language-plaintext highlighter-rouge">$EDITOR</code> or vi as a fallback if not set).
+Users can also edit <em>other user’s</em> crontabs with <code class="language-plaintext highlighter-rouge">crontab -e -u &lt;user&gt;</code> so long
+as they have <code class="language-plaintext highlighter-rouge">*USE</code> authority to the target user profile. All jobs in user’s
+crontabs will run under that user profile.</p>
+
+<p>Cron supports both a deny list and allow list, with the allow list taking
+precedence. An empty <code class="language-plaintext highlighter-rouge">/QOpenSys/etc/cron.deny</code> is shipped with cron and system
+adminstrators may add users to this file to prevent them from <em>editing</em> their
+crontab (though the crontab will still run!). If an admin only wants to allow
+certain users to be able to create and edit their crontabs, they can create a
+<code class="language-plaintext highlighter-rouge">/QOpenSys/etc/cron.allow</code>.</p>
+
+<p>In addition to specifically scheduled commands, admins may place scripts or
+symlinks to scripts in the <code class="language-plaintext highlighter-rouge">/QOpenSys/etc/cron.hourly</code>,
+<code class="language-plaintext highlighter-rouge">/QOpenSys/etc/cron.daily</code>, and <code class="language-plaintext highlighter-rouge">/QOpenSys/etc/cron.monthly</code> directories. These
+scripts will be executed by cron once per hour, day, or month as appropriate.</p>
+    
+      <h3 id="ninja-build">
+        
+        
+          ninja-build <a href="#ninja-build"></a>
+        
+        
+      </h3>
+
+<p><a href="https://ninja-build.org/">Ninja</a> is a build tool, similar to Make: it generates
+a dependency graph from the given rules and determines what to build when
+something changes. The difference between Make and Ninja is that the Ninja file
+format is not meant to be written by humans, but generated by other build tools,
+such as <a href="https://cmake.org/">CMake</a>. In addition, Ninja defaults to
+automatically using all the available processors on your system, whereas Make
+requires you to specify the number you want to use with <code class="language-plaintext highlighter-rouge">-jN</code>.</p>
+
+<p>The easiest way to try out Ninja is by building a project that uses CMake and
+specifying the Ninja build generator with the <code class="language-plaintext highlighter-rouge">-G</code> option, eg.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Assuming there's a CMakeLists.txt in the current directory</span>
+<span class="nb">mkdir </span>build <span class="o">&amp;&amp;</span> <span class="nb">cd </span>build
+
+cmake <span class="nt">-G</span> Ninja ..
+
+ninja
+</code></pre></div></div>
+    
+      <h3 id="minisign">
+        
+        
+          minisign <a href="#minisign"></a>
+        
+        
+      </h3>
+
+<p><a href="https://jedisct1.github.io/minisign/">minisign</a> is a super simple tool for
+signing files. Currently if you want to sign a file on IBM i, you can use 
+either OpenSSL or GPG, but neither is ideal.</p>
+
+<p>GPG is kind of a behemoth - it can do lots of things, but it has quite a
+learning curve to get going and there’s lots to criticize about it’s very “stuck
+in the 90s” defaults, but it certainly <em>can</em> be used to securely sign and verify
+files.</p>
+
+<p>OpenSSL also works and has all the same issues as anything using SSL has:
+managing your public key infrastructure. You also have to use the <code class="language-plaintext highlighter-rouge">openssl</code>
+command, which looks very much like it was designed the <em>IBM Way</em>™, what with
+its nearly 50 “commands” and various options for each of them. Trying to
+remember all the different options and switches is enough to drive one mad.</p>
+
+<p>Instead, if all you want to do is sign files, a much easier tool is minisign.
+Minisign is inspired by (and mostly compatible with) OpenBSD’s <code class="language-plaintext highlighter-rouge">signify</code> tool.
+It does one thing (sign/verify files) and supports only one crypto algorithm
+(<a href="http://ed25519.cr.yp.to">ed25519</a>) - it’s almost impossible to mess things up!</p>
+
+<p>Here’s a simple example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># create a keypair</span>
+minisign <span class="nt">-G</span>
+
+<span class="c"># Sign a file, creating myfile.txt.minisig</span>
+minisign <span class="nt">-S</span> <span class="nt">-m</span> myfile.txt
+
+<span class="c"># Verify the file</span>
+minisign <span class="nt">-V</span> <span class="nt">-m</span> myfile.txt <span class="nt">-p</span> minisign.pub
+</code></pre></div></div>
+
+<p>Compare to the equivalent using OpenSSL:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Generate a keypair (using a 4096-bit RSA key)</span>
+openssl req <span class="nt">-nodes</span> <span class="nt">-x509</span> <span class="nt">-sha256</span> <span class="nt">-newkey</span> rsa:4096 <span class="nt">-keyout</span> signing.key <span class="nt">-out</span> signing.crt <span class="nt">-days</span> 365 <span class="nt">-subj</span> <span class="s2">"/CN=signing"</span>
+
+<span class="c"># Sign the file</span>
+openssl dgst <span class="nt">-sha256</span> <span class="nt">-sign</span> signing.key <span class="nt">-out</span> myfile.txt.sha256 myfile.txt
+
+<span class="c"># Get the signer's public key from the certificate</span>
+openssl x509 <span class="nt">-in</span> signing.crt <span class="nt">-pubkey</span> <span class="nt">-noout</span> <span class="o">&gt;</span> signing.pub
+
+<span class="c"># Verify the file</span>
+openssl dgst <span class="nt">-sha256</span> <span class="nt">-verify</span> signing.pub <span class="nt">-signature</span> myfile.txt.sha256 myfile.txt
+</code></pre></div></div>
+    
+      <h3 id="libzip">
+        
+        
+          libzip <a href="#libzip"></a>
+        
+        
+      </h3>
+
+<p><a href="https://libzip.org/">libzip</a> is a library for reading, creating, and modifying
+Zip archives. It’s primarily used on IBM i for the PHP <a href="https://www.php.net/manual/en/book.zip.php">zip
+extension</a>. Beyond that, you may
+find some use with the <code class="language-plaintext highlighter-rouge">zipcmp</code> and <code class="language-plaintext highlighter-rouge">zipmerge</code> utilities in the libzip-tools
+subpackage.</p>
+    
+      <h3 id="pv">
+        
+        
+          pv <a href="#pv"></a>
+        
+        
+      </h3>
+
+<p><a href="http://www.ivarch.com/programs/pv.shtml">pv</a> “pipe viewer” is a tool for
+monitoring the progress of data flowing through a shell pipeline. You can insert
+it anywhere between two commands in the pipeline to view a progress bar,
+estimate of time to completion, transfer speed, etc.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ pv -cN source &lt; matplotlib-3.2.1.tar.gz |
+  gzip -d | pv -cN gzip |
+  xz | pv -cN xz &gt; matplotlib-3.2.1.tar.xz
+   source: 23.0MiB 0:00:18 [1.81MiB/s] [=========&gt;       ] 59% ETA 0:00:12
+     gzip: 46.4MiB 0:00:19 [2.37MiB/s] [           &lt;=&gt;                   ]
+       xz: 20.3MiB 0:00:19 [1.85MiB/s] [           &lt;=&gt;                   ]
+</code></pre></div></div>
+    
+      <h3 id="cups">
+        
+        
+          cups <a href="#cups"></a>
+        
+        
+      </h3>
+
+<p><a href="https://www.cups.org/">CUPS</a> (Common Unix Printing System) is a printing system
+for Unix-like systems. CUPS traditionally includes both a print server, drivers
+for various printers, and libraries for interacting with it. At this time, we
+are only providing the main CUPS library (libcups), since it is needed by
+OpenJDK Java 11.</p>
+
+<p>We are looking to explore further capabilities for integration in the future —
+perhaps a CUPS driver which can generate a spool file on an output queue or
+perhaps CUPS could read from an output queue and route the spool files to a
+remote printer? If that is something you’d be interested in, please let me know!</p>
+    
+      <h2 id="package-updates">
+        
+        
+          Package Updates <a href="#package-updates"></a>
+        
+        
+      </h2>
+    
+      <h3 id="bash">
+        
+        
+          bash <a href="#bash"></a>
+        
+        
+      </h3>
+
+<p>With the latest update to BASH, there are 3 new IBM i-specific BASH builtin
+functions: <code class="language-plaintext highlighter-rouge">liblist</code>, <code class="language-plaintext highlighter-rouge">cl</code>, and <code class="language-plaintext highlighter-rouge">getjobid</code>. These builtins function nearly
+identically to the <code class="language-plaintext highlighter-rouge">liblist</code>, <code class="language-plaintext highlighter-rouge">system</code>, and <code class="language-plaintext highlighter-rouge">getjobid</code> commands that exist in
+PASE and/or QSH. I have more details about these new builtin functions <a href="/2020/12/23/bash-builtins.html">here</a>.</p>
+    
+      <h3 id="ca-certificates">
+        
+        
+          ca-certificates <a href="#ca-certificates"></a>
+        
+        
+      </h3>
+
+<p>ca-certificates will now generate a Curl-style certificate bundle at
+<code class="language-plaintext highlighter-rouge">/QOpenSys/var/lib/ca-certificates/ca-bundle.pem</code>. This may be useful for
+applications that need this style of CA trust store.</p>
+    
+      <h3 id="rpm">
+        
+        
+          rpm <a href="#rpm"></a>
+        
+        
+      </h3>
+
+<p>NOTE: This is mostly useful for rpm <em>packagers</em>.</p>
+
+<p>rpm ships with a new “Build Root Policy” file brp-rm-libtool-control-files which
+will automatically run after just prior to the <code class="language-plaintext highlighter-rouge">%files</code> sections being packaged
+and removes any libtool .la files found. If you were in the habit of removing
+these files manually (as we do at IBM), you no longer need to do so.</p>
+    
+      <h2 id="closing">
+        
+        
+          Closing <a href="#closing"></a>
+        
+        
+      </h2>
+
+<p>Well, that’s it for 2020. It’s been quite a year and despite everything going
+on, the IBM i Open Source ecosystem has still managed to make great strides.</p>
+
+<p>Of course we wouldn’t have gotten nearly as much accomplished this year without
+the great team we have here at IBM. Thanks and mad props goes out to Abdirahim,
+Eric, Mark, Meng Xu, Naveen, Vasili, Jesse, and more for their amazing
+contributions this year.</p>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/ibmi-oss-updates" class="page__taxonomy-item" rel="tag">ibmi-oss-updates</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-23T00:00:00-06:00">December 23, 2020</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2020/12/23/bash-builtins.html" class="pagination--pager" title="getjobid, cl, and liblist — Oh, My!
+">Previous</a>
+    
+    
+      <a href="/2021/03/03/feb-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates February 2021
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/02/21/jan-2022-oss-updates.html" rel="permalink">IBM i Open Source Updates January 2022
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

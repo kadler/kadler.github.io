@@ -1,0 +1,213 @@
+<style>
+.boxed {
+    margin: 0.2em;
+    padding: 0.3em;
+    font-size: 12pt;
+    font-family: sans-serif;
+}
+
+.outlined {
+    border: 1px solid black;
+}
+
+.guessed {
+    background-color: #10a040;
+    color: whitesmoke;
+}
+
+.guess {
+    width: 1.5em;
+    font-size: 12pt;
+    text-align: center;
+}
+
+.error {
+    background-color: red;
+    color: whitesmoke;
+}
+
+.top {
+    position: absolute;
+    width: 1.5em;
+    height: 1.5em;
+    text-align: center;
+}
+
+.bottom {
+    position: absolute;
+    width: 1.5em;
+    height: 1.5em;
+    text-align: center;
+    top: 2.5em;
+    font-weight: bold;
+}
+
+.container {
+    position: relative;
+    display: inline-block;
+    width: 2.5em;
+    height: 5em;
+}
+
+#cryptogram {
+    width: 100%;
+    height: 6em;
+    font-size: 14pt;
+    display: block;
+}
+
+.hidden {
+    display: none;
+}
+
+</style>
+<script>
+var letters = "abcdefghijklmnopqrstuvwxyz";
+var cryptogram = new Map();
+var guesses = new Map();
+
+function load() {
+    // Clear out a previously loaded cryptogram node map
+    cryptogram = {};
+    letters.split('').forEach(letter => {
+        cryptogram[letter] = Array();
+    });
+    guesses = new Map();
+
+    // Clear out any previously loaded cryptogram DOM elements
+    let loaded_cryptogram = document.getElementById('loaded_cryptogram');
+    loaded_cryptogram.innerHTML = "";
+
+    // Load up the words from the cryptogram in the text area
+    let gram = document.getElementById('cryptogram').value.toLowerCase();
+    gram.split(/\s+/).forEach(word => { 
+        word.split("").forEach(letter => {
+            let guessable = letters.includes(letter);
+            
+            let node = document.createElement("span");
+            node.className = "container";
+
+            let orig = document.createElement("span");
+            orig.className = "boxed top";
+            orig.innerHTML = letter;
+            node.appendChild(orig);
+
+            let guess = document.createElement("span");
+            guess.className = "boxed bottom";
+            node.appendChild(guess)
+
+            if (guessable) {
+                orig.classList.add("outlined");
+                guess.classList.add("outlined");
+                cryptogram[letter].push(guess);
+            }
+
+            loaded_cryptogram.appendChild(node);
+        });
+
+        let node = document.createElement("span");
+        node.className = "boxed";
+        node.innerHTML = " ";
+        loaded_cryptogram.appendChild(node);
+    });
+
+    let children = document.getElementById("guesses").children;
+    Array.from(children).forEach(el => {
+        el.value = "";
+    });
+
+    document.getElementById('guesses').classList.remove('hidden');
+}
+
+function update(el) {
+    // If the cryptogram didn't contain any of this character, no need to update
+    if (!cryptogram[el.id]) return;
+
+    // TODO: Figure out how to check for duplicate guesses and flag them as errors
+    const old_value = guesses.get(el.id);
+
+    // If old and new values are the same, nothing to do
+    if (old_value == el.value) return;
+
+    guesses.set(el.id, el.value);
+    
+
+    let entries_matching_value = (value) => {
+        return Array.from(guesses.entries())
+                    .filter(entry => entry[1] == value)
+                    .map(entry => entry[0]);
+    }
+
+    // Check if we had duplicates of the old value. If we no longer have duplicates,
+    // after changing the value, then we remove the error condition from the other
+    // entries. Otherwise, we leave them be since there are still more duplicates.
+    if (old_value) {
+        // If we now only have 1 entry, there's no duplicates 
+        let entries = entries_matching_value(old_value);
+        if (entries.length == 1) {
+            document.getElementById(entries[0]).classList.remove('error');
+        }
+    }
+
+    // Assume it's not a duplicate for now.
+    el.classList.remove('error');
+
+    // If we have a new value, we need to check for duplicates.
+    // If we have duplicates, we need to add the error condition to them all
+    if (el.value) {
+        let entries = entries_matching_value(el.value);
+        if (entries.length > 1) {
+            entries.forEach(entry => {
+                document.getElementById(entry).classList.add('error');
+            });
+        }
+    }
+
+    // Put the guess in each corresponding box from the cryptogram
+    cryptogram[el.id].forEach(node => {
+        node.innerHTML = el.value;
+    });
+
+    
+}
+</script>
+
+<h1>Cryptogram Solving Tool</h1>
+<div style="width: 50%; position: relative; padding-bottom: 30px; ">
+  <textarea id="cryptogram"></textarea>
+  <button onclick="load()" style="position: absolute; right: 0px;">Load</button>
+</div>
+<div>
+    <div style="height: 1em;"></div>
+    <div id='guesses' class='hidden'>
+        <input id="a" type="text" maxlength="1" class="boxed outlined guess" placeholder="a" onkeyup="update(this)" />
+        <input id="b" type="text" maxlength="1" class="boxed outlined guess" placeholder="b" onkeyup="update(this)" />
+        <input id="c" type="text" maxlength="1" class="boxed outlined guess" placeholder="c" onkeyup="update(this)" />
+        <input id="d" type="text" maxlength="1" class="boxed outlined guess" placeholder="d" onkeyup="update(this)" />
+        <input id="e" type="text" maxlength="1" class="boxed outlined guess" placeholder="e" onkeyup="update(this)" />
+        <input id="f" type="text" maxlength="1" class="boxed outlined guess" placeholder="f" onkeyup="update(this)" />
+        <input id="g" type="text" maxlength="1" class="boxed outlined guess" placeholder="g" onkeyup="update(this)" />
+        <input id="h" type="text" maxlength="1" class="boxed outlined guess" placeholder="h" onkeyup="update(this)" />
+        <input id="i" type="text" maxlength="1" class="boxed outlined guess" placeholder="i" onkeyup="update(this)" />
+        <input id="j" type="text" maxlength="1" class="boxed outlined guess" placeholder="j" onkeyup="update(this)" />
+        <input id="k" type="text" maxlength="1" class="boxed outlined guess" placeholder="k" onkeyup="update(this)" />
+        <input id="l" type="text" maxlength="1" class="boxed outlined guess" placeholder="l" onkeyup="update(this)" />
+        <input id="m" type="text" maxlength="1" class="boxed outlined guess" placeholder="m" onkeyup="update(this)" />
+        <input id="n" type="text" maxlength="1" class="boxed outlined guess" placeholder="n" onkeyup="update(this)" />
+        <input id="o" type="text" maxlength="1" class="boxed outlined guess" placeholder="o" onkeyup="update(this)" />
+        <input id="p" type="text" maxlength="1" class="boxed outlined guess" placeholder="p" onkeyup="update(this)" />
+        <input id="q" type="text" maxlength="1" class="boxed outlined guess" placeholder="q" onkeyup="update(this)" />
+        <input id="r" type="text" maxlength="1" class="boxed outlined guess" placeholder="r" onkeyup="update(this)" />
+        <input id="s" type="text" maxlength="1" class="boxed outlined guess" placeholder="s" onkeyup="update(this)" />
+        <input id="t" type="text" maxlength="1" class="boxed outlined guess" placeholder="t" onkeyup="update(this)" />
+        <input id="u" type="text" maxlength="1" class="boxed outlined guess" placeholder="u" onkeyup="update(this)" />
+        <input id="v" type="text" maxlength="1" class="boxed outlined guess" placeholder="v" onkeyup="update(this)" />
+        <input id="w" type="text" maxlength="1" class="boxed outlined guess" placeholder="w" onkeyup="update(this)" />
+        <input id="x" type="text" maxlength="1" class="boxed outlined guess" placeholder="x" onkeyup="update(this)" />
+        <input id="y" type="text" maxlength="1" class="boxed outlined guess" placeholder="y" onkeyup="update(this)" />
+        <input id="z" type="text" maxlength="1" class="boxed outlined guess" placeholder="z" onkeyup="update(this)" />
+    </div>
+    <br />
+    <div id="loaded_cryptogram"></div>
+</div>
+

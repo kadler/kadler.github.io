@@ -1,0 +1,699 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>LIBPATH… How Does It Work? - Kevin’s Ramblings</title>
+<meta name="description" content="So in the last entry, I described the differences between PATH and LIBPATH, but I didn’t really explain how LIBPATH is actually used. I’m going to rectify that in this entry. First, though, we need to take a detour and learn how programs get loaded.">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="LIBPATH… How Does It Work?">
+<meta property="og:url" content="https://kadler.io/2017/09/08/libpath.html">
+
+
+  <meta property="og:description" content="So in the last entry, I described the differences between PATH and LIBPATH, but I didn’t really explain how LIBPATH is actually used. I’m going to rectify that in this entry. First, though, we need to take a detour and learn how programs get loaded.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2017-09-08T18:03:20-05:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2017/09/08/libpath.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="LIBPATH… How Does It Work?">
+    <meta itemprop="description" content="So in the last entry, I described the differences between PATH and LIBPATH, but I didn’t really explain how LIBPATH is actually used. I’m going to rectify that in this entry. First, though, we need to take a detour and learn how programs get loaded.">
+    <meta itemprop="datePublished" content="September 08, 2017">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">LIBPATH… How Does It Work?
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  6 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>So in the last entry, I described the differences between <code class="language-plaintext highlighter-rouge">PATH</code> and <code class="language-plaintext highlighter-rouge">LIBPATH</code>, but I didn’t really explain how <code class="language-plaintext highlighter-rouge">LIBPATH</code> is actually used. I’m going to rectify that in this entry. First, though, we need to take a detour and learn how programs get loaded.</p>
+      <h2 id="loading-101">
+        
+        
+          Loading 101 <a href="#loading-101"></a>
+        
+        
+      </h2>
+
+<p>When you execute a program on Unix systems, this flows through a function called <code class="language-plaintext highlighter-rouge">exec()</code>. This special function will cause the program specified to replace the currently executing program. Before the new program can start its execution, it must first get loaded in to memory. There’s two pieces that coordinate to load a program:</p>
+
+<ul>
+  <li>the loader in the kernel (SLIC)</li>
+  <li>the linker (ld)</li>
+</ul>
+
+<p>The loader will load the program objects in to memory, while the linker will find the shared libraries that the program depends on and has them loaded as well as a bunch of other things that we don’t care about for this. In AIX/PASE there’s also the Runtime Dynamic Linker, but we can ignore that for now as well.</p>
+    
+      <h2 id="drafting-our-mvp">
+        
+        
+          Drafting our MVP <a href="#drafting-our-mvp"></a>
+        
+        
+      </h2>
+<p>So to start, let’s look at a “simple” example. This is a program which doesn’t link to any shared libraries. One might call it an “MVP”: <strong>M</strong>inimum <strong>V</strong>iable <strong>P</strong>rogram. You might think this basic program looks like this:</p>
+
+<pre><code class="language-C">int main()
+{
+    int x = 6 + 25;
+    return x;
+}
+</code></pre>
+
+<p>However, if we build this program it will link to the <code class="language-plaintext highlighter-rouge">libc</code> shared library, but I said we didn’t want to link to <em>any</em> shared libraries! How can we do that? For that we need to make our “simple” example somewhat more complicated by going to assembly. Here’s the code:</p>
+
+<pre><code class="language-asm">        .file   "example.s"
+        .csect .text[PR]
+        .toc
+        .csect .text[PR]
+        .align 2
+        .globl __start
+        .globl .__start
+        .csect __start[DS]
+
+__start:
+        .llong .__start, TOC[tc0], 0
+        .csect .text[PR]
+.__start:
+        li 9,6
+        li 10,25
+        add 3,9,10
+</code></pre>
+
+<p>This is practically the smallest program you can make. It’s so small that some might argue the applicability of using the term “viable” to describe it, since it doesn’t contain a complete instruction stream and simply crashes after the last instruction:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">-bash-4</span>.3<span class="nv">$ </span>./example1
+Illegal instruction <span class="o">(</span>core dumped<span class="o">)</span>
+</code></pre></div></div>
+
+<p>However, it does load and execute so it’s definitely a program… Just not a very good one! <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20"></p>
+    
+      <h2 id="dumping-the-mvp">
+        
+        
+          Dumping the MVP <a href="#dumping-the-mvp"></a>
+        
+        
+      </h2>
+
+<p>So our MVP got in to a bad crash and broke his leg, punctured his spleen, and lost half his blood. What to do with him? It may seem heartless, but I think we have to dump him:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">-bash-4</span>.3<span class="nv">$ </span>dump <span class="nt">-X64</span> <span class="nt">-H</span> example1
+
+example1:
+
+                        <span class="k">***</span>Loader Section<span class="k">***</span>
+                      Loader Header Information
+VERSION#         <span class="c">#SYMtableENT     #RELOCent        LENidSTR</span>
+0x00000001       0x00000001       0x00000002       0x00000010
+
+<span class="c">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL</span>
+0x00000001       0x00000070       0x0000000a       0x00000080
+
+
+                        <span class="k">***</span>Import File Strings<span class="k">***</span>
+INDEX  PATH                          BASE                MEMBER
+0      /usr/lib:/lib
+</code></pre></div></div>
+
+<p>The AIX/PASE <code class="language-plaintext highlighter-rouge">dump</code> command can tell you quite a bit about binaries/executables, shared libraries, and object files. Here we’re using the <code class="language-plaintext highlighter-rouge">-X64</code> flag to tell it we’re looking at a 64-bit object and the <code class="language-plaintext highlighter-rouge">-H</code> flag to tell it to dump the object’s header. The important part to look at is below the <code class="language-plaintext highlighter-rouge">***Import File Strings***</code>. There is only 1 index defined and it is index 0, which is special and always exists. Since there are no other indexes defined this means the program is not linked to any shared libraries.</p>
+
+<p>Since this program is not linked to any shared libraries, the linker doesn’t have anything to do and so <code class="language-plaintext highlighter-rouge">LIBPATH</code> is not used at all. What about a program that links to some shared libraries? Let’s that first <code class="language-plaintext highlighter-rouge">C</code> example above and dump it:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-bash-4.3$ dump -X64 -H example2
+
+example2:
+
+                        ***Loader Section***
+                      Loader Header Information
+VERSION#         #SYMtableENT     #RELOCent        LENidSTR
+0x00000001       0x0000000a       0x0000002a       0x00000021
+
+#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+0x00000002       0x000003c8       0x0000007b       0x000003e9
+
+
+                        ***Import File Strings***
+INDEX  PATH                          BASE                MEMBER
+0      /usr/lib:/lib
+1                                    libc.a              shr_64.o
+</code></pre></div></div>
+
+<p>Aha! Notice now we have an index 1 whose “base” is <code class="language-plaintext highlighter-rouge">libc.a</code>. This is the AIX/PASE C library (<code class="language-plaintext highlighter-rouge">libc</code>). Shared libraries are a bit funky on AIX/PASE compared to other UNIX environments. On most other UNIX platforms, a “shared library” is synonymous with a “shared object”, but this is not the case in AIX/PASE. Here, a shared library can contain my shared objects. In this case we’re linked to <code class="language-plaintext highlighter-rouge">shr_64.o</code>, which is the conventional name for AIX 64-bit shared objects (<code class="language-plaintext highlighter-rouge">shr.o</code> is the conventional name for 32-bit shared objects).</p>
+
+<p>Ok, so now we execute the program: Our shell calls <code class="language-plaintext highlighter-rouge">exec()</code> which tells the SLIC loader to load the <code class="language-plaintext highlighter-rouge">example2</code> binary in to memory and then the linker gets to load our shared libraries. In this case it sees that it needs to load <code class="language-plaintext highlighter-rouge">shr_64.o</code> from the <code class="language-plaintext highlighter-rouge">libc.a</code> archive, but how does it go about finding <code class="language-plaintext highlighter-rouge">libc.a</code>?</p>
+    
+      <h2 id="index-0-youre-my-hero">
+        
+        
+          Index 0, You’re My Hero! <a href="#index-0-youre-my-hero"></a>
+        
+        
+      </h2>
+
+<p>I have skipped over index 0 previously, but you may have noticed it looks an awful lot like <code class="language-plaintext highlighter-rouge">PATH</code> or <code class="language-plaintext highlighter-rouge">LIBPATH</code>. Well, that’s because it is! Index 0 is a special index that specifies the executable’s library search path. It’s technically not <code class="language-plaintext highlighter-rouge">LIBPATH</code>, but you can think of it like that. The linker will look through each of these paths until it find a file named <code class="language-plaintext highlighter-rouge">libc.a</code> and try to load <code class="language-plaintext highlighter-rouge">shr_64.o</code> from it. If we look, indeed there is a <code class="language-plaintext highlighter-rouge">/usr/lib/libc.a</code> in PASE with a <code class="language-plaintext highlighter-rouge">shr_64.o</code> member:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">-bash-4</span>.3<span class="nv">$ </span>ar <span class="nt">-X64</span> t /usr/lib/libc.a | <span class="nb">grep </span>shr
+shr_64.o
+</code></pre></div></div>
+    
+      <h2 id="404-library-not-found">
+        
+        
+          404: Library Not Found <a href="#404-library-not-found"></a>
+        
+        
+      </h2>
+
+<p>So what happens if the linker looks through all the directories on the application’s search path and still can’t find a library? Well, then you get linker errors:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-bash-4.3$ ./example3
+exec(): 0509-036 Cannot load program ./example3 because of the following errors:
+        0509-150   Dependent module libc.a(shr_64.o) could not be loaded.
+        0509-022 Cannot load module libc.a(shr_64.o).
+        0509-026 System error: A file or directory in the path name does not exist.
+
+-bash-4.3$ dump -X64 -H example3
+
+example3:
+
+                        ***Loader Section***
+                      Loader Header Information
+VERSION#         #SYMtableENT     #RELOCent        LENidSTR
+0x00000001       0x0000000a       0x0000002a       0x00000023
+
+#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+0x00000002       0x000003c8       0x0000007b       0x000003eb
+
+
+                        ***Import File Strings***
+INDEX  PATH                          BASE                MEMBER
+0      /does/not/exist
+1                                    libc.a              shr_64.o
+</code></pre></div></div>
+
+<p>In this case the library search path only contains a dummy directory <code class="language-plaintext highlighter-rouge">/does/not/exist</code> which doesn’t contain <code class="language-plaintext highlighter-rouge">libc.a</code>. You would get a similar error if the library exists, but does not contain the <code class="language-plaintext highlighter-rouge">shr_64.o</code> member:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-bash-4.3$ ./example3
+exec(): 0509-036 Cannot load program ./example3 because of the following errors:
+        0509-150   Dependent module /does/not/exist/libc.a(shr_64.o) could not be loaded.
+        0509-152   Member shr_64.o is not found in archive
+</code></pre></div></div>
+
+<p>In either case, we can use the <code class="language-plaintext highlighter-rouge">LIBPATH</code> environment variable to tell the linker where to find <code class="language-plaintext highlighter-rouge">libc.a</code>:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-bash-4.3$ LIBPATH=/usr/lib:/lib ./example3
+-bash-4.3$ echo $?
+31
+</code></pre></div></div>
+
+<p>Use <code class="language-plaintext highlighter-rouge">LIBPATH</code> to specify extra directories to search for shared libraries in addition to the application’s built in search path. These directories are searched before the directories in the application’s search path. In the above example, the application’s library search path is <code class="language-plaintext highlighter-rouge">/does/not/exist</code> and the <code class="language-plaintext highlighter-rouge">LIBPATH</code> is <code class="language-plaintext highlighter-rouge">/usr/lib/:/lib</code>, so the resulting search path is <code class="language-plaintext highlighter-rouge">/usr/lib:/lib:/does/not/exist</code>. Since <code class="language-plaintext highlighter-rouge">libc.a</code> is found in <code class="language-plaintext highlighter-rouge">/usr/lib</code> and contains <code class="language-plaintext highlighter-rouge">shr_64.o</code>, all is well!</p>
+
+<p>Of course, all of that mess could have just been avoided if our application told the linker where the <code class="language-plaintext highlighter-rouge">libc.a</code> actually is. Then we wouldn’t have needed to specify <code class="language-plaintext highlighter-rouge">LIBPATH</code> at all! So why doesn’t our application have the right library path specified? In the next entry I’ll explain how the application’s library search path gets set and how to set it yourself so you shouldn’t normally have to specify <code class="language-plaintext highlighter-rouge">LIBPATH</code>.</p>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/libpath" class="page__taxonomy-item" rel="tag">libpath</a><span class="sep">, </span>
+    
+      
+      
+      <a href="/categories/pase" class="page__taxonomy-item" rel="tag">pase</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2017-09-08T18:03:20-05:00">September 08, 2017</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2017/09/01/path.html" class="pagination--pager" title="PATH vs LIBPATH
+">Previous</a>
+    
+    
+      <a href="/2017/11/17/how-to-libpath.html" class="pagination--pager" title="Mucking with the Runtime Library Search Path on PASE
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/02/21/jan-2022-oss-updates.html" rel="permalink">IBM i Open Source Updates January 2022
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

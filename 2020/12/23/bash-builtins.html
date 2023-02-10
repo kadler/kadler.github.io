@@ -1,0 +1,795 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>getjobid, cl, and liblist — Oh, My! - Kevin’s Ramblings</title>
+<meta name="description" content="With the latest update to BASH, there are 3 new IBM i-specific BASH builtinfunctions: liblist, cl, and getjobid. These builtins function nearlyidentically to the liblist, system, and getjobid commands that exist inPASE and/or QSH.">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="getjobid, cl, and liblist — Oh, My!">
+<meta property="og:url" content="https://kadler.io/2020/12/23/bash-builtins.html">
+
+
+  <meta property="og:description" content="With the latest update to BASH, there are 3 new IBM i-specific BASH builtinfunctions: liblist, cl, and getjobid. These builtins function nearlyidentically to the liblist, system, and getjobid commands that exist inPASE and/or QSH.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-23T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2020/12/23/bash-builtins.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="getjobid, cl, and liblist — Oh, My!">
+    <meta itemprop="description" content="With the latest update to BASH, there are 3 new IBM i-specific BASH builtinfunctions: liblist, cl, and getjobid. These builtins function nearlyidentically to the liblist, system, and getjobid commands that exist inPASE and/or QSH.">
+    <meta itemprop="datePublished" content="December 23, 2020">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">getjobid, cl, and liblist — Oh, My!
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  6 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>With the latest update to BASH, there are 3 new IBM i-specific BASH builtin
+functions: <code class="language-plaintext highlighter-rouge">liblist</code>, <code class="language-plaintext highlighter-rouge">cl</code>, and <code class="language-plaintext highlighter-rouge">getjobid</code>. These builtins function nearly
+identically to the <code class="language-plaintext highlighter-rouge">liblist</code>, <code class="language-plaintext highlighter-rouge">system</code>, and <code class="language-plaintext highlighter-rouge">getjobid</code> commands that exist in
+PASE and/or QSH.</p>
+
+<p>If these commands already exist, why add them to BASH? Let’s explore:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ /QOpenSys/usr/bin/getjobid
+Process identifier 1575015 is 073984/QSECOFR/QP0ZSPWT
+$ /QOpenSys/usr/bin/getjobid
+Process identifier 1575016 is 073985/QSECOFR/QP0ZSPWT
+$ /QOpenSys/usr/bin/getjobid
+Process identifier 1575017 is 073986/QSECOFR/QP0ZSPWT
+</code></pre></div></div>
+
+<p>Every time I run getjobid, I’m getting the job id of the <code class="language-plaintext highlighter-rouge">getjobid</code> process, not
+my shell’s jobid. If I want to get my shell’s job id, I have to remember to pass
+the shell’s pid (which is helpfully in the <code class="language-plaintext highlighter-rouge">$$</code> special variable)</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/QOpenSys/usr/bin/getjobid <span class="nv">$$</span>
+</code></pre></div></div>
+
+<p>Kind of a pain, but once you figure it out it’s not sooooo bad.</p>
+      <h2 id="cl-to-the-rescue">
+        
+        
+          CL to the Rescue? <a href="#cl-to-the-rescue"></a>
+        
+        
+      </h2>
+
+<p>Ok, so now let’s say I am trying to run a PASE program which is running in to
+problems while calling some ILE code. The ILE code is writing messages to the
+job log, but the job log isn’t being saved due to the log level of the job!
+Let’s use the <code class="language-plaintext highlighter-rouge">system</code> command to change the log level:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/QOpenSys/usr/bin/system <span class="s2">"CHGJOB LOG(4 00 *SECLVL)"</span>
+</code></pre></div></div>
+
+<p>If I run this, I will get no difference in behavior.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ /QOpenSys/usr/bin/system 'dspjob' | grep -E -A3 'LOG$'
+   Message logging:                                 LOG
+     Level  . . . . . . . . . . . . . . . . . . :                4
+     Severity . . . . . . . . . . . . . . . . . :                0
+     Text . . . . . . . . . . . . . . . . . . . :                *NOLIST
+</code></pre></div></div>
+
+<p>What gives? Oh, duh! I forgot to add the <code class="language-plaintext highlighter-rouge">-i</code> flag to run in the current
+process. Silly me. Wait, even after adding <code class="language-plaintext highlighter-rouge">-i</code>, it’s still not working. <em>womp,
+womp</em></p>
+
+<p>What is going on? Well, if you understand the Unix process model, this does
+starts to makes sense: we executed the <code class="language-plaintext highlighter-rouge">system</code> command, causing BASH to start a
+<em>new process</em> in which the <code class="language-plaintext highlighter-rouge">system</code> command starts up (and if the <code class="language-plaintext highlighter-rouge">-i</code> flag is
+not passed, <code class="language-plaintext highlighter-rouge">system</code> spawns <em>an additional job</em>), calls <code class="language-plaintext highlighter-rouge">CHGJOB</code>, and
+immediately exits. It sort of looks like this:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash
+└── system -i ... -&gt; CHGJOB
+
+bash
+└── system ...
+    └── &lt;spawned job&gt; -&gt; CHGJOB
+</code></pre></div></div>
+
+<p>In either case, this is quite pointless (even more so without <code class="language-plaintext highlighter-rouge">-i</code>), as it still
+hasn’t affected <em>our job</em>. Luckily, the <code class="language-plaintext highlighter-rouge">CHGJOB</code> command supports passing in a
+job name, so we can use <code class="language-plaintext highlighter-rouge">getjobid</code> to retrieve it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/QOpenSys/usr/bin/system <span class="s2">"CHGJOB JOB(</span><span class="si">$(</span>/QOpenSys/usr/bin/getjobid <span class="nt">-s</span> <span class="nv">$$</span><span class="si">)</span><span class="s2">) LOG(4 00 *SECLVL)"</span>
+</code></pre></div></div>
+
+<p>What a pain in the butt! Of course this only works because <code class="language-plaintext highlighter-rouge">CHGJOB</code> allows you
+to specify a job name to affect. Other CL commands are not so lucky, like
+<code class="language-plaintext highlighter-rouge">ADDLIBLE</code> or <code class="language-plaintext highlighter-rouge">CHGCURLIB</code> <img class="emoji" title=":disappointed:" alt=":disappointed:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f61e.png" height="20" width="20">…</p>
+    
+      <h2 id="bash-to-the-rescue">
+        
+        
+          Bash to the Rescue <a href="#bash-to-the-rescue"></a>
+        
+        
+      </h2>
+
+<p>Ok, so back to BASH. Because these new functions are <em>builtins</em> and not
+commands, they execute in BASH itself, ie. <em>the current job</em>. This means when we
+run <code class="language-plaintext highlighter-rouge">getjobid</code> it gives you what you probably expected:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ getjobid
+Process identifier 1574877 is 073846/QSECOFR/QP0ZSPWT
+$ getjobid
+Process identifier 1574877 is 073846/QSECOFR/QP0ZSPWT
+$ getjobid $$
+Process identifier 1574877 is 073846/QSECOFR/QP0ZSPWT
+</code></pre></div></div>
+
+<p>In addition, we also have a <code class="language-plaintext highlighter-rouge">cl</code> function, which behaves almost the same as
+<code class="language-plaintext highlighter-rouge">system</code>, except it defaults to running in the current job, so no <code class="language-plaintext highlighter-rouge">-i</code> is
+needed. With that, we don’t even need <code class="language-plaintext highlighter-rouge">getjobid</code> for the above example:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cl <span class="s2">"CHGJOB LOG(4 00 *SECLVL)"</span>
+</code></pre></div></div>
+
+<p>And of course with builtins, it’s finally possible to implement a <code class="language-plaintext highlighter-rouge">liblist</code>
+utility to change the library list of PASE jobs:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ liblist -a kadler
+CPC2196: Library KADLER added to library list. 
+$ liblist -d kadler
+CPC2197: Library KADLER removed from library list.
+$ liblist -c kadler
+CPC2198: Current library changed to KADLER.
+$ liblist
+QSYS        SYS  
+QSYS2       SYS  
+QHLPSYS     SYS  
+QUSRSYS     SYS  
+QSHELL      PRD  
+KADLER      CUR  
+QGPL        USR  
+QTEMP       USR  
+QDEVELOP    USR  
+QBLDSYS     USR  
+</code></pre></div></div>
+
+<p>And because we’re using the the
+<a href="https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/rzajq/rzajqviewliblinfo.htm">LIBRARY_LIST_INFO</a>
+SQL service, we get the schema name for free so I figured why not add a <code class="language-plaintext highlighter-rouge">-s</code>
+option?</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ liblist -a LONGSCHEM
+CPC2196: Library LONGSCHEM added to library list.
+
+$ liblist -s
+QSYS        SYS  QSYS
+QSYS2       SYS  QSYS2
+QHLPSYS     SYS  QHLPSYS
+QUSRSYS     SYS  QUSRSYS
+QSHELL      PRD  QSHELL
+KADLER      CUR  KADLER
+LONGSCHEM   USR  longschemaname
+QGPL        USR  QGPL
+QTEMP       USR  QTEMP
+QDEVELOP    USR  QDEVELOP
+QBLDSYS     USR  QBLDSYS
+</code></pre></div></div>
+
+<p>Note that for compatibility with QSH liblist, the default output is kept the same.</p>
+
+<p>Finally, ff that wasn’t enough, if you ever forget what the command line
+arguments do, we have much better help text than the PASE or QSH equivalents
+<img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20"></p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cl --help
+cl: cl [-beEhiIkKnOpqsSv] COMMAND [ARG ...]
+    Executes a CL command.
+    
+    Options:
+      -i        Run COMMAND in the current job (default)
+      -S        Run COMMAND in a spawned job
+      -K        Keep all spool files generated by COMMAND and the job log
+      -k        Keep all spool files generated by COMMAND
+      -n        Do not include the message identifier when writing the messages to standard error
+      -p        Only write the messages sent to the program's message queue by COMMAND to standard error
+      -q        Do not write messages generated by COMMAND to standard error
+      -s        Do not write spool files generated by COMMAND to standard output
+      -v        Write the complete command string to standard output before executing it
+    
+      -b        Force binary mode for standard streams used by the CL command
+      -e        Copy PASE for i environment variables to ILE before running COMMAND
+      -I        Force CCSID conversion for standard input used by COMMAND
+      -O        Force CCSID conversion for standard output used by COMMAND
+      -E        Force CCSID conversion for standard error used by COMMAND
+    
+    Arguments:
+      COMMAND   The CL command to run.
+      ARG       One or more arguments to pass to the CL command
+</code></pre></div></div>
+    
+      <h2 id="questions-caveats-and-more">
+        
+        
+          Questions, Caveats, and More <a href="#questions-caveats-and-more"></a>
+        
+        
+      </h2>
+    
+      <h3 id="checking-for-support">
+        
+        
+          Checking for support <a href="#checking-for-support"></a>
+        
+        
+      </h3>
+
+<p>These builtins are available once you install bash 4.4-3. You can check if you
+have the support and ensure you’re using the builtin by using the <code class="language-plaintext highlighter-rouge">type</code>
+builtin:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ type liblist
+liblist is a shell builtin
+$ type cl
+cl is a shell builtin
+$ type getjobid
+getjobid is a shell builtin
+</code></pre></div></div>
+
+<p>Note, the <code class="language-plaintext highlighter-rouge">which</code> command will give you different results, since <code class="language-plaintext highlighter-rouge">which</code> is an
+external <em>command</em> and not a BASH <em>builtin</em>:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ which getjobid
+/QOpenSys/usr/bin/getjobid
+</code></pre></div></div>
+    
+      <h3 id="how-do-i-use-them">
+        
+        
+          How do I use them? <a href="#how-do-i-use-them"></a>
+        
+        
+      </h3>
+
+<p>Just call them like you would any other command. It’s likely you’re already
+using BASH builtins and didn’t even know it! (Things like <code class="language-plaintext highlighter-rouge">echo</code>, <code class="language-plaintext highlighter-rouge">cd</code>, and even
+more used in scripting are also BASH builtins.)</p>
+
+<p>When BASH has a builtin, it takes precedence over any external command found on
+the <code class="language-plaintext highlighter-rouge">$PATH</code>:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ which getjobid
+/QOpenSys/usr/bin/getjobid
+$ type getjobid
+getjobid is a shell builtin
+</code></pre></div></div>
+    
+      <h3 id="why-cl-and-not-system">
+        
+        
+          Why ‘cl’ and not ‘system’? <a href="#why-cl-and-not-system"></a>
+        
+        
+      </h3>
+
+<p>While both <code class="language-plaintext highlighter-rouge">getjobid</code> and <code class="language-plaintext highlighter-rouge">liblist</code> match the names their PASE/QSH counterparts,
+we decided not to do the same with <code class="language-plaintext highlighter-rouge">cl</code> — even though it has all the same
+options. We did initially have it as <code class="language-plaintext highlighter-rouge">system</code>, but there was concern that too
+many existing PASE scripts relied on <code class="language-plaintext highlighter-rouge">system</code> and depending on whether you ran a
+script in <code class="language-plaintext highlighter-rouge">bash</code> vs <code class="language-plaintext highlighter-rouge">bsh</code>, <code class="language-plaintext highlighter-rouge">ksh</code>, etc you could get unexpected behavior.</p>
+
+<p>You can always create a BASH alias for <code class="language-plaintext highlighter-rouge">system</code> if you like. Run the following
+or add it to one of BASH’s <a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html">startup
+files</a>
+(eg. ~/.bashrc):</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">alias </span><span class="nv">system</span><span class="o">=</span>cl
+</code></pre></div></div>
+
+<p>In addition, because we didn’t have to worry about full compatibility with
+<code class="language-plaintext highlighter-rouge">system</code>, we could change the default behavior to running in the current job,
+which is probably what you want most of the time anyway. <img class="emoji" title=":tada:" alt=":tada:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f389.png" height="20" width="20"> This means no
+<code class="language-plaintext highlighter-rouge">-i</code> is not needed (but supported for compatibility) and also a new
+builtin-specific option <code class="language-plaintext highlighter-rouge">-S</code> has been added to force <code class="language-plaintext highlighter-rouge">cl</code> to spawn a new job.
+This spawned job will run in a non-multithreaded job and without PASE loaded,
+which can be useful for some commands.</p>
+    
+      <h3 id="how-do-i-run-the-non-builtin-version">
+        
+        
+          How do I run the non-builtin version? <a href="#how-do-i-run-the-non-builtin-version"></a>
+        
+        
+      </h3>
+
+<p>Since builtins have higher precedence over external commands, changing your
+<code class="language-plaintext highlighter-rouge">$PATH</code> will have no effect. You need to either fully qualify the command or
+disable the shell builtin.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Fully qualify getjobid</span>
+/QOpenSys/usr/bin/getjobid
+
+<span class="c"># Disable getjobid builtin for the current session</span>
+<span class="nb">enable</span> <span class="nt">-n</span> getjobid
+</code></pre></div></div>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/ibmi-oss-updates" class="page__taxonomy-item" rel="tag">ibmi-oss-updates</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-23T00:00:00-06:00">December 23, 2020</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2020/12/02/nov-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates October &amp; November 2020
+">Previous</a>
+    
+    
+      <a href="/2020/12/23/dec-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates December 2020
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/02/21/jan-2022-oss-updates.html" rel="permalink">IBM i Open Source Updates January 2022
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

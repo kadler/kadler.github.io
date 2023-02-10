@@ -1,0 +1,648 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>IBM i Open Source Updates Dec 2019 - Kevin’s Ramblings</title>
+<meta name="description" content="It’s a new year and so I’m finally getting around to doing something that I’ve wanted to do for a while now: write a blog series about various updates about what the IBM i OSS team is doing. I’m not sure the cadence of these updates, but I’ll try to keep them updated periodically. For this first one, I’m going to handle it a bit differently as the team has just gotten back from the holiday break so there’s not much to share so far for this year, but November and December were very busy, so that’s what I’m going to talk about here.">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="IBM i Open Source Updates Dec 2019">
+<meta property="og:url" content="https://kadler.io/2020/01/08/oss-updates.html">
+
+
+  <meta property="og:description" content="It’s a new year and so I’m finally getting around to doing something that I’ve wanted to do for a while now: write a blog series about various updates about what the IBM i OSS team is doing. I’m not sure the cadence of these updates, but I’ll try to keep them updated periodically. For this first one, I’m going to handle it a bit differently as the team has just gotten back from the holiday break so there’s not much to share so far for this year, but November and December were very busy, so that’s what I’m going to talk about here.">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-01-08T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2020/01/08/oss-updates.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="IBM i Open Source Updates Dec 2019">
+    <meta itemprop="description" content="It’s a new year and so I’m finally getting around to doing something that I’ve wanted to do for a while now: write a blog series about various updates about what the IBM i OSS team is doing. I’m not sure the cadence of these updates, but I’ll try to keep them updated periodically. For this first one, I’m going to handle it a bit differently as the team has just gotten back from the holiday break so there’s not much to share so far for this year, but November and December were very busy, so that’s what I’m going to talk about here.">
+    <meta itemprop="datePublished" content="January 08, 2020">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">IBM i Open Source Updates Dec 2019
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  5 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>It’s a new year and so I’m finally getting around to doing something that I’ve wanted to do for a while now: write a blog series about various updates about what the IBM i OSS team is doing. I’m not sure the cadence of these updates, but I’ll try to keep them updated periodically. For this first one, I’m going to handle it a bit differently as the team has just gotten back from the holiday break so there’s not much to share so far for this year, but November and December were very busy, so that’s what I’m going to talk about here.</p>
+      <h2 id="new-packages">
+        
+        
+          New Packages <a href="#new-packages"></a>
+        
+        
+      </h2>
+
+<p>Let’s start with the fun part: new stuff!</p>
+    
+      <h3 id="gnu-cpio">
+        
+        
+          GNU CPIO <a href="#gnu-cpio"></a>
+        
+        
+      </h3>
+
+<p>In December, we finally shipped cpio-gnu. We had originally planned to ship this with the original yum release back in 2018, but due to an oversight, it was missed but we finally got it shipped. cpio-gnu is the <a href="https://www.gnu.org/software/cpio/">GNU</a> version of the <code class="language-plaintext highlighter-rouge">cpio</code> utility, supplementing the PASE version. It is more compatible with open source packages which generate CPIO archives, most notably <a href="http://ftp.rpm.org/max-rpm/s1-rpm-miscellania-rpm2cpio.html">rpm2cpio</a> which might be useful if you wanted to, say, extract an AIX rpm without having to deal with getting rpm and yum to install these foreign rpms.</p>
+    
+      <h3 id="pyodbc">
+        
+        
+          PyODBC <a href="#pyodbc"></a>
+        
+        
+      </h3>
+
+<p>We now have an rpm packaging <a href="https://github.com/mkleehammer/pyodbc">PyODBC</a> for Python 3. This makes it <em>vastly</em> easier to get going with ODBC on IBM i, as previously you had to install a bunch of development tools and patch PyODBC to fix a few bugs. Instead, you can now say <code class="language-plaintext highlighter-rouge">yum install python3-pyodbc</code> and get going right away!</p>
+
+<p>Note: We will <em>not</em> be providing a PyODBC rpm for Python 2. Python 2 is now <a href="https://pythonclock.org/">EOL</a> and you should be using Python 3 instead.</p>
+    
+      <h2 id="package-updates">
+        
+        
+          Package Updates <a href="#package-updates"></a>
+        
+        
+      </h2>
+
+<ul>
+  <li>OpenSSL 1.1 updated to <a href="https://www.openssl.org/news/openssl-1.1.1-notes.html">1.1.1d</a>
+</li>
+  <li>OpenSSL 1.0.2 updated to <a href="https://www.openssl.org/news/openssl-1.0.2-notes.html">1.0.2t</a>
+</li>
+  <li>bzip2 patched for various CVE and other bug fixes</li>
+  <li>libpng updated to 1.6.37 to fix various CVEs</li>
+  <li>python3-ibm_db and python2-ibm_db updated to <a href="https://github.com/kadler/python-ibmdb/releases/tag/2.0.5.12">2.0.5.12</a>
+</li>
+  <li>rpm build with libarchive, enabling use of <a href="http://manpages.ubuntu.com/manpages/xenial/man8/rpm2archive.8.html">rpm2archive</a>
+</li>
+  <li>wget updated to <a href="http://git.savannah.gnu.org/cgit/wget.git/tree/NEWS?h=v1.20.3&amp;id=a220ead43505bc3e0ea8efb1572919111dbbf6dc">1.20.3</a> to work with OpenSSL 1.1</li>
+  <li>curl updated to <a href="https://curl.haxx.se/changes.html#7_65_3">7.65.3</a> to work with OpenSSL 1.1</li>
+  <li>openssh updated to <a href="https://www.openssh.com/txt/release-8.1">8.1p1</a> to work with OpenSSL 1.1</li>
+  <li>Node.js v12 upated to <a href="https://nodejs.org/en/blog/release/v12.13.0/">v12.13.0</a>, also patched to fix <a href="https://bitbucket.org/ibmi/opensource/issues/80/issues-with-qp2term-and-nodejs-v1281">bug</a> causing crashes when running in a 5250</li>
+  <li>libutil updated to <a href="https://github.com/IBM/portlibfori/releases/tag/0.6.2">0.6.2</a> to fix a bug affecting Jupyter</li>
+  <li>Python 2 and 3 patched to fix CVE-2019-16935</li>
+  <li>python3-pip now ships with a default pip.conf to supress the pesky upgrade notification</li>
+</ul>
+    
+      <h2 id="openssl-11-migration">
+        
+        
+          OpenSSL 1.1 Migration <a href="#openssl-11-migration"></a>
+        
+        
+      </h2>
+
+<p>Back in August, I wrote a <a href="https://ibmsystemsmag.com/Power-Systems/08/2019/RPMs-and-YUM-on-IBM-i-7-1">guest entry</a> on Jesse’s blog to explain that all IBM i 7.1 rpms would be replaced with IBM i 7.2 rpms and why. As a refresher, the change was motivated by OpenSSL 1.0.2 going out of support at the <a href="https://www.openssl.org/policies/releasestrat.html">end of 2019</a> and our OpenSSL 1.1 build only working on IBM i 7.2. To keep users protected, we had to migrate anything using OpenSSL 1.0.2 to OpenSSL 1.1, which included the package manager yum. Here’s a list of packages that got updated to OpenSSL 1.1:</p>
+
+<ul>
+  <li>curl</li>
+  <li>git</li>
+  <li>libarchive</li>
+  <li>lftp</li>
+  <li>python2</li>
+  <li>python2-pycurl</li>
+  <li>python3</li>
+  <li>python3-cryptography</li>
+  <li>openssh</li>
+  <li>wget</li>
+</ul>
+
+<p>You can now safely remove OpenSSL 1.0.2 libraries with <code class="language-plaintext highlighter-rouge">yum remove libopenssl1_0_0</code>. Now, if we could get rid of Python 2…</p>
+
+<p>Note: For the most part the RPM dependencies should make sure that everything is consistent when updating, but it’s possible something was missed. So, if you get odd OpenSSL errors from any of these packages you might want to make sure they’re at the latest versions.</p>
+    
+      <h2 id="ibm-i-72-rebuild">
+        
+        
+          IBM i 7.2 Rebuild <a href="#ibm-i-72-rebuild"></a>
+        
+        
+      </h2>
+
+<p>As mentioned in the previously mentioned blog post, we planned to rebuild all rpms on IBM i 7.2 by September 24th. We ran in to a few unexpected surprises along the way to doing so, so we only got a few packages rebuilt by then. We finally managed to rebuild all the packages by the end of the year. The repository is now 100% 7.2 rpms and along the way we cleaned up a few duplicate packages in there as well.</p>
+
+<p>A side benefit of rebuilding all the packages is that we now have source rpms for all packages. When we originally started building rpms, we did not save the source rpms and so they were not published to the repository. Any of those packages that had been updated since then would have had source rpms published, but there were a few packages which never saw an update and so were still missing source rpms - this has now been fixed.</p>
+    
+      <h2 id="changelog-updates">
+        
+        
+          Changelog Updates <a href="#changelog-updates"></a>
+        
+        
+      </h2>
+
+<p>While we were rebuilding all the packages on IBM i 7.2, it seemed a good time to go back and add changelogs to all the packages. A package’s changelog can be viewed with <code class="language-plaintext highlighter-rouge">rpm</code> using <code class="language-plaintext highlighter-rouge">rpm -q --changelog &lt;package name&gt;</code>, eg. <code class="language-plaintext highlighter-rouge">rpm -q --changelog yum</code>. Alternatively, you can install <code class="language-plaintext highlighter-rouge">yum-plugin-changelog</code> to view changelogs with <code class="language-plaintext highlighter-rouge">yum</code>, either during install/upgrade/etc, eg. <code class="language-plaintext highlighter-rouge">yum upgrade --changelog</code> or to view a specific package’s changelog, eg. <code class="language-plaintext highlighter-rouge">yum changelog all yum</code>. For more information on the yum-changelog plugin, refer to the <a href="https://linux.die.net/man/1/yum-changelog">man page</a>.</p>
+    
+      <h2 id="license-updates">
+        
+        
+          License Updates <a href="#license-updates"></a>
+        
+        
+      </h2>
+
+<p>Again, while rebuilding all the packages we felt it was a good time to do more housekeeping. All of our packages were updated to use <a href="https://spdx.org/licenses">SPDX</a> license identifiers. So instead of “BSD” or “GPL”, we use a more specific license identifier like “BSD-3-Clause” or “GPL-3.0-or-later”. If you or your company are worried about licensing issues with Open Source, this should make it a little easier to identify your licensing restrictions and obligations; if not, you can keep ignoring the license field.</p>
+
+<p>In addition, we found that a few of our packages had incorrect licenses listed and were fixed.</p>
+    
+      <h3 id="gpl-licence-changes">
+        
+        
+          GPL Licence Changes <a href="#gpl-licence-changes"></a>
+        
+        
+      </h3>
+
+<p>A final thing to note here: we have changed how we handle GPL packages. A common part of the GPL text is that it gives the option to allow distribution under “any later version”, eg. the GPL version 3 <a href="https://www.gnu.org/licenses/gpl-3.0.en.html">says</a>:</p>
+
+<blockquote>
+  <p>Each version is given a distinguishing version number. If the Program specifies that a certain numbered version of the GNU General Public License “or any later version” applies to it, you have the option of following the terms and conditions either of that numbered version or of any later version published by the Free Software Foundation. If the Program does not specify a version number of the GNU General Public License, you may choose any version ever published by the Free Software Foundation.</p>
+</blockquote>
+
+<p>Previously, we would distribute a GPL package under the version noted in the package license, even if the package allowed it to be distributed under a later version of the GPL. So if a package was distributed under the GPL version 2, we would also distribute it under the GPL version 2, <em>even if</em> the license allowed us to distribute it under the GPL version 3. However, our lawyers prefer GPL version 3 to version 2 and it makes our lives easier as well. With that in mind, <em>when possible</em> we will distribute any GPL v2 “or later” software under GPL v3 “or later”. We do provide some GPL v2-only packages, so those and any of their dependencies will still be distributed under the GPL v2.</p>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/ibmi-oss-updates" class="page__taxonomy-item" rel="tag">ibmi-oss-updates</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-01-08T00:00:00-06:00">January 08, 2020</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2018/10/02/bash-command-oddities.html" class="pagination--pager" title="Bash Command Oddities
+">Previous</a>
+    
+    
+      <a href="/2020/04/10/oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates Jan 2020
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/02/21/jan-2022-oss-updates.html" rel="permalink">IBM i Open Source Updates January 2022
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

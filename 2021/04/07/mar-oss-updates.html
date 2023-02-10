@@ -1,0 +1,744 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>IBM i Open Source Updates March 2021 - Kevin’s Ramblings</title>
+<meta name="description" content="Hold on to your hats, because this might be the biggest monthly update yet!">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="IBM i Open Source Updates March 2021">
+<meta property="og:url" content="https://kadler.io/2021/04/07/mar-oss-updates.html">
+
+
+  <meta property="og:description" content="Hold on to your hats, because this might be the biggest monthly update yet!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2021-04-07T00:00:00-05:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2021/04/07/mar-oss-updates.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="IBM i Open Source Updates March 2021">
+    <meta itemprop="description" content="Hold on to your hats, because this might be the biggest monthly update yet!">
+    <meta itemprop="datePublished" content="April 07, 2021">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">IBM i Open Source Updates March 2021
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  5 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Hold on to your hats, because this might be the <strong>biggest</strong> monthly update yet!</p>
+      <h2 id="new-packages">
+        
+        
+          New Packages <a href="#new-packages"></a>
+        
+        
+      </h2>
+    
+      <h3 id="integer-set-library-isl">
+        
+        
+          Integer Set Library (ISL) <a href="#integer-set-library-isl"></a>
+        
+        
+      </h3>
+
+<p><a href="http://isl.gforge.inria.fr/">ISL</a> is a math library used by GCC and needed to build GCC. This will likely be more useful in the future. <img class="emoji" title=":wink:" alt=":wink:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f609.png" height="20" width="20"></p>
+    
+      <h3 id="gcc-package-and-gcc-aix">
+        
+        
+          GCC Package and gcc-aix <a href="#gcc-package-and-gcc-aix"></a>
+        
+        
+      </h3>
+
+<p>Our existing gcc-related packages have been updated to now use a <em>gcc6</em> prefix. Thus <code class="language-plaintext highlighter-rouge">gcc‑aix</code> ➔ <code class="language-plaintext highlighter-rouge">gcc6‑aix</code>, <code class="language-plaintext highlighter-rouge">gcc‑cpp‑aix</code> ➔ <code class="language-plaintext highlighter-rouge">gcc6‑cpp‑aix</code>, etc. In addition, all the GCC binaries have a <em>-6</em> suffix, eg. <code class="language-plaintext highlighter-rouge">gcc</code> ➔ <code class="language-plaintext highlighter-rouge">gcc‑6</code>, <code class="language-plaintext highlighter-rouge">g++</code> ➔ <code class="language-plaintext highlighter-rouge">g++‑6</code>, etc. This will be important when we deliver a new version of GCC so that both versions can be installed side-by-side. Through the magic of rpm tags, these renames should not cause any issues when upgrading through <code class="language-plaintext highlighter-rouge">yum</code>.</p>
+
+<p>In addition, we have also shipped unversioned <code class="language-plaintext highlighter-rouge">gcc</code> packages, which always point to the “base” GCC package version. This is currently pointed at the existing GCC 6 packages mentioned above and is the default compiler used by our rpm builds. In the future, we may decide to change our base compiler and this allows an easy way to do that.</p>
+    
+      <h3 id="brotli">
+        
+        
+          brotli <a href="#brotli"></a>
+        
+        
+      </h3>
+
+<p>Like zstd we shipped previously, <a href="https://github.com/google/brotli#introduction">Brotli</a> is another modern compression algortithm, this time developed by Google. It is required to build Node.js. Up until now, we’ve static linked in the version shipped with the Node.js source, but we’re experimenting with building some of these dependencies as shared libraries instead.</p>
+    
+      <h3 id="c-ares">
+        
+        
+          c-ares <a href="#c-ares"></a>
+        
+        
+      </h3>
+
+<p><a href="https://c-ares.haxx.se">c-ares</a> is an asynchronous DNS resolver. Like Brotli, it is required to build Node.js and we’re experimenting with building some of these dependencies as shared libraries instead.</p>
+    
+      <h3 id="pixman">
+        
+        
+          pixman <a href="#pixman"></a>
+        
+        
+      </h3>
+
+<p><a href="http://pixman.org/">pixman</a> is a low-level pixel manipulation library. It is used by <a href="https://www.cairographics.org/">cairo</a> and other higher-level graphics libraries.</p>
+    
+      <h3 id="xorg-x11-libraries">
+        
+        
+          X.org X11 libraries <a href="#xorg-x11-libraries"></a>
+        
+        
+      </h3>
+
+<p>We are now shipping the open source <a href="https://www.x.org/wiki/">X.org</a> X11 libraries developed by the freedesktop.org community. While the AIX-sourced versions of these libraries as shipped in PASE and the X.org versions do share a common lineage, they have diverged over time, with much of the current development focus coming from the X.org version to support Linux desktops. As such, many open source projects using X11 libraries expect to be run under X.org versions of the libaries. Not much changes at the moment, but this lays groundwork for the future.</p>
+    
+      <h2 id="package-updates">
+        
+        
+          Package Updates <a href="#package-updates"></a>
+        
+        
+      </h2>
+    
+      <h3 id="r">
+        
+        
+          R <a href="#r"></a>
+        
+        
+      </h3>
+
+<p>The R build has been updated to build with both libtiff and the X.org X11 libraries now that they are available. There are some other optional dependencies that we are looking to build with in the future, but don’t currently have approval to ship.</p>
+
+<p>In addition, we have enabled <code class="language-plaintext highlighter-rouge">-pthread</code> flags by default, which should enable some packages to build out of the box, without having to set special flags.</p>
+
+<p>Finally, R has been built against our new BLAS library indirector which I’ll go in to more detail below.</p>
+    
+      <h3 id="blas--related-packages">
+        
+        
+          BLAS &amp; related packages <a href="#blas--related-packages"></a>
+        
+        
+      </h3>
+
+<p>Our BLAS infrastructure has gone through a massive overhaul. We currently ship the Netlib reference versions of the <a href="https://www.netlib.org/blas/">BLAS</a> and <a href="http://www.netlib.org/lapack/">LAPACK</a> scientific libraries used by ML workloads. While these libraries do work, these are generic, unoptimized versions. We’d like to offer alternative, <em>optimized</em> versions of these BLAS libraries, but currently applications link directly to the Netlib libraries. To enable ease of switching BLAS implementations, we have built an indirection mechanism that provides 4 libraries:</p>
+
+<ul>
+  <li>libblas-indirect.so.0</li>
+  <li>libcblas-indirect.so.0</li>
+  <li>liblapack-indirect.so.0</li>
+  <li>liblapacke-indirect.so.0</li>
+</ul>
+
+<p>These libraries can be switched between the various BLAS implementations using the <code class="language-plaintext highlighter-rouge">update-alternatives</code> mechanism, eg. <code class="language-plaintext highlighter-rouge">alternatives --config blas</code> and all our existing BLAS-using packages (<code class="language-plaintext highlighter-rouge">R</code>, <code class="language-plaintext highlighter-rouge">python3-numpy</code>, <code class="language-plaintext highlighter-rouge">python3-scipy</code>, <code class="language-plaintext highlighter-rouge">python3-scikit-learn</code>) have been rebuilt to use these indirection libraries.</p>
+
+<p>Ok, so you can now switch between BLAS implementations, but what good is it if we only have a single implementation? Well, read on my friend!</p>
+    
+      <h3 id="openblas">
+        
+        
+          OpenBLAS <a href="#openblas"></a>
+        
+        
+      </h3>
+
+<p><a href="http://www.openblas.net/">OpenBLAS</a> is an optimized version of GotoBLAS. It contains hand-optimized assembly versions of BLAS functions for various various architectures and operating systems. Most importantly for us, it has optimized instructions for POWER and builds on IBM i.</p>
+
+<p>We currently ship version 0.3.10 with support for both POWER6 and POWER8 optimization levels. The code will detect at runtime which CPU you are running on and switch appropriately. Running various benchmarks we saw OpenBLAS running over 5x faster than Netlib BLAS on a POWER8 IBM i 7.3 machine.</p>
+
+<p>While OpenBLAS supports some POWER9 and even some POWER10 optimizations, we are currently limited to POWER8 support at the moment, due to limitations in the assembler used in PASE. Because the IBM i 7.2 PASE version of <code class="language-plaintext highlighter-rouge">as</code> only supports up to POWER7 and the IBM i 7.3 version only supports up to POWER8, we have only enabled the POWER8 optimizations and had to build this RPM on IBM i 7.3 to do so.</p>
+
+<p>This means this package is our first IBM i 7.3+ rpm and will also be our first RPM delivered through our new IBM i 7.3+ repo. If you want to enable it, you can download the repo file <a href="https://public.dhe.ibm.com/software/ibmi/products/pase/rpms/ibm-7.3.repo">here</a> to <code class="language-plaintext highlighter-rouge">/QOpenSys/etc/yum/repos.d</code>. We’re working on a more permanent and seamless solution for the future. In addition, a bunch of new packages we’re working on will start showing up there (and only there). With IBM i 7.2 going out of support at the end of April, it’s time to start leaving it behind.</p>
+    
+      <h3 id="rpm">
+        
+        
+          RPM <a href="#rpm"></a>
+        
+        
+      </h3>
+
+<p>Various improvements for packagers:</p>
+
+<ul>
+  <li>The brp-python-bytecompile script now uses the correct paths for IBM i, enabling automatic Python byte-compiling during RPM builds</li>
+  <li>RPM scriptlets now use the default PASE <code class="language-plaintext highlighter-rouge">$PATH</code> with the addition of <code class="language-plaintext highlighter-rouge">/QOpenSys/pkgs/bin</code>.</li>
+  <li>Various build-related files and utilities have moved from the rpm package to the rpm-build package</li>
+  <li>The default compile flags (<code class="language-plaintext highlighter-rouge">%optflags</code>) are now set per-release to include the minimum POWER hardware level supported on that release (eg. 7.2: <code class="language-plaintext highlighter-rouge">-mcpu=power6</code>, 7.3: <code class="language-plaintext highlighter-rouge">-mcpu=power7 -maltivec -mvsx</code>, etc)</li>
+</ul>
+    
+      <h3 id="bash">
+        
+        
+          bash <a href="#bash"></a>
+        
+        
+      </h3>
+
+<p>bash now looks for an inputrc file in <code class="language-plaintext highlighter-rouge">/QOpenSys/etc/inputrc</code> instead of <code class="language-plaintext highlighter-rouge">/etc/inputrc</code> (<code class="language-plaintext highlighter-rouge">~/.inputrc</code> is not affected)</p>
+    
+      <h3 id="perl">
+        
+        
+          perl <a href="#perl"></a>
+        
+        
+      </h3>
+
+<p>libperl.a has been repackaged in to a standard svr4-style shared library libperl.so.5.24. In addition, various files have been split in to a <code class="language-plaintext highlighter-rouge">perl-devel</code> package.</p>
+    
+      <h3 id="db2util">
+        
+        
+          db2util <a href="#db2util"></a>
+        
+        
+      </h3>
+
+<p>Updated to 1.0.11 to fix an issue with empty string output for NUMERIC and DECIMAL types.</p>
+    
+      <h3 id="util-linux">
+        
+        
+          util-linux <a href="#util-linux"></a>
+        
+        
+      </h3>
+
+<p>This package has been updated to require the necessary version of libutil2.</p>
+    
+      <h3 id="pkg-config">
+        
+        
+          pkg-config <a href="#pkg-config"></a>
+        
+        
+      </h3>
+
+<p>pkg-config has been patched to ignore Requires.private dependencies. These are only needed when static linking and since we provide no static libraries, disabling this allows us to avoid adding unnecessary rpm dependencies to many development packages.</p>
+    
+      <h3 id="ansible">
+        
+        
+          ansible <a href="#ansible"></a>
+        
+        
+      </h3>
+
+<p>Ansible has been updated to no longer adjust the shebang line of various Python files it ships. This was causing issues when running IBM i as the Ansible control node and communicating with a non-IBM i remote node.</p>
+    
+      <h3 id="other-updates">
+        
+        
+          Other Updates <a href="#other-updates"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>nodejs10 was updated to <a href="https://nodejs.org/en/blog/release/v10.24.0/">10.24.0</a>.</li>
+  <li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.21.0/">12.21.0</a>.</li>
+  <li>nodejs14 was updated to <a href="https://nodejs.org/en/blog/release/v14.16.0/">14.16.0</a>.</li>
+  <li>libutil was updated to <a href="https://github.com/IBM/portlibfori/releases/tag/0.10.0">0.10.0</a>
+</li>
+  <li>ansible was updated to 2.9.10</li>
+</ul>
+    
+      <h2 id="closing">
+        
+        
+          Closing <a href="#closing"></a>
+        
+        
+      </h2>
+
+<p>Last month I mentioned bigger changes were coming and while I certainly think we nailed it on that front, there’s still more on the way. Stay tuned!</p>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/ibmi-oss-updates" class="page__taxonomy-item" rel="tag">ibmi-oss-updates</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2021-04-07T00:00:00-05:00">April 07, 2021</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2021/03/03/feb-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates February 2021
+">Previous</a>
+    
+    
+      <a href="/2021/06/04/apr-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates April 2021
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/02/21/jan-2022-oss-updates.html" rel="permalink">IBM i Open Source Updates January 2022
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

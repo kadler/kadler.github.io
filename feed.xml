@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="https://kadler.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://kadler.io/" rel="alternate" type="text/html" /><updated>2023-02-10T12:13:33-06:00</updated><id>https://kadler.io/feed.xml</id><title type="html">Kevin’s Ramblings</title><subtitle>Ramblings of an Open Source dude working on IBM i.
+</subtitle><author><name>Kevin Adler</name></author><entry><title type="html">IBM-provided Repositories ODBC Linux Driver Repositories</title><link href="https://kadler.io/2022/05/20/odbc-repos.html" rel="alternate" type="text/html" title="IBM-provided Repositories ODBC Linux Driver Repositories" /><published>2022-05-20T00:00:00-05:00</published><updated>2022-05-20T00:00:00-05:00</updated><id>https://kadler.io/2022/05/20/odbc-repos</id><content type="html" xml:base="https://kadler.io/2022/05/20/odbc-repos.html">&lt;p&gt;Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the
+IBM i Access Client Solutions application package, which includes the IBM i
+Access ODBC driver. This also includes the latest version of the IBM i Access
+ODBC driver, which was released today.&lt;/p&gt;
+
+&lt;p&gt;While we have been pushing the IBM i Access ODBC driver as the “One True Way” to
+access the database from open source for some time, the biggest hindrance has
+been getting it installed. Previously, it was only available from the byzantine
+labyrinth that is IBM ESS or from the MRS download site (conventiently
+bookmarkable to &lt;a href=&quot;https://ibm.biz/ibmi-odbc-download&quot;&gt;https://ibm.biz/ibmi-odbc-download&lt;/a&gt;). Both of these require
+manual steps to log in, agree to the license, download the zip, then extract the
+zip and install the package. But Linux distributions have these fancy things
+called package managers that can point to remote repositories of packages and
+easily extend the distribution’s package list with third-party software. Heck,
+even &lt;em&gt;Microsoft&lt;/em&gt; provides Linux repositories nowadays, so it’s high time that
+IBM does similarly.&lt;/p&gt;
+
+&lt;p&gt;With this change, it will be much easier for end users to install the driver on
+Linux. It also makes it easier for automation to install the driver as well,
+whether that’s Ansible system deployment scripts or Dockerfiles for building
+ODBC-based Linux container apps. In addition, it makes updating the driver much
+easier too, since the process uses the same upgrade procedure as the rest of the
+system packages.&lt;/p&gt;
+
+&lt;h2 id=&quot;installing-the-repository&quot;&gt;Installing the Repository&lt;/h2&gt;
+
+&lt;p&gt;The repositories are located under
+&lt;a href=&quot;https://public.dhe.ibm.com/software/ibmi/products/odbc/&quot;&gt;https://public.dhe.ibm.com/software/ibmi/products/odbc/&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;red-hat-based-distribution-setup&quot;&gt;Red Hat-based Distribution Setup&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl https://public.dhe.ibm.com/software/ibmi/products/odbc/rpms/ibmi-acs.repo | &lt;span class=&quot;nb&quot;&gt;sudo tee&lt;/span&gt; /etc/yum.repos.d/ibmi-acs.repo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;suse-based-distribution-setup&quot;&gt;SUSE-based Distribution Setup&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl https://public.dhe.ibm.com/software/ibmi/products/odbc/rpms/ibmi-acs.repo | &lt;span class=&quot;nb&quot;&gt;sudo tee&lt;/span&gt; /etc/zypp/repos.d/ibmi-acs.repo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;debian-based-and-ubuntu-based-distribution-setup&quot;&gt;Debian-based and Ubuntu-based Distribution Setup&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl https://public.dhe.ibm.com/software/ibmi/products/odbc/debs/dists/1.1.0/ibmi-acs-1.1.0.list | &lt;span class=&quot;nb&quot;&gt;sudo tee&lt;/span&gt; /etc/apt/sources.list.d/ibmi-acs-1.1.0.list
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;installing-the-odbc-driver&quot;&gt;Installing the ODBC driver&lt;/h2&gt;
+
+&lt;h3 id=&quot;red-hat-based-distribution-installation&quot;&gt;Red Hat-based Distribution Installation&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;dnf &lt;span class=&quot;nb&quot;&gt;install&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;--refresh&lt;/span&gt; ibm-iaccess
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;suse-based-distribution-installation&quot;&gt;SUSE-based Distribution Installation&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;zypper refresh
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;zypper &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;ibm-iaccess
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;debian-based-and-ubuntu-based-distribution-installation&quot;&gt;Debian-based and Ubuntu-based Distribution Installation&lt;/h3&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt update
+&lt;span class=&quot;nb&quot;&gt;sudo &lt;/span&gt;apt &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;ibm-iaccess
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Kevin Adler</name></author><category term="odbc" /><summary type="html">Today, we’re pushing out something that I’ve been wanting for a long time. We now have RPM and DEB repositories for Linux available directly from IBM for the IBM i Access Client Solutions application package, which includes the IBM i Access ODBC driver. This also includes the latest version of the IBM i Access ODBC driver, which was released today.</summary></entry><entry><title type="html">IBM i Open Source Updates January 2022</title><link href="https://kadler.io/2022/02/21/jan-2022-oss-updates.html" rel="alternate" type="text/html" title="IBM i Open Source Updates January 2022" /><published>2022-02-21T00:00:00-06:00</published><updated>2022-02-21T00:00:00-06:00</updated><id>https://kadler.io/2022/02/21/jan-2022-oss-updates</id><content type="html" xml:base="https://kadler.io/2022/02/21/jan-2022-oss-updates.html">&lt;p&gt;Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. :grin:&lt;/p&gt;
+
+&lt;h2 id=&quot;new-packages&quot;&gt;New Packages&lt;/h2&gt;
+
+&lt;h3 id=&quot;gnu-binutils&quot;&gt;GNU binutils&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.gnu.org/software/binutils/&quot;&gt;GNU binutils&lt;/a&gt; is a collection of
+binary tools, mainly the GNU linker (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ld&lt;/code&gt;) and the GNU assembler (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;as&lt;/code&gt;).  Many
+changes have gone in to the 2.37 release to improve AIX compatibility in the
+linker, however it is not yet recommended for production usage.  The assembler
+seems to be in much better shape, however, and supports up to Power 10
+instructions even back to IBM i 7.3 while the PASE assembler only supports
+up to POWER8 on 7.3 and POWER9 on 7.4.&lt;/p&gt;
+
+&lt;p&gt;Additional utilities that may be of interest are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;c++filt&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;objdump&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;NOTE: This package is only available for IBM i 7.3 and newer.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;package-updates&quot;&gt;Package Updates&lt;/h2&gt;
+
+&lt;h3 id=&quot;service-commander&quot;&gt;service-commander&lt;/h3&gt;
+
+&lt;p&gt;service-commander went through a few updates this month to 1.0.1, 1.0.2, and
+finally 1.1.0.&lt;/p&gt;
+
+&lt;p&gt;Major improvements include:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Common IBM i services such as HTTP Admin servers, IBM i Host Servers, etc
+are now pre-configured out of the box&lt;/li&gt;
+  &lt;li&gt;Services now support multiple ports and/or multiple jobs&lt;/li&gt;
+  &lt;li&gt;Python 3.9 is now used instead of 3.6&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For more information, refer to the
+&lt;a href=&quot;https://github.com/ThePrez/ServiceCommander-IBMi/releases/tag/v1.1.0&quot;&gt;1.1.0&lt;/a&gt;,
+&lt;a href=&quot;https://github.com/ThePrez/ServiceCommander-IBMi/releases/tag/v1.0.2&quot;&gt;1.0.2&lt;/a&gt;,
+and
+&lt;a href=&quot;https://github.com/ThePrez/ServiceCommander-IBMi/releases/tag/v1.0.1&quot;&gt;1.0.1&lt;/a&gt;
+release notes.&lt;/p&gt;
+
+&lt;h3 id=&quot;gcc-10&quot;&gt;GCC 10&lt;/h3&gt;
+
+&lt;p&gt;GCC 10 has now been updated to 10.3.0. In addition, numerous improvements have
+been made:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Fixed Power 10 support&lt;/li&gt;
+  &lt;li&gt;Add alias for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-m64&lt;/code&gt; -&amp;gt; &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-maix64&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Fortran support added&lt;/li&gt;
+  &lt;li&gt;Add comptibility for libgfortran3 from GCC 6&lt;/li&gt;
+  &lt;li&gt;Use Red Hat-style compiler identification in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;gcc --version&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Remove unsupported &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-mpe&lt;/code&gt; option&lt;/li&gt;
+  &lt;li&gt;Disable building GCC with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;-G&lt;/code&gt; linker flag, which should improve performance&lt;/li&gt;
+  &lt;li&gt;Simplified rpm build spec file&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;NOTE: This package is only available for IBM i 7.3 and newer.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;sbin-changes&quot;&gt;sbin Changes&lt;/h3&gt;
+
+&lt;p&gt;On Unix platforms, there’s a distinction between bin/ and sbin/ directories,
+where bin/ contains programs usable by all users while sbin/ contains programs
+that are meant for admins and usually require “root” authority and are usually
+only added to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$PATH&lt;/code&gt; if the user is root.&lt;/p&gt;
+
+&lt;p&gt;On IBM i, users may have multiple different special authorities such as
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*ALLOBJ&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*SECADM&lt;/code&gt;, etc instead of having a special “root” user (though
+QSECOFR does exist) so this distinction doesn’t make as much sense. In
+addition, sbin/ directories are not added to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$PATH&lt;/code&gt;, which can lead to
+confusion for users unaware of this split, especially since most packages we
+ship do not contain any sbin/ programs.&lt;/p&gt;
+
+&lt;p&gt;Because this split behavior is rather foreign and doesn’t make as much sense on
+a platform with special authorities, we have decided to move away from
+packaging anything in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/QOpenSys/pkgs/sbin&lt;/code&gt;. All existing packages that have
+sbin/ files have moved those files to bin/, with compatibility symlinks in
+sbin/ left for now.&lt;/p&gt;
+
+&lt;p&gt;The following packages (programs) were affected:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;yum-utils (yum-complete-transaction, yumdb)&lt;/li&gt;
+  &lt;li&gt;gnupg2 (addgnupghome, applygnupgdefaults)&lt;/li&gt;
+  &lt;li&gt;logrotate (logrotate)&lt;/li&gt;
+  &lt;li&gt;man-db (accessdb)&lt;/li&gt;
+  &lt;li&gt;openssh (sshd)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In addition, we plan to make a change to rpm to change the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%{_sbindir}&lt;/code&gt; macro to
+be the same as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%{_bindir}&lt;/code&gt;. This should ensure the majority of packages going
+forward require no special changes.&lt;/p&gt;
+
+&lt;h3 id=&quot;tn5250&quot;&gt;tn5250&lt;/h3&gt;
+
+&lt;p&gt;Encrypted 5250 is now supported using TLS/SSL, eg &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tn5250
+ssl:ibmi.example.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;other-updates&quot;&gt;Other Updates&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;python39-paramiko was updated to 2.7.2&lt;/li&gt;
+  &lt;li&gt;python39-psycopg2 was updated to 2.9.1&lt;/li&gt;
+  &lt;li&gt;mariadb was updated to
+&lt;a href=&quot;https://mariadb.com/kb/en/mariadb-10332-release-notes/&quot;&gt;10.3.32&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;nodejs12 was updated to &lt;a href=&quot;https://nodejs.org/en/blog/release/v12.22.9/&quot;&gt;12.22.9&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;nodejs14 was updated to &lt;a href=&quot;https://nodejs.org/en/blog/release/v14.18.1/&quot;&gt;14.18.1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;nodejs16 was updated to &lt;a href=&quot;https://nodejs.org/en/blog/release/v16.13.2/&quot;&gt;16.13.2&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;/h2&gt;
+
+&lt;p&gt;Quite a few big changes, especially on 7.3 and up packages Hmm. :thinking:&lt;/p&gt;</content><author><name>Kevin Adler</name></author><category term="ibmi-oss-updates" /><summary type="html">Happy new year! I know it’s late February now, but it’s still the first post of 2022 here, so let’s see what January had to offer. :grin:</summary></entry><entry><title type="html">IBM i Open Source Updates December 2021</title><link href="https://kadler.io/2022/01/31/dec-2021-oss-updates.html" rel="alternate" type="text/html" title="IBM i Open Source Updates December 2021" /><published>2022-01-31T00:00:00-06:00</published><updated>2022-01-31T00:00:00-06:00</updated><id>https://kadler.io/2022/01/31/dec-2021-oss-updates</id><content type="html" xml:base="https://kadler.io/2022/01/31/dec-2021-oss-updates.html">&lt;p&gt;Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many of them had been in the works for a long time.&lt;/p&gt;
+
+&lt;h2 id=&quot;package-updates&quot;&gt;Package Updates&lt;/h2&gt;
+
+&lt;h3 id=&quot;yum&quot;&gt;yum&lt;/h3&gt;
+
+&lt;p&gt;Yum now requires the &lt;a href=&quot;/2021/12/07/ibmi-repos.html&quot;&gt;ibmi-repos&lt;/a&gt;
+package. This should hopefully mean a smooth transition to the new repos as
+users update their installations.&lt;/p&gt;
+
+&lt;p&gt;If you have more questions please refer to the
+&lt;a href=&quot;https://ibmi-oss-docs.readthedocs.io/en/latest/yum/IBM_REPOS.html#faqs&quot;&gt;FAQ&lt;/a&gt;
+or reach out to me.&lt;/p&gt;
+
+&lt;h3 id=&quot;openblas&quot;&gt;OpenBLAS&lt;/h3&gt;
+
+&lt;p&gt;OpenBLAS has been updated to
+&lt;a href=&quot;https://github.com/xianyi/OpenBLAS/releases/tag/v0.3.19&quot;&gt;0.3.19&lt;/a&gt; which brings
+optimized code paths for both POWER9 and Power10. In addition, OpenBLAS will
+now determine the proper CPU optimizations and number of cores to use at
+runtime automatically instead of having to set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OPENBLAS_CORETYPE&lt;/code&gt; and
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OPENBLAS_NUM_THREADS&lt;/code&gt;, respectively. Users can still set these values if they
+want to override them.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;NOTE: This package is only available for IBM i 7.3 and newer.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;python-39-packages&quot;&gt;Python 3.9 packages&lt;/h3&gt;
+
+&lt;p&gt;Python 3.9 packages for Numpy, Pandas, and other ML packages are now available!
+This has been a long-awaited update for many users, especially as Python 3.6 is now
+no longer supported.&lt;/p&gt;
+
+&lt;p&gt;In addition, many packages have been updated (including some major version changes) and
+new dependencies packaged. You’ll definitely want to test your applications.&lt;/p&gt;
+
+&lt;p&gt;Full list of packages and versions:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;numpy 1.21.4&lt;/li&gt;
+  &lt;li&gt;pandas 1.3.4&lt;/li&gt;
+  &lt;li&gt;scipy 1.7.3&lt;/li&gt;
+  &lt;li&gt;scikit-learn 1.0.1&lt;/li&gt;
+  &lt;li&gt;beniget 0.4.1&lt;/li&gt;
+  &lt;li&gt;gast 0.5.3&lt;/li&gt;
+  &lt;li&gt;joblib 1.1.0&lt;/li&gt;
+  &lt;li&gt;ply 3.11&lt;/li&gt;
+  &lt;li&gt;pybind11 2.8.1&lt;/li&gt;
+  &lt;li&gt;pythran 0.10.0&lt;/li&gt;
+  &lt;li&gt;threadpoolctl 3.0.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;NOTE: These packages are only available for IBM i 7.3 and newer.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;cmake&quot;&gt;CMake&lt;/h3&gt;
+
+&lt;p&gt;CMake was updated to 3.16.9 and now builds svr4-style libraries when the
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;VERSION&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SOVERSION&lt;/code&gt; property is set on a library target.  The soname will
+reflect the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SOVERSION&lt;/code&gt;, unless not specified in which case it uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;VERSION&lt;/code&gt;,
+and if that is not specified, it builds an un-versioned shared object.&lt;/p&gt;
+
+&lt;p&gt;eg.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-`cmake&quot;&gt;add_library(foo SHARED foo.c)
+# Creates libfoo.so
+
+add_library(bar SHARED bar.c)
+set_target_properties(bar PROPERTIES SOVERSION 1)
+# creates libbar.so -&amp;gt; libbar.so.1
+
+add_library(baz SHARED baz.c)
+set_target_properties(baz PROPERTIES VERSION 1.2.3)
+# creates libbaz.so -&amp;gt; libbaz.so.1.2.3
+
+add_library(bla SHARED bla.c)
+set_target_properties(bix PROPERTIES VERSION 1.2.3 SOVERSION 1)
+# creates libbla.so -&amp;gt; libbla.so.1
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This brings CMake in line with libtool’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--with-aix-soname=svr4&lt;/code&gt; option used
+throughout our rpm ecosystem.&lt;/p&gt;
+
+&lt;h3 id=&quot;gdb&quot;&gt;gdb&lt;/h3&gt;
+
+&lt;p&gt;GDB has been rebuilt to use NCURSES instead of the PASE curses libraries. This
+fixes errors when using terminals other than “xterm” or “aixterm” (eg.
+xterm-256color used by most modern Linux terminals).  It also now properly handles
+UTF-8 locales when running in TUI mode.&lt;/p&gt;
+
+&lt;h3 id=&quot;openjdk-11&quot;&gt;OpenJDK 11&lt;/h3&gt;
+
+&lt;p&gt;The OpenJDK 11 Early Access rpm has been updated to handle the SVR4-style
+libraries we use in our rpm ecosystem when using dynamic linking. This fixes
+problems when loading libraries for FreeType, GLib, OpenSSL, CUPS, Fontconfig,
+libzip, and more.&lt;/p&gt;
+
+&lt;h3 id=&quot;libiconv&quot;&gt;libiconv&lt;/h3&gt;
+
+&lt;p&gt;This package now provides a charset-alias sub-package shipping
+/QOpenSys/pkgs/lib/charset.alias, which can be used as an rpm dependency for
+other packages which depend on this file.&lt;/p&gt;
+
+&lt;h3 id=&quot;tk&quot;&gt;TK&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.tcl.tk/&quot;&gt;TK&lt;/a&gt; is now built with the open source X.org X11 libraries
+instead of the PASE X11 libraries.&lt;/p&gt;
+
+&lt;h3 id=&quot;p11-kit--ca-certificates&quot;&gt;p11-kit &amp;amp; ca-certificates&lt;/h3&gt;
+
+&lt;p&gt;The system PKI trust directories (/QOpenSys/etc/pki/trust and
+/QOpenSys/pkgs/share/pki/trust) changed ownership from the p11-kit package to
+ca-certificates. Most users will not have the p11-kit package installed in
+normal operation, which meant that these directories wouldn’t be either. This
+made it more difficult for users to figure out where to put their own CA
+certificates (eg. for self-signed certificates). In addition, we’ve added a
+README file at /QOpenSys/etc/pki/trust/anchors/README.
+&lt;a href=&quot;https://www.seidengroup.com/2021/04/26/how-to-validate-self-signed-ssl-tls-certificates-from-ibm-i/&quot;&gt;Seiden Group&lt;/a&gt;
+also has a great step-by-step article outlining the steps.&lt;/p&gt;
+
+&lt;h3 id=&quot;ca-certificates-mozilla&quot;&gt;ca-certificates-mozilla&lt;/h3&gt;
+
+&lt;p&gt;Speaking of CA certificates, the system CA certificate trust store, based on
+Mozilla’s trust list, has been updated based on the NSS 3.60.&lt;/p&gt;
+
+&lt;p&gt;If you’re interested in all the changes:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.45_release_notes#certificate_authority_changes&quot;&gt;NSS 3.45 CA Changes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.46_release_notes#certificate_authority_changes&quot;&gt;NSS 3.46 CA Changes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.48_release_notes#certificate_authority_changes&quot;&gt;NSS 3.48 CA Changes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.54_release_notes#certificate_authority_changes&quot;&gt;NSS 3.54 CA Changes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.57_release_notes#certificate_authority_changes&quot;&gt;NSS 3.57 CA Changes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.60_release_notes#certificate_authority_changes&quot;&gt;NSS 3.60 CA Changes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;other-updates&quot;&gt;Other Updates&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;python3 was updated to &lt;a href=&quot;https://www.python.org/downloads/release/python-3615/&quot;&gt;3.6.15&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;python39 was updated to &lt;a href=&quot;https://www.python.org/downloads/release/python-398/&quot;&gt;3.9.8&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;service-commander was updated to 
+&lt;a href=&quot;https://github.com/ThePrez/ServiceCommander-IBMi/releases/tag/v0.7.0&quot;&gt;0.7.0&lt;/a&gt; and
+&lt;a href=&quot;https://github.com/ThePrez/ServiceCommander-IBMi/releases/tag/v0.7.2&quot;&gt;0.7.2&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;libutil has been updated to &lt;a href=&quot;https://github.com/IBM/portlibfori/releases/tag/0.11.1&quot;&gt;0.11.1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;nss updated to 3.68.1&lt;/li&gt;
+  &lt;li&gt;nspr updated to 4.32&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;/h2&gt;
+
+&lt;p&gt;Well, that’s it for 2021. What a year!&lt;/p&gt;
+
+&lt;p&gt;We had some big new packages and versions:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;GCC 10&lt;/li&gt;
+  &lt;li&gt;OpenBLAS&lt;/li&gt;
+  &lt;li&gt;Node.js 16&lt;/li&gt;
+  &lt;li&gt;Python 3.9&lt;/li&gt;
+  &lt;li&gt;ibmi-repos&lt;/li&gt;
+  &lt;li&gt;FreeTDS&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We also had quite a lot of smaller updates to packages like bash, curl,
+db2util, nginx, R, etc. What was your favorite update this year?&lt;/p&gt;
+
+&lt;p&gt;Check back next week for the start of 2022 updates.&lt;/p&gt;</content><author><name>Kevin Adler</name></author><category term="ibmi-oss-updates" /><summary type="html">Just because the last couple months were quiet doesn’t mean that nothing’s going on. Case in point, the last month of 2021 saw a ton of updates, though many of them had been in the works for a long time.</summary></entry><entry><title type="html">IBM i Open Source Updates November 2021</title><link href="https://kadler.io/2022/01/24/nov-2021-oss-updates.html" rel="alternate" type="text/html" title="IBM i Open Source Updates November 2021" /><published>2022-01-24T00:00:00-06:00</published><updated>2022-01-24T00:00:00-06:00</updated><id>https://kadler.io/2022/01/24/nov-2021-oss-updates</id><content type="html" xml:base="https://kadler.io/2022/01/24/nov-2021-oss-updates.html">&lt;p&gt;November brings some nice goodies for IBM i 7.3+ users and some security fixes.&lt;/p&gt;
+
+&lt;h2 id=&quot;new-packages&quot;&gt;New Packages&lt;/h2&gt;
+
+&lt;h3 id=&quot;ibmi-repos&quot;&gt;ibmi-repos&lt;/h3&gt;
+
+&lt;p&gt;I previously talked about this package &lt;a href=&quot;/2021/12/07/ibmi-repos.html&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&quot;leptonica&quot;&gt;Leptonica&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://leptonica.org/&quot;&gt;Leptonica&lt;/a&gt; is a set of image processing and analysis
+libraries.  It supports numerous operations:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Raster operations&lt;/li&gt;
+  &lt;li&gt;Affine transforms (scaling, translation, rotation, shear) on images of
+arbitrary pixel depth&lt;/li&gt;
+  &lt;li&gt;Projective and bilinear transforms&lt;/li&gt;
+  &lt;li&gt;Binary and grayscale morphology, rank order filters, and convolution&lt;/li&gt;
+  &lt;li&gt;and more&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;NOTE: This package is only available for IBM i 7.3 and newer.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;tesseract&quot;&gt;Tesseract&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://tesseract-ocr.github.io/&quot;&gt;Tesseract&lt;/a&gt; is an open source text
+recognition engine using a trained machine learning model as its basis.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;NOTE: This package is only available for IBM i 7.3 and newer.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;package-updates&quot;&gt;Package Updates&lt;/h2&gt;
+
+&lt;h3 id=&quot;pcre&quot;&gt;PCRE&lt;/h3&gt;
+
+&lt;p&gt;PCRE was updated to 8.45, which is the &lt;strong&gt;final&lt;/strong&gt; release of PCRE1. Applications
+should migrate to PCRE2, which is also packaged.&lt;/p&gt;
+
+&lt;h3 id=&quot;nginx&quot;&gt;NGINX&lt;/h3&gt;
+
+&lt;p&gt;Patched against &lt;a href=&quot;https://nvd.nist.gov/vuln/detail/CVE-2021-23017&quot;&gt;CVE-2021-23017&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;other-updates&quot;&gt;Other Updates&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;service-commander was updated to &lt;a href=&quot;https://github.com/ThePrez/ServiceCommander-IBMi/releases/tag/v0.6.0&quot;&gt;0.6.0&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;/h2&gt;
+
+&lt;p&gt;Come back next Monday for December updates!&lt;/p&gt;</content><author><name>Kevin Adler</name></author><category term="ibmi-oss-updates" /><summary type="html">November brings some nice goodies for IBM i 7.3+ users and some security fixes.</summary></entry><entry><title type="html">IBM i Open Source Updates October 2021</title><link href="https://kadler.io/2022/01/17/oct-2021-oss-updates.html" rel="alternate" type="text/html" title="IBM i Open Source Updates October 2021" /><published>2022-01-17T00:00:00-06:00</published><updated>2022-01-17T00:00:00-06:00</updated><id>https://kadler.io/2022/01/17/oct-2021-oss-updates</id><content type="html" xml:base="https://kadler.io/2022/01/17/oct-2021-oss-updates.html">&lt;p&gt;Another relatively quiet month of IBM i open source updates.&lt;/p&gt;
+
+&lt;h2 id=&quot;package-updates&quot;&gt;Package Updates&lt;/h2&gt;
+
+&lt;h3 id=&quot;python39-pyzmq&quot;&gt;python39-pyzmq&lt;/h3&gt;
+
+&lt;p&gt;pyzmq was previously packaged for Python 3.6 and now packaged for Python 3.9, along with being updated to version 22.1.0.&lt;/p&gt;
+
+&lt;h3 id=&quot;other-updates&quot;&gt;Other Updates&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;nodejs12 was updated to &lt;a href=&quot;https://nodejs.org/en/blog/release/v12.22.7/&quot;&gt;12.22.7&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;nodejs14 was updated to &lt;a href=&quot;https://node5s.org/en/blog/release/v14.18.1/&quot;&gt;14.18.1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;nodejs16 was updated to &lt;a href=&quot;https://nodejs.org/en/blog/release/v16.11.1/&quot;&gt;16.11.1&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;python39-itoolkit was updated to &lt;a href=&quot;https://github.com/IBM/python-itoolkit/releases/tag/1.7.0&quot;&gt;1.7.0&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;/h2&gt;
+
+&lt;p&gt;Come back Monday for November updates!&lt;/p&gt;</content><author><name>Kevin Adler</name></author><category term="ibmi-oss-updates" /><summary type="html">Another relatively quiet month of IBM i open source updates.</summary></entry><entry><title type="html">IBM i Open Source Updates September 2021</title><link href="https://kadler.io/2022/01/14/sep-2021-oss-updates.html" rel="alternate" type="text/html" title="IBM i Open Source Updates September 2021" /><published>2022-01-14T00:00:00-06:00</published><updated>2022-01-14T00:00:00-06:00</updated><id>https://kadler.io/2022/01/14/sep-2021-oss-updates</id><content type="html" xml:base="https://kadler.io/2022/01/14/sep-2021-oss-updates.html">&lt;p&gt;September was a pretty quiet month, but still some good stuff.&lt;/p&gt;
+
+&lt;h2 id=&quot;new-packages&quot;&gt;New Packages&lt;/h2&gt;
+
+&lt;h3 id=&quot;service-commander&quot;&gt;Service Commander&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://github.com/ThePrez/ServiceCommander-IBMi&quot;&gt;Service Commander&lt;/a&gt; is tool for starting and managing services on IBM i. It makes it easy to manage your open source PASE services as well as traditional ILE services and jobs.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Some examples:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Start the service named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kafka&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sc start kafka
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Stop the service named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zookeeper&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sc stop zookeeper
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Check status of all configured services (all services belong to a special group named “all”)&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sc check group:all
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;other-updates&quot;&gt;Other Updates&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;db2util was updated to &lt;a href=&quot;https://github.com/IBM/ibmi-db2util/releases/tag/v1.0.12&quot;&gt;1.0.12&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;/h2&gt;
+
+&lt;p&gt;Come back Monday for October updates!&lt;/p&gt;</content><author><name>Kevin Adler</name></author><category term="ibmi-oss-updates" /><summary type="html">September was a pretty quiet month, but still some good stuff.</summary></entry><entry><title type="html">IBM i Open Source Updates August 2021</title><link href="https://kadler.io/2022/01/10/aug-2021-oss-updates.html" rel="alternate" type="text/html" title="IBM i Open Source Updates August 2021" /><published>2022-01-10T00:00:00-06:00</published><updated>2022-01-10T00:00:00-06:00</updated><id>https://kadler.io/2022/01/10/aug-2021-oss-updates</id><content type="html" xml:base="https://kadler.io/2022/01/10/aug-2021-oss-updates.html">&lt;p&gt;August is up, let’s check it out.&lt;/p&gt;
+
+&lt;h2 id=&quot;new-packages&quot;&gt;New Packages&lt;/h2&gt;
+
+&lt;h3 id=&quot;ncdu&quot;&gt;Ncdu&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://dev.yorhel.nl/ncdu&quot;&gt;Ncdu&lt;/a&gt; stands for “NCurses Disk Usage” and is a curses-based equivalent to the standard &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;du&lt;/code&gt; Unix command and &lt;a href=&quot;https://en.wikipedia.org/wiki/Text-based_user_interface&quot;&gt;TUI&lt;/a&gt; equivalent to tools like &lt;a href=&quot;https://windirstat.net/&quot;&gt;WinDirStat&lt;/a&gt; or &lt;a href=&quot;https://github.com/shundhammer/qdirstat&quot;&gt;QDirStat&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/ncdu.png&quot; alt=&quot;Ncdu screenshot&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Not only can you visualize the hierarchical storage usage, but you can also clean up unneeded files directly from the tool.&lt;/p&gt;
+
+&lt;p&gt;As far as I know, this only works on files in the Root and QOpenSys filesystems.&lt;/p&gt;
+
+&lt;h3 id=&quot;c-ares&quot;&gt;c-ares&lt;/h3&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://c-ares.org&quot;&gt;c-ares&lt;/a&gt; is an asychronous DNS resolver from the same authors as &lt;a href=&quot;https://github.com/curl/curl&quot;&gt;curl&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;package-updates&quot;&gt;Package Updates&lt;/h2&gt;
+
+&lt;h3 id=&quot;libuv&quot;&gt;libuv&lt;/h3&gt;
+
+&lt;p&gt;Updated to 1.42.0, fixing a &lt;a href=&quot;https://github.com/libuv/libuv/issues/3062&quot;&gt;vlan crash&lt;/a&gt; issue.&lt;/p&gt;
+
+&lt;h3 id=&quot;python-rpm-macros&quot;&gt;python-rpm-macros&lt;/h3&gt;
+
+&lt;p&gt;A fix was added for the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%py_shebang_fix&lt;/code&gt; macro which was causing erroneous error messages printed from yum:&lt;/p&gt;
+
+&lt;div class=&quot;language-text highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;error: Macro %if has illegal name (%define)
+error: Macro %endif has empty body
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;python39-psutil&quot;&gt;python39-psutil&lt;/h3&gt;
+
+&lt;p&gt;psutil was previously packaged for Python 3.6 and now packaged for Python 3.9, along with being updated to version 5.8.0.&lt;/p&gt;
+
+&lt;h3 id=&quot;other-updates&quot;&gt;Other Updates&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;nodejs12 was updated to &lt;a href=&quot;https://nodejs.org/en/blog/release/v12.22.4/&quot;&gt;12.22.4&lt;/a&gt; and &lt;a href=&quot;https://nodejs.org/en/blog/release/v12.22.5/&quot;&gt;12.22.5&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;nodejs14 was updated to &lt;a href=&quot;https://node5s.org/en/blog/release/v14.16.4/&quot;&gt;14.16.4&lt;/a&gt; and &lt;a href=&quot;https://nodejs.org/en/blog/release/v14.16.1/&quot;&gt;14.16.5&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;nodejs16 was updated to &lt;a href=&quot;https://nodejs.org/en/blog/release/v16.6.0/&quot;&gt;16.6.0&lt;/a&gt; and &lt;a href=&quot;https://nodejs.org/en/blog/release/v16.6.2/&quot;&gt;16.6.2&lt;/a&gt;.&lt;/li&gt;
+  &lt;li&gt;python39-pynacl was updated to 1.4.0&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;/h2&gt;
+
+&lt;p&gt;Come back Friday for September updates!&lt;/p&gt;</content><author><name>Kevin Adler</name></author><category term="ibmi-oss-updates" /><summary type="html">August is up, let’s check it out.</summary></entry><entry><title type="html">IBM i Open Source Updates July 2021</title><link href="https://kadler.io/2022/01/07/july-2021-oss-updates.html" rel="alternate" type="text/html" title="IBM i Open Source Updates July 2021" /><published>2022-01-07T00:00:00-06:00</published><updated>2022-01-07T00:00:00-06:00</updated><id>https://kadler.io/2022/01/07/july-2021-oss-updates</id><content type="html" xml:base="https://kadler.io/2022/01/07/july-2021-oss-updates.html">&lt;p&gt;Back with another overdue update, this time for July. Big news this month, which had been hinted at for a while. Did you figure it out ahead of time?&lt;/p&gt;
+&lt;h2 id=&quot;new-packages&quot;&gt;New Packages&lt;/h2&gt;
+
+&lt;h3 id=&quot;python-39&quot;&gt;Python 3.9&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;/assets/images/wild-python-appears.png&quot; alt=&quot;Wild Python appeared&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;In addition to the existing Python 2.7 and 3.6, you can now use Python 3.9 on IBM i. We’ve spent a significant amount of time running through the Python test suite and fixing issues found so this should be the most stable version of Python on the platform yet! If you’re wondering what’s new with 3.9, there’s the &lt;a href=&quot;https://docs.python.org/3/whatsnew/3.9.html&quot;&gt;official docs&lt;/a&gt; as well as some great summaries like &lt;a href=&quot;https://ayushi7rawat.hashnode.dev/python-39-all-you-need-to-know&quot;&gt;this one&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In addition to the Python 3.9 interpreter and runtime, we’ve ported the following Python 3.6 packages over:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;dateutil&lt;/li&gt;
+  &lt;li&gt;paramiko&lt;/li&gt;
+  &lt;li&gt;pytz&lt;/li&gt;
+  &lt;li&gt;six&lt;/li&gt;
+  &lt;li&gt;Pillow&lt;/li&gt;
+  &lt;li&gt;bcrypt&lt;/li&gt;
+  &lt;li&gt;cffi&lt;/li&gt;
+  &lt;li&gt;cryptography&lt;/li&gt;
+  &lt;li&gt;ibm_db&lt;/li&gt;
+  &lt;li&gt;itoolkit&lt;/li&gt;
+  &lt;li&gt;psycopg2&lt;/li&gt;
+  &lt;li&gt;pycparser&lt;/li&gt;
+  &lt;li&gt;pynacl&lt;/li&gt;
+  &lt;li&gt;pip&lt;/li&gt;
+  &lt;li&gt;setuptools&lt;/li&gt;
+  &lt;li&gt;wheel&lt;/li&gt;
+  &lt;li&gt;pyodbc&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Some of these packages have been updated to the most recent version. In addition, cython has been packaged for Python 3.9 for dependencies while others like idna2 and asn1crypto were not brought over since they are no longer needed.&lt;/p&gt;
+
+&lt;p&gt;At this point, the only Python 3.6 packages we still have not brought to Python 3.9 are the ML-related packages:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;numpy&lt;/li&gt;
+  &lt;li&gt;pandas&lt;/li&gt;
+  &lt;li&gt;scikit-learn&lt;/li&gt;
+  &lt;li&gt;scipy&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;With Python 3.6 going EOL in December, it’s recommended to start porting code to 3.9 as soon as possible.&lt;/p&gt;
+
+&lt;p&gt;By default upon installation, it &lt;em&gt;will&lt;/em&gt; set /QOpenSys/pkgs/bin/python3 to point to python3.9. For more info on handling Python on IBM i refer to our &lt;a href=&quot;https://ibmi-oss-docs.readthedocs.io/en/latest/python/README.html&quot;&gt;docs&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;package-updates&quot;&gt;Package Updates&lt;/h2&gt;
+
+&lt;h3 id=&quot;ncurses&quot;&gt;ncurses&lt;/h3&gt;
+
+&lt;p&gt;The ncurses package was updated to ship pkg-config files in ncurses-devel. This can help when building packages which rely on pkg-config to determine the ncurses link and cflags instead of using ncurses’ bespoke &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ncurses6-config&lt;/code&gt; script.&lt;/p&gt;
+
+&lt;h3 id=&quot;python-rpm-macros&quot;&gt;python-rpm-macros&lt;/h3&gt;
+
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;%py_install_wheel&lt;/code&gt; macro was updated to adjust the INSTALLER file created by pip to show that the package was installed by rpm.&lt;/p&gt;
+
+&lt;h3 id=&quot;other-updates&quot;&gt;Other Updates&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;libsodium was updated to 1.0.18&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;/h2&gt;
+
+&lt;p&gt;Another month down, 5 more to go. Come back next Monday for August updates!&lt;/p&gt;</content><author><name>Kevin Adler</name></author><category term="ibmi-oss-updates" /><summary type="html">Back with another overdue update, this time for July. Big news this month, which had been hinted at for a while. Did you figure it out ahead of time? New Packages</summary></entry><entry><title type="html">IBM i Open Source Updates June 2021</title><link href="https://kadler.io/2022/01/04/jun-2021-oss-updates.html" rel="alternate" type="text/html" title="IBM i Open Source Updates June 2021" /><published>2022-01-04T00:00:00-06:00</published><updated>2022-01-04T00:00:00-06:00</updated><id>https://kadler.io/2022/01/04/jun-2021-oss-updates</id><content type="html" xml:base="https://kadler.io/2022/01/04/jun-2021-oss-updates.html">&lt;p&gt;Hey, it’s been a while! I got way behind on pushing out update blogs, so I’ll be pushing out updates to catch up on the 2021 and try to be more consistent for 2022.&lt;/p&gt;
+
+&lt;h2 id=&quot;new-packages&quot;&gt;New Packages&lt;/h2&gt;
+
+&lt;h3 id=&quot;python-rpm-macros&quot;&gt;python-rpm-macros&lt;/h3&gt;
+
+&lt;p&gt;This package contains improved rpm macros for Python. The rpm-devel package already ships some Python macros in /QOpenSys/pkgs/lib/rpm/macros.python3, but these have been removed from the latest version of rpm and replaced by the macros in this package.&lt;/p&gt;
+
+&lt;h2 id=&quot;package-updates&quot;&gt;Package Updates&lt;/h2&gt;
+
+&lt;h3 id=&quot;gnu-readline&quot;&gt;GNU Readline&lt;/h3&gt;
+
+&lt;p&gt;GNU Readline was updated to version 8.1, which now ships libreadline8 instead of libreadline6. Both Readline packages are available, so existing packages will not have problems, but packages will link to libreadline8 as they get updated.&lt;/p&gt;
+
+&lt;h3 id=&quot;bash&quot;&gt;BASH&lt;/h3&gt;
+
+&lt;p&gt;BASH was updated to 5.1. There are a variety of changes since 4.4. You can read more about the changes in &lt;a href=&quot;https://lists.gnu.org/archive/html/bug-bash/2019-01/msg00063.html&quot;&gt;5.0&lt;/a&gt; and &lt;a href=&quot;https://lists.gnu.org/archive/html/info-gnu/2020-12/msg00003.html&quot;&gt;5.1&lt;/a&gt; in the release announcements.&lt;/p&gt;
+
+&lt;h3 id=&quot;libidn2&quot;&gt;libidn2&lt;/h3&gt;
+
+&lt;p&gt;The package was updated to handle upgrading from community versions of libidn2.&lt;/p&gt;
+
+&lt;h3 id=&quot;ansible&quot;&gt;Ansible&lt;/h3&gt;
+
+&lt;p&gt;Ansible was updated to force using /QOpenSys/pkgs/bin/python3.6 instead of /QOpenSys/pkgs/bin/python3. The python3 symlink depends on the update-alternatives choice for Python 3 and while today we only have one alternative (Python 3.6), that won’t be the case for long.&lt;/p&gt;
+
+&lt;h3 id=&quot;other-updates&quot;&gt;Other Updates&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;python3-pip was updated to 21.1.2&lt;/li&gt;
+  &lt;li&gt;python3-setuptools was updated to 57.0.0&lt;/li&gt;
+  &lt;li&gt;python3-wheel was updated to 0.36.2&lt;/li&gt;
+  &lt;li&gt;ant was updated to 1.10.10&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;closing&quot;&gt;Closing&lt;/h2&gt;
+
+&lt;p&gt;Well, 6 months through 2021. Lots of stuff delivered and lots of stuff to come. Hopefully back in a few days with a report on July 2021.&lt;/p&gt;</content><author><name>Kevin Adler</name></author><category term="ibmi-oss-updates" /><summary type="html">Hey, it’s been a while! I got way behind on pushing out update blogs, so I’ll be pushing out updates to catch up on the 2021 and try to be more consistent for 2022.</summary></entry><entry><title type="html">IBM-provided Repositories and YUM Updates</title><link href="https://kadler.io/2021/12/07/ibmi-repos.html" rel="alternate" type="text/html" title="IBM-provided Repositories and YUM Updates" /><published>2021-12-07T00:00:00-06:00</published><updated>2021-12-07T00:00:00-06:00</updated><id>https://kadler.io/2021/12/07/ibmi-repos</id><content type="html" xml:base="https://kadler.io/2021/12/07/ibmi-repos.html">&lt;p&gt;Today, we’re pushing out an update to YUM which will automatically pull in a
+new ibmi-repos package. The ibmi-repos package will provide two “new”
+repositories:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;ibmi-base&lt;/li&gt;
+  &lt;li&gt;ibmi-release&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The new ibmi-base repo will point to the same place that the current ibm repo
+does, while the ibmi-release repo will point at an IBM i version-specific repo.&lt;/p&gt;
+
+&lt;p&gt;This will make it easier for us to push out updates to these repos as things
+change. Currently, the ibm repo is only shipped with the bootstrap and not
+owned by any package, so we can’t push out any updates to it automatically.&lt;/p&gt;
+
+&lt;p&gt;Because we would like to make the transition from the ibm repo to the new repos
+as seamless and error-free as possible, we’re pushing out new repo files
+instead of trying to update the existing repo in-place and we’re making yum
+depend on this new package. This will ensure that all users will get this
+update when they run updates and any of their local changes to the existing
+repo will not get overwritten in the process (if the sysadmin has made any
+changes).&lt;/p&gt;
+
+&lt;p&gt;Once migrated to the new repos, the old ibm.repo file can be removed.&lt;/p&gt;
+
+&lt;p&gt;More details and a FAQ is available in our
+&lt;a href=&quot;https://ibmi-oss-docs.readthedocs.io/en/latest/yum/IBM_REPOS.html&quot;&gt;docs&lt;/a&gt;&lt;/p&gt;</content><author><name>Kevin Adler</name></author><category term="ibmi-oss-updates" /><summary type="html">Today, we’re pushing out an update to YUM which will automatically pull in a new ibmi-repos package. The ibmi-repos package will provide two “new” repositories:</summary></entry></feed>

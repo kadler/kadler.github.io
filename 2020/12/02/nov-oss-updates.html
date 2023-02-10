@@ -1,0 +1,803 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>IBM i Open Source Updates October &amp; November 2020 - Kevin’s Ramblings</title>
+<meta name="description" content="October was a pretty slow month with mostly low-level improvements so I figuredI’d combine them with the November updates. November turned out to be a prettybig, so here we go!">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="IBM i Open Source Updates October &amp; November 2020">
+<meta property="og:url" content="https://kadler.io/2020/12/02/nov-oss-updates.html">
+
+
+  <meta property="og:description" content="October was a pretty slow month with mostly low-level improvements so I figuredI’d combine them with the November updates. November turned out to be a prettybig, so here we go!">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2020-12-02T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2020/12/02/nov-oss-updates.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="IBM i Open Source Updates October &amp; November 2020">
+    <meta itemprop="description" content="October was a pretty slow month with mostly low-level improvements so I figuredI’d combine them with the November updates. November turned out to be a prettybig, so here we go!">
+    <meta itemprop="datePublished" content="December 02, 2020">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">IBM i Open Source Updates October &amp; November 2020
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  4 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>October was a pretty slow month with mostly low-level improvements so I figured
+I’d combine them with the November updates. November turned out to be a pretty
+big, so here we go!</p>
+      <h2 id="new-packages">
+        
+        
+          New Packages <a href="#new-packages"></a>
+        
+        
+      </h2>
+    
+      <h3 id="pcre2">
+        
+        
+          PCRE2 <a href="#pcre2"></a>
+        
+        
+      </h3>
+
+<p><a href="http://www.pcre.org/">PCRE</a> stands for Perl Compatible Regular Expressions, and
+is a regular expression library. While we previously shipped PCRE1, that version
+has been marked stable and is no longer developed. Instead, focus shifted to
+PCRE2 and many packages will only work with that version.</p>
+    
+      <h3 id="dos2unix">
+        
+        
+          dos2unix <a href="#dos2unix"></a>
+        
+        
+      </h3>
+
+<p>The <a href="http://waterlan.home.xs4all.nl/dos2unix.html">dos2unix</a> project provides a
+set of simple conversion utilities which convert newlines in files between
+DOS/Windows (CRLF), Unix (LF), and Classic Mac OS (CR).</p>
+
+<p>If you ever run in to problems transferring text files from a Windows system to
+IBM i and trying to use it in PASE, a simple fix might be running it through
+dos2unix:</p>
+
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dos2unix windows-file.txt
+</code></pre></div></div>
+    
+      <h3 id="snappy">
+        
+        
+          Snappy <a href="#snappy"></a>
+        
+        
+      </h3>
+
+<p><a href="https://github.com/google/snappy">Snappy</a> is a newer compression algorithm and
+library from Google, which aims for very high speed with reasonable compression.
+Unlike many other compression tools we’ve provide in the past such as gzip, xz,
+zstd, bzip2, etc. snappy does not provide a command line tool — only a library.</p>
+    
+      <h3 id="mongodb-c-driver">
+        
+        
+          MongoDB C Driver <a href="#mongodb-c-driver"></a>
+        
+        
+      </h3>
+
+<p><a href="http://mongoc.org">mongoc</a> is a MongoDB client library. This allows
+applications and language packages to connect to MongoDB instances. While this
+won’t help you run MongoDB <em>on IBM i</em>, it will allow you to use MongoDB-based
+applications connecting to MongoDB instances on other systems.</p>
+
+<p>mongoc also provides libbson, which is a library for building, parsing, and
+iterating <a href="http://bsonspec.org/">BSON</a> documents.</p>
+
+<p>Unfortunately, the current build is missing libmongocrypt, so it does not yet
+support “Client-Side Field Level Encryption” but we are working on adding this
+for the future.</p>
+    
+      <h3 id="sshpass">
+        
+        
+          sshpass <a href="#sshpass"></a>
+        
+        
+      </h3>
+
+<p><a href="https://sourceforge.net/projects/sshpass/">sshpass</a> is a tool for performing
+password authentication using keyboard-interactive in a non-interactive manner.
+Ideally, you would use public key authentication with SSH keys or certificates
+instead, but sometimes this is not available. Many users already use <code class="language-plaintext highlighter-rouge">expect</code> to
+do similar things, but now there is another option.</p>
+    
+      <h3 id="mariadb-103">
+        
+        
+          MariaDB 10.3 <a href="#mariadb-103"></a>
+        
+        
+      </h3>
+
+<p>This is by far the biggest update of October and November!
+<a href="https://mariadb.org/">MariaDB</a> is an open source database based off of MySQL
+from the original developers of MySQL. Zend has long shipped a version of
+MySQL/MariaDB in the <a href="https://www.zend.com/downloads/zend-dbi">ZendDBi</a> product,
+but now it’s easier than ever to get MariaDB running on your system! The rpm
+version also has more modern defaults, such as using <code class="language-plaintext highlighter-rouge">utf8mb4</code> as the default
+charset so you can store all the emoji you want <img class="emoji" title=":hugs:" alt=":hugs:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f917.png" height="20" width="20"> <img class="emoji" title=":rainbow:" alt=":rainbow:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f308.png" height="20" width="20"> <img class="emoji" title=":rocket:" alt=":rocket:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f680.png" height="20" width="20">!</p>
+
+<p>One thing to note is that the rpm version we provide <em>does not</em> include the Db2
+storage engine. If that is something you need, please contact me directly and we
+can discuss further.</p>
+    
+      <h2 id="package-updates">
+        
+        
+          Package Updates <a href="#package-updates"></a>
+        
+        
+      </h2>
+    
+      <h3 id="autoconf--automake-dependency-fixes">
+        
+        
+          autoconf / automake Dependency Fixes <a href="#autoconf--automake-dependency-fixes"></a>
+        
+        
+      </h3>
+
+<p>The autoconf package now requires m4-gnu and automake now requires autoconf,
+fixing some package dependencies.</p>
+    
+      <h3 id="libutil-09">
+        
+        
+          libutil 0.9 <a href="#libutil-09"></a>
+        
+        
+      </h3>
+
+<p>libutil has been updated to 0.9, which implements the GNU libc extension
+functions <code class="language-plaintext highlighter-rouge">asprintf</code> and <code class="language-plaintext highlighter-rouge">vasprintf</code>. For more info see the <a href="https://linux.die.net/man/3/asprintf">Linux man
+page</a></p>
+    
+      <h3 id="ssl-and-zstd-support-in-rsync">
+        
+        
+          SSL and zstd Support in Rsync <a href="#ssl-and-zstd-support-in-rsync"></a>
+        
+        
+      </h3>
+
+<p>rsync has been updated to 3.2.3, which now supports SSL encrypted connections to
+an rsync daemon as well as using zstd compression in addition to the existing
+zlib compression.</p>
+    
+      <h3 id="wget-built-with-pcre2">
+        
+        
+          Wget built with PCRE2 <a href="#wget-built-with-pcre2"></a>
+        
+        
+      </h3>
+
+<p>Wget has been rebuilt with PCRE2 support. This allows you to use Perl-style
+regexes with the <code class="language-plaintext highlighter-rouge">--accept-regex</code> and <code class="language-plaintext highlighter-rouge">--reject-regex</code> options.</p>
+    
+      <h3 id="git-built-with-pcre2">
+        
+        
+          git built with PCRE2 <a href="#git-built-with-pcre2"></a>
+        
+        
+      </h3>
+
+<p>git has been rebuilt with PCRE2 support. You can now specify <code class="language-plaintext highlighter-rouge">--perl-regexp</code> to
+various git commands to use Perl-style regexes.</p>
+    
+      <h3 id="rpm-build-dependency-fixes">
+        
+        
+          rpm-build Dependency Fixes <a href="#rpm-build-dependency-fixes"></a>
+        
+        
+      </h3>
+
+<p>The rpm-build package now requires the following packages:</p>
+
+<ul>
+  <li>bash</li>
+  <li>coreutils-gnu</li>
+  <li>findutils</li>
+  <li>grep-gnu</li>
+  <li>patch-gnu</li>
+  <li>sed-gnu</li>
+  <li>gzip</li>
+  <li>tar-gnu</li>
+  <li>make-gnu</li>
+</ul>
+
+<p>Various build scripts assume these packages are installed or assume they are
+using GNU tools, which may behave differently than PASE tools.</p>
+
+<p>In addition, it recommends the following packages:</p>
+
+<ul>
+  <li>bzip2</li>
+  <li>xz</li>
+  <li>unzip</li>
+</ul>
+
+<p>These packages are optional and only needed when builing packages whose source
+archives are compressed using one of those packages. Currently, this
+recommendation has no effect, since yum does not support “Recommends” rpm
+dependencies.</p>
+    
+      <h3 id="curl-devel-dependency-fixes">
+        
+        
+          curl-devel Dependency Fixes <a href="#curl-devel-dependency-fixes"></a>
+        
+        
+      </h3>
+
+<p>The libraries curl links with — so called “private libraries” — were removed
+from the output of <code class="language-plaintext highlighter-rouge">curl-config --libs</code>. Packages which link to curl only need
+to link to libcurl, not the libraries which curl itself links to. This could
+cause linker errors when building against libcurl and libssh2-devel,
+openssl-devel, and zlib-devel were not also installed.</p>
+    
+      <h3 id="yum-allobj-check-fix">
+        
+        
+          yum *ALLOBJ Check Fix <a href="#yum-allobj-check-fix"></a>
+        
+        
+      </h3>
+
+<p>On some systems, yum would fail when attempting to check if the user has <code class="language-plaintext highlighter-rouge">*ALLOBJ</code> authority:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>File "/QOpenSys/pkgs/bin/yum", line 29, in &lt;module&gt;
+    yummain.user_main(sys.argv[1:], exit_code=True)
+  File "/QOpenSys/pkgs/share/yum-cli/yummain.py", line 288, in user_main
+    errcode = main(args)
+  File "/QOpenSys/pkgs/share/yum-cli/yummain.py", line 98, in main
+    base.getOptionsConfig(args)
+  File "/QOpenSys/pkgs/share/yum-cli/cli.py", line 230, in getOptionsConfig
+    self.conf
+  File "/QOpenSys/pkgs/lib/python2.7/site-packages/yum/__init__.py", line 897, in &lt;lambda&gt;
+    conf = property(fget=lambda self: self._getConfig(),
+  File "/QOpenSys/pkgs/lib/python2.7/site-packages/yum/__init__.py", line 357, in _getConfig
+    self.conf.has_root_authority = misc.hasRootAuthority()
+  File "/QOpenSys/pkgs/lib/python2.7/site-packages/yum/misc.py", line 103, in hasRootAuthority
+    has_auth = _root_authority_cache[euid] = hasAllObjectAuthority()
+  File "/QOpenSys/pkgs/lib/python2.7/site-packages/yum/misc.py", line 71, in hasAllObjectAuthority
+    syscalls._RSLOBJ2(sysptr, ctypes.c_ushort(0x0201), b'QSYCUSRS', b'QSYS')
+  File "/QOpenSys/pkgs/lib/python2.7/ctypes/__init__.py", line 379, in __getattr__
+    func = self.__getitem__(name)
+  File "/QOpenSys/pkgs/lib/python2.7/ctypes/__init__.py", line 384, in __getitem__
+    func = self._FuncPtr((name_or_ordinal, self))
+AttributeError
+</code></pre></div></div>
+
+<p>This has been fixed by loading the various ILE syscalls from libc.a instead of /unix.</p>
+    
+      <h3 id="other-updates">
+        
+        
+          Other Updates <a href="#other-updates"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.19.1/">12.19.1</a>.</li>
+  <li>nodejs14 was updated to <a href="https://nodejs.org/en/blog/release/v14.15.1/">14.15.1</a>.</li>
+  <li>python3 was updated to <a href="https://www.python.org/downloads/release/python-3612/">3.6.12</a>
+</li>
+  <li>libutil was updated to <a href="https://github.com/IBM/portlibfori/releases/tag/0.9.0">0.9.0</a>.</li>
+  <li>freetype was updated to 2.10.4</li>
+  <li>nano was updated to <a href="https://www.nano-editor.org/news.php">5.3</a> and UTF-8
+support was enabled.</li>
+</ul>
+    
+      <h2 id="closing">
+        
+        
+          Closing <a href="#closing"></a>
+        
+        
+      </h2>
+
+<p>We had some big splashy new packages, some incremental version bumps, bug fixes,
+and some quality of life improvements. A solid update before the coming holiday
+wind down.</p>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/ibmi-oss-updates" class="page__taxonomy-item" rel="tag">ibmi-oss-updates</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2020-12-02T00:00:00-06:00">December 02, 2020</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2020/10/28/aug-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates August &amp; September 2020
+">Previous</a>
+    
+    
+      <a href="/2020/12/23/bash-builtins.html" class="pagination--pager" title="getjobid, cl, and liblist — Oh, My!
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/02/21/jan-2022-oss-updates.html" rel="permalink">IBM i Open Source Updates January 2022
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20">
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>

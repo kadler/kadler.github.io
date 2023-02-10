@@ -1,0 +1,681 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.15.2 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>IBM i Open Source Updates January 2022 - Kevin’s Ramblings</title>
+<meta name="description" content="Happy new year! I know it’s late February now, but it’s still the first post of2022 here, so let’s see what January had to offer. :grin:">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Kevin's Ramblings">
+<meta property="og:title" content="IBM i Open Source Updates January 2022">
+<meta property="og:url" content="https://kadler.io/2022/02/21/jan-2022-oss-updates.html">
+
+
+  <meta property="og:description" content="Happy new year! I know it’s late February now, but it’s still the first post of2022 here, so let’s see what January had to offer. :grin:">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2022-02-21T00:00:00-06:00">
+
+
+
+
+
+
+<link rel="canonical" href="https://kadler.io/2022/02/21/jan-2022-oss-updates.html">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Kevin's Ramblings Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single wide">
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/">Kevin's Ramblings</a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/posts/">Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/categories/">Categories</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Archive</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/ebcdic/">EBCDIC</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/about/">About</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+  <div class="sidebar sticky">
+  
+
+
+<div itemscope itemtype="https://schema.org/Person">
+
+  
+    <div class="author__avatar">
+      
+        <img src="/assets/images/bio-photo.jpg" alt="Kevin Adler" itemprop="image">
+      
+    </div>
+  
+
+  <div class="author__content">
+    
+      <h3 class="author__name" itemprop="name">Kevin Adler</h3>
+    
+    
+      <div class="author__bio" itemprop="description">
+        <p>Open Source Dude</p>
+
+      </div>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li itemprop="homeLocation" itemscope itemtype="https://schema.org/Place">
+          <i class="fas fa-fw fa-map-marker-alt" aria-hidden="true"></i> <span itemprop="name">Rochester, MN</span>
+        </li>
+      
+
+      
+        
+          
+            <li><a href="https://github.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span></a></li>
+          
+        
+          
+            <li><a href="https://mastodon.lol/@kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span></a></li>
+          
+        
+          
+            <li><a href="https://twitter.com/kadlerio" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span></a></li>
+          
+        
+          
+            <li><a href="https://stackoverflow.com/users/3245633/kevin-adler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span></a></li>
+          
+        
+          
+            <li><a href="https://www.linkedin.com/in/kevin-adler-19038a15" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span class="label">LinkedIn</span></a></li>
+          
+        
+          
+            <li><a href="https://bitbucket.org/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-bitbucket" aria-hidden="true"></i><span class="label">BitBucket</span></a></li>
+          
+        
+          
+            <li><a href="https://gitlab.com/kadler" rel="me nofollow noopener noreferrer"><i class="fab fa-fw fa-gitlab" aria-hidden="true"></i><span class="label">GitLab</span></a></li>
+          
+        
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="IBM i Open Source Updates January 2022">
+    <meta itemprop="description" content="Happy new year! I know it’s late February now, but it’s still the first post of2022 here, so let’s see what January had to offer. :grin:">
+    <meta itemprop="datePublished" content="February 21, 2022">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">IBM i Open Source Updates January 2022
+</h1>
+          
+            <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  2 minute read
+</p>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>Happy new year! I know it’s late February now, but it’s still the first post of
+2022 here, so let’s see what January had to offer. <img class="emoji" title=":grin:" alt=":grin:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f601.png" height="20" width="20"></p>
+      <h2 id="new-packages">
+        
+        
+          New Packages <a href="#new-packages"></a>
+        
+        
+      </h2>
+    
+      <h3 id="gnu-binutils">
+        
+        
+          GNU binutils <a href="#gnu-binutils"></a>
+        
+        
+      </h3>
+
+<p><a href="https://www.gnu.org/software/binutils/">GNU binutils</a> is a collection of
+binary tools, mainly the GNU linker (<code class="language-plaintext highlighter-rouge">ld</code>) and the GNU assembler (<code class="language-plaintext highlighter-rouge">as</code>).  Many
+changes have gone in to the 2.37 release to improve AIX compatibility in the
+linker, however it is not yet recommended for production usage.  The assembler
+seems to be in much better shape, however, and supports up to Power 10
+instructions even back to IBM i 7.3 while the PASE assembler only supports
+up to POWER8 on 7.3 and POWER9 on 7.4.</p>
+
+<p>Additional utilities that may be of interest are <code class="language-plaintext highlighter-rouge">c++filt</code> and <code class="language-plaintext highlighter-rouge">objdump</code>.</p>
+
+<p><em>NOTE: This package is only available for IBM i 7.3 and newer.</em></p>
+    
+      <h2 id="package-updates">
+        
+        
+          Package Updates <a href="#package-updates"></a>
+        
+        
+      </h2>
+    
+      <h3 id="service-commander">
+        
+        
+          service-commander <a href="#service-commander"></a>
+        
+        
+      </h3>
+
+<p>service-commander went through a few updates this month to 1.0.1, 1.0.2, and
+finally 1.1.0.</p>
+
+<p>Major improvements include:</p>
+<ul>
+  <li>Common IBM i services such as HTTP Admin servers, IBM i Host Servers, etc
+are now pre-configured out of the box</li>
+  <li>Services now support multiple ports and/or multiple jobs</li>
+  <li>Python 3.9 is now used instead of 3.6</li>
+</ul>
+
+<p>For more information, refer to the
+<a href="https://github.com/ThePrez/ServiceCommander-IBMi/releases/tag/v1.1.0">1.1.0</a>,
+<a href="https://github.com/ThePrez/ServiceCommander-IBMi/releases/tag/v1.0.2">1.0.2</a>,
+and
+<a href="https://github.com/ThePrez/ServiceCommander-IBMi/releases/tag/v1.0.1">1.0.1</a>
+release notes.</p>
+    
+      <h3 id="gcc-10">
+        
+        
+          GCC 10 <a href="#gcc-10"></a>
+        
+        
+      </h3>
+
+<p>GCC 10 has now been updated to 10.3.0. In addition, numerous improvements have
+been made:</p>
+<ul>
+  <li>Fixed Power 10 support</li>
+  <li>Add alias for <code class="language-plaintext highlighter-rouge">-m64</code> -&gt; <code class="language-plaintext highlighter-rouge">-maix64</code>
+</li>
+  <li>Fortran support added</li>
+  <li>Add comptibility for libgfortran3 from GCC 6</li>
+  <li>Use Red Hat-style compiler identification in <code class="language-plaintext highlighter-rouge">gcc --version</code>
+</li>
+  <li>Remove unsupported <code class="language-plaintext highlighter-rouge">-mpe</code> option</li>
+  <li>Disable building GCC with <code class="language-plaintext highlighter-rouge">-G</code> linker flag, which should improve performance</li>
+  <li>Simplified rpm build spec file</li>
+</ul>
+
+<p><em>NOTE: This package is only available for IBM i 7.3 and newer.</em></p>
+    
+      <h3 id="sbin-changes">
+        
+        
+          sbin Changes <a href="#sbin-changes"></a>
+        
+        
+      </h3>
+
+<p>On Unix platforms, there’s a distinction between bin/ and sbin/ directories,
+where bin/ contains programs usable by all users while sbin/ contains programs
+that are meant for admins and usually require “root” authority and are usually
+only added to the <code class="language-plaintext highlighter-rouge">$PATH</code> if the user is root.</p>
+
+<p>On IBM i, users may have multiple different special authorities such as
+<code class="language-plaintext highlighter-rouge">*ALLOBJ</code>, <code class="language-plaintext highlighter-rouge">*SECADM</code>, etc instead of having a special “root” user (though
+QSECOFR does exist) so this distinction doesn’t make as much sense. In
+addition, sbin/ directories are not added to the <code class="language-plaintext highlighter-rouge">$PATH</code>, which can lead to
+confusion for users unaware of this split, especially since most packages we
+ship do not contain any sbin/ programs.</p>
+
+<p>Because this split behavior is rather foreign and doesn’t make as much sense on
+a platform with special authorities, we have decided to move away from
+packaging anything in <code class="language-plaintext highlighter-rouge">/QOpenSys/pkgs/sbin</code>. All existing packages that have
+sbin/ files have moved those files to bin/, with compatibility symlinks in
+sbin/ left for now.</p>
+
+<p>The following packages (programs) were affected:</p>
+
+<ul>
+  <li>yum-utils (yum-complete-transaction, yumdb)</li>
+  <li>gnupg2 (addgnupghome, applygnupgdefaults)</li>
+  <li>logrotate (logrotate)</li>
+  <li>man-db (accessdb)</li>
+  <li>openssh (sshd)</li>
+</ul>
+
+<p>In addition, we plan to make a change to rpm to change the <code class="language-plaintext highlighter-rouge">%{_sbindir}</code> macro to
+be the same as <code class="language-plaintext highlighter-rouge">%{_bindir}</code>. This should ensure the majority of packages going
+forward require no special changes.</p>
+    
+      <h3 id="tn5250">
+        
+        
+          tn5250 <a href="#tn5250"></a>
+        
+        
+      </h3>
+
+<p>Encrypted 5250 is now supported using TLS/SSL, eg <code class="language-plaintext highlighter-rouge">tn5250
+ssl:ibmi.example.com</code>.</p>
+    
+      <h3 id="other-updates">
+        
+        
+          Other Updates <a href="#other-updates"></a>
+        
+        
+      </h3>
+
+<ul>
+  <li>python39-paramiko was updated to 2.7.2</li>
+  <li>python39-psycopg2 was updated to 2.9.1</li>
+  <li>mariadb was updated to
+<a href="https://mariadb.com/kb/en/mariadb-10332-release-notes/">10.3.32</a>
+</li>
+  <li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.22.9/">12.22.9</a>
+</li>
+  <li>nodejs14 was updated to <a href="https://nodejs.org/en/blog/release/v14.18.1/">14.18.1</a>
+</li>
+  <li>nodejs16 was updated to <a href="https://nodejs.org/en/blog/release/v16.13.2/">16.13.2</a>
+</li>
+</ul>
+    
+      <h2 id="closing">
+        
+        
+          Closing <a href="#closing"></a>
+        
+        
+      </h2>
+
+<p>Quite a few big changes, especially on 7.3 and up packages Hmm. <img class="emoji" title=":thinking:" alt=":thinking:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f914.png" height="20" width="20"></p>
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="/categories/ibmi-oss-updates" class="page__taxonomy-item" rel="tag">ibmi-oss-updates</a>
+    
+    </span>
+  </p>
+
+
+        
+          <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Updated:</strong> <time datetime="2022-02-21T00:00:00-06:00">February 21, 2022</time></p>
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="/2022/01/31/dec-2021-oss-updates.html" class="pagination--pager" title="IBM i Open Source Updates December 2021
+">Previous</a>
+    
+    
+      <a href="/2022/05/20/odbc-repos.html" class="pagination--pager" title="IBM-provided Repositories ODBC Linux Driver Repositories
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      <h4 class="page__related-title">You May Also Enjoy</h4>
+      <div class="grid__wrapper">
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/05/20/odbc-repos.html" rel="permalink">IBM-provided Repositories ODBC Linux Driver Repositories
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Today, we’re pushing out something that I’ve been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/31/dec-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates December 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  3 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Just because the last couple months were quiet doesn’t mean that nothing’s
+going on. Case in point, the last month of 2021 saw a ton of updates, though
+many ...</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/24/nov-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates November 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">November brings some nice goodies for IBM i 7.3+ users and some security fixes.
+</p>
+  </article>
+</div>
+
+        
+          
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="/2022/01/17/oct-2021-oss-updates.html" rel="permalink">IBM i Open Source Updates October 2021
+</a>
+      
+    </h2>
+    
+      <p class="page__meta"><i class="far fa-clock" aria-hidden="true"></i> 
+
+
+
+
+  less than 1 minute read
+</p>
+    
+    <p class="archive__item-excerpt" itemprop="description">Another relatively quiet month of IBM i open source updates.
+</p>
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        <div class="page__footer-follow">
+  <ul class="social-icons">
+    
+
+    
+
+    <li><a href="/feed.xml"><i class="fas fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">© 2023 Kevin's Ramblings. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/assets/js/main.min.js"></script>
+  <script data-search-pseudo-elements defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+  </body>
+</html>
