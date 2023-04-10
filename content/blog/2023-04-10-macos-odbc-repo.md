@@ -1,5 +1,5 @@
 +++
-title = "IBM-provided Repositories macOS ODBC Driver Repositories"
+title = "IBM-provided macOS ODBC Driver Repositories"
 slug = "2023-04-10-macos-odbc-repo"
 
 [taxonomies]

@@ -1,5 +1,5 @@
 +++
-title = "IBM-provided Repositories ODBC Linux Driver Repositories"
+title = "IBM-provided Linux ODBC Driver Repositories"
 aliases = [ "2022/05/20/odbc-repos.html",]
 slug = "2022-05-20-odbc-repos"
 
