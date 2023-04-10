@@ -4,7 +4,7 @@ aliases = [ "2022/05/20/odbc-repos.html",]
 slug = "2022-05-20-odbc-repos"
 
 [taxonomies]
-tags = [ "odbc",]
+tags = [ "odbc", "linux",]
 +++
 
 Today, we're pushing out something that I've been wanting for a long time. We
