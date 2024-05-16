@@ -8,6 +8,6 @@ template = "page.html"
    )
 }}
 
-I work on porting open source software to the IBM i platform.
+I work on porting open source software to the IBM&nbsp;i platform.
 
 {{ socials() }}
