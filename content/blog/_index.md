@@ -1,5 +1,5 @@
 +++
-title = "Kevin's Blog"
+title = "Korinne's Blog"
 
 # number of pages to paginate by
 paginate_by = 5

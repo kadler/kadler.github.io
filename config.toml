@@ -1,8 +1,8 @@
 # The URL the site will be built for
 base_url = "https://kadler.io"
 
-title = "Kevin's Ramblings"
-description = "Ramblings of an Open Source dude working on IBM i."
+title = "Korinne's Ramblings"
+description = "Ramblings of an Open Source chick working on IBM i."
 
 theme = "terminimal"
 
@@ -37,10 +37,9 @@ enable_post_view_navigation = true
 post_view_navigation_prompt = "Read more"
 
 accent_color = "pink"
-#background_color = "dark"
 
-logo_text = "Kevin's Ramblings"
-author = "Kevin Adler"
+logo_text = "Korinne's Ramblings"
+author = "Korinne Adler"
 
 social_items = [
     {label = "GitHub", icon = "fab fa-fw fa-github", url = "https://github.com/kadler"},

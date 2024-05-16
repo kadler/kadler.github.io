@@ -3,7 +3,7 @@ title = "About me"
 template = "page.html"
 +++
 
-{{ image(src="/images/bio-photo.jpg",
+{{ image(src="/images/bio-photo.png",
       style="border-radius: 50%; float: right; shape-outside: circle();"
    )
 }}
