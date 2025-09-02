@@ -45,8 +45,8 @@ social_items = [
     {label = "GitHub", icon = "fab fa-fw fa-github", url = "https://github.com/kadler"},
     {label = "Mastodon", icon = "fab fa-fw fa-mastodon", url = "https://tech.lgbt/@kadler"},
     {label = "Twitter", icon = "fab fa-fw fa-twitter-square", url = "https://twitter.com/kadlerio"},
-    {label = "Stack Overflow", icon = "fab fa-fw fa-stack-overflow", url = "https://stackoverflow.com/users/3245633/kevin-adler"},
-    {label = "LinkedIn", icon = "fab fa-fw fa-linkedin", url = "https://www.linkedin.com/in/kevin-adler-19038a15"},
+    {label = "Stack Overflow", icon = "fab fa-fw fa-stack-overflow", url = "https://stackoverflow.com/users/3245633"},
+    {label = "LinkedIn", icon = "fab fa-fw fa-linkedin", url = "https://www.linkedin.com/in/kadlerio"},
     {label = "BitBucket", icon = "fab fa-fw fa-bitbucket", url = "https://bitbucket.org/kadler"},
     {label = "GitLab", icon = "fab fa-fw fa-gitlab", url = "https://gitlab.com/kadler"},
 ]
