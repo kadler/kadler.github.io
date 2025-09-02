@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>LIBPATH... How Does It Work?</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="Explaining how AIX/PASE finds and loads shared libraries">
+
+    <meta property="og:description" content="Explaining how AIX/PASE finds and loads shared libraries">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2017-09-08-libpath/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="Explaining how AIX/PASE finds and loads shared libraries">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2017-09-08-libpath/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2017-09-08-libpath/">LIBPATH... How Does It Work?</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2017-09-08
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/libpath/">#libpath</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/pase/">#pase</a></span>
+    
+
+        <div class="post-content">
+            <p>So in the last entry, I described the differences between <code>PATH</code> and <code>LIBPATH</code>, but I didn't really explain how <code>LIBPATH</code> is actually used. I'm going to rectify that in this entry. First, though, we need to take a detour and learn how programs get loaded.</p>
+<span id="continue-reading"></span><h2 id="loading-101">Loading 101</h2>
+<p>When you execute a program on Unix systems, this flows through a function called <code>exec()</code>. This special function will cause the program specified to replace the currently executing program. Before the new program can start its execution, it must first get loaded in to memory. There's two pieces that coordinate to load a program:</p>
+<ul>
+<li>the loader in the kernel (SLIC)</li>
+<li>the linker (ld)</li>
+</ul>
+<p>The loader will load the program objects in to memory, while the linker will find the shared libraries that the program depends on and has them loaded as well as a bunch of other things that we don't care about for this. In AIX/PASE there's also the Runtime Dynamic Linker, but we can ignore that for now as well.</p>
+<h2 id="drafting-our-mvp">Drafting our MVP</h2>
+<p>So to start, let's look at a &quot;simple&quot; example. This is a program which doesn't link to any shared libraries. One might call it an &quot;MVP&quot;: <strong>M</strong>inimum <strong>V</strong>iable <strong>P</strong>rogram. You might think this basic program looks like this:</p>
+<pre data-lang="C" style="background-color:#282c34;color:#abb2bf;" class="language-C "><code class="language-C" data-lang="C"><span style="color:#c678dd;">int </span><span style="color:#61afef;">main</span><span>()
+</span><span>{
+</span><span>    </span><span style="color:#c678dd;">int</span><span> x </span><span style="color:#56b6c2;">= </span><span style="color:#d19a66;">6 </span><span style="color:#56b6c2;">+ </span><span style="color:#d19a66;">25</span><span>;
+</span><span>    </span><span style="color:#c678dd;">return</span><span> x;
+</span><span>}
+</span></code></pre>
+<p>However, if we build this program it will link to the <code>libc</code> shared library, but I said we didn't want to link to <em>any</em> shared libraries! How can we do that? For that we need to make our &quot;simple&quot; example somewhat more complicated by going to assembly. Here's the code:</p>
+<pre data-lang="asm" style="background-color:#282c34;color:#abb2bf;" class="language-asm "><code class="language-asm" data-lang="asm"><span style="color:#61afef;">        .file   </span><span style="color:#98c379;">&quot;example.s&quot;
+</span><span style="color:#61afef;">        .csect .text</span><span>[</span><span style="color:#61afef;">PR</span><span>]
+</span><span style="color:#61afef;">        .toc
+</span><span style="color:#61afef;">        .csect .text</span><span>[</span><span style="color:#61afef;">PR</span><span>]
+</span><span style="color:#61afef;">        .</span><span style="color:#56b6c2;">align </span><span style="color:#d19a66;">2
+</span><span style="color:#61afef;">        .globl __start
+</span><span style="color:#61afef;">        .globl .__start
+</span><span style="color:#61afef;">        .csect __start</span><span>[</span><span style="font-style:italic;color:#e06c75;">DS</span><span>]
+</span><span>
+</span><span style="color:#61afef;">__start:
+</span><span style="color:#61afef;">        .llong .__start</span><span>, </span><span style="color:#61afef;">TOC</span><span>[</span><span style="color:#61afef;">tc0</span><span>], </span><span style="color:#d19a66;">0
+</span><span style="color:#61afef;">        .csect .text</span><span>[</span><span style="color:#61afef;">PR</span><span>]
+</span><span style="color:#61afef;">.__start:
+</span><span style="color:#61afef;">        li </span><span style="color:#d19a66;">9</span><span>,</span><span style="color:#d19a66;">6
+</span><span style="color:#61afef;">        li </span><span style="color:#d19a66;">10</span><span>,</span><span style="color:#d19a66;">25
+</span><span style="color:#61afef;">        </span><span style="color:#c678dd;">add </span><span style="color:#d19a66;">3</span><span>,</span><span style="color:#d19a66;">9</span><span>,</span><span style="color:#d19a66;">10
+</span></code></pre>
+<p>This is practically the smallest program you can make. It's so small that some might argue the applicability of using the term &quot;viable&quot; to describe it, since it doesn't contain a complete instruction stream and simply crashes after the last instruction:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">-bash-4.3$</span><span> ./example1
+</span><span style="color:#e06c75;">Illegal</span><span> instruction (core dumped)
+</span></code></pre>
+<p>However, it does load and execute so it's definitely a program... Just not a very good one! 😉</p>
+<h2 id="dumping-the-mvp">Dumping the MVP</h2>
+<p>So our MVP got in to a bad crash and broke his leg, punctured his spleen, and lost half his blood. What to do with him? It may seem heartless, but I think we have to dump him:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">-bash-4.3$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -X64 -H</span><span> example1
+</span><span>
+</span><span style="color:#e06c75;">example1:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000001       0x00000002       0x00000010
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000070       0x0000000a       0x00000080
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /usr/lib:/lib
+</span></code></pre>
+<p>The AIX/PASE <code>dump</code> command can tell you quite a bit about binaries/executables, shared libraries, and object files. Here we're using the <code>-X64</code> flag to tell it we're looking at a 64-bit object and the <code>-H</code> flag to tell it to dump the object's header. The important part to look at is below the <code>***Import File Strings***</code>. There is only 1 index defined and it is index 0, which is special and always exists. Since there are no other indexes defined this means the program is not linked to any shared libraries.</p>
+<p>Since this program is not linked to any shared libraries, the linker doesn't have anything to do and so <code>LIBPATH</code> is not used at all. What about a program that links to some shared libraries? Let's that first <code>C</code> example above and dump it:</p>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>-bash-4.3$ dump -X64 -H example2
+</span><span>
+</span><span>example2:
+</span><span>
+</span><span>                        ***Loader Section***
+</span><span>                      Loader Header Information
+</span><span>VERSION#         #SYMtableENT     #RELOCent        LENidSTR
+</span><span>0x00000001       0x0000000a       0x0000002a       0x00000021
+</span><span>
+</span><span>#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span>0x00000002       0x000003c8       0x0000007b       0x000003e9
+</span><span>
+</span><span>
+</span><span>                        ***Import File Strings***
+</span><span>INDEX  PATH                          BASE                MEMBER
+</span><span>0      /usr/lib:/lib
+</span><span>1                                    libc.a              shr_64.o
+</span></code></pre>
+<p>Aha! Notice now we have an index 1 whose &quot;base&quot; is <code>libc.a</code>. This is the AIX/PASE C library (<code>libc</code>). Shared libraries are a bit funky on AIX/PASE compared to other UNIX environments. On most other UNIX platforms, a &quot;shared library&quot; is synonymous with a &quot;shared object&quot;, but this is not the case in AIX/PASE. Here, a shared library can contain my shared objects. In this case we're linked to <code>shr_64.o</code>, which is the conventional name for AIX 64-bit shared objects (<code>shr.o</code> is the conventional name for 32-bit shared objects).</p>
+<p>Ok, so now we execute the program: Our shell calls <code>exec()</code> which tells the SLIC loader to load the <code>example2</code> binary in to memory and then the linker gets to load our shared libraries. In this case it sees that it needs to load <code>shr_64.o</code> from the <code>libc.a</code> archive, but how does it go about finding <code>libc.a</code>?</p>
+<h2 id="index-0-you-re-my-hero">Index 0, You're My Hero!</h2>
+<p>I have skipped over index 0 previously, but you may have noticed it looks an awful lot like <code>PATH</code> or <code>LIBPATH</code>. Well, that's because it is! Index 0 is a special index that specifies the executable's library search path. It's technically not <code>LIBPATH</code>, but you can think of it like that. The linker will look through each of these paths until it find a file named <code>libc.a</code> and try to load <code>shr_64.o</code> from it. If we look, indeed there is a <code>/usr/lib/libc.a</code> in PASE with a <code>shr_64.o</code> member:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">-bash-4.3$</span><span> ar</span><span style="font-style:italic;color:#e06c75;"> -X64</span><span> t /usr/lib/libc.a </span><span style="color:#56b6c2;">| </span><span style="color:#e06c75;">grep</span><span> shr
+</span><span style="color:#e06c75;">shr_64.o
+</span></code></pre>
+<h2 id="404-library-not-found">404: Library Not Found</h2>
+<p>So what happens if the linker looks through all the directories on the application's search path and still can't find a library? Well, then you get linker errors:</p>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>-bash-4.3$ ./example3
+</span><span>exec(): 0509-036 Cannot load program ./example3 because of the following errors:
+</span><span>        0509-150   Dependent module libc.a(shr_64.o) could not be loaded.
+</span><span>        0509-022 Cannot load module libc.a(shr_64.o).
+</span><span>        0509-026 System error: A file or directory in the path name does not exist.
+</span><span>
+</span><span>-bash-4.3$ dump -X64 -H example3
+</span><span>
+</span><span>example3:
+</span><span>
+</span><span>                        ***Loader Section***
+</span><span>                      Loader Header Information
+</span><span>VERSION#         #SYMtableENT     #RELOCent        LENidSTR
+</span><span>0x00000001       0x0000000a       0x0000002a       0x00000023
+</span><span>
+</span><span>#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span>0x00000002       0x000003c8       0x0000007b       0x000003eb
+</span><span>
+</span><span>
+</span><span>                        ***Import File Strings***
+</span><span>INDEX  PATH                          BASE                MEMBER
+</span><span>0      /does/not/exist
+</span><span>1                                    libc.a              shr_64.o
+</span></code></pre>
+<p>In this case the library search path only contains a dummy directory <code>/does/not/exist</code> which doesn't contain <code>libc.a</code>. You would get a similar error if the library exists, but does not contain the <code>shr_64.o</code> member:</p>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>-bash-4.3$ ./example3
+</span><span>exec(): 0509-036 Cannot load program ./example3 because of the following errors:
+</span><span>        0509-150   Dependent module /does/not/exist/libc.a(shr_64.o) could not be loaded.
+</span><span>        0509-152   Member shr_64.o is not found in archive
+</span></code></pre>
+<p>In either case, we can use the <code>LIBPATH</code> environment variable to tell the linker where to find <code>libc.a</code>:</p>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>-bash-4.3$ LIBPATH=/usr/lib:/lib ./example3
+</span><span>-bash-4.3$ echo $?
+</span><span>31
+</span></code></pre>
+<p>Use <code>LIBPATH</code> to specify extra directories to search for shared libraries in addition to the application's built in search path. These directories are searched before the directories in the application's search path. In the above example, the application's library search path is <code>/does/not/exist</code> and the <code>LIBPATH</code> is <code>/usr/lib/:/lib</code>, so the resulting search path is <code>/usr/lib:/lib:/does/not/exist</code>. Since <code>libc.a</code> is found in <code>/usr/lib</code> and contains <code>shr_64.o</code>, all is well!</p>
+<p>Of course, all of that mess could have just been avoided if our application told the linker where the <code>libc.a</code> actually is. Then we wouldn't have needed to specify <code>LIBPATH</code> at all! So why doesn't our application have the right library path specified? In the next entry I'll explain how the application's library search path gets set and how to set it yourself so you shouldn't normally have to specify <code>LIBPATH</code>.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2017-09-01-path/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">PATH vs LIBPATH</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2017-11-17-how-to-libpath/">
+                            <span class="button__text">Mucking with the Runtime Library Search Path on PASE</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

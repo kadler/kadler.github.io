@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM-provided Linux ODBC Driver Repositories</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2022-05-20-odbc-repos/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2022-05-20-odbc-repos/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2022-05-20-odbc-repos/">IBM-provided Linux ODBC Driver Repositories</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2022-05-20
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/linux/">#linux</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/odbc/">#odbc</a></span>
+    
+
+        <div class="post-content">
+            <p>Today, we're pushing out something that I've been wanting for a long time. We
+now have RPM and DEB repositories for Linux available directly from IBM for the
+IBM i Access Client Solutions application package, which includes the IBM i
+Access ODBC driver. This also includes the latest version of the IBM i Access
+ODBC driver, which was released today.</p>
+<p>While we have been pushing the IBM i Access ODBC driver as the &quot;One True Way&quot; to
+access the database from open source for some time, the biggest hindrance has
+been getting it installed. Previously, it was only available from the byzantine
+labyrinth that is IBM ESS or from the MRS download site (conventiently
+bookmarkable to <a href="https://ibm.biz/ibmi-odbc-download">https://ibm.biz/ibmi-odbc-download</a>). Both of these require
+manual steps to log in, agree to the license, download the zip, then extract the
+zip and install the package. But Linux distributions have these fancy things
+called package managers that can point to remote repositories of packages and
+easily extend the distribution's package list with third-party software. Heck,
+even <em>Microsoft</em> provides Linux repositories nowadays, so it's high time that
+IBM does similarly.</p>
+<p>With this change, it will be much easier for end users to install the driver on
+Linux. It also makes it easier for automation to install the driver as well,
+whether that's Ansible system deployment scripts or Dockerfiles for building
+ODBC-based Linux container apps. In addition, it makes updating the driver much
+easier too, since the process uses the same upgrade procedure as the rest of the
+system packages.</p>
+<span id="continue-reading"></span><h2 id="installing-the-repository">Installing the Repository</h2>
+<p>The repositories are located under
+<a href="https://public.dhe.ibm.com/software/ibmi/products/odbc/">https://public.dhe.ibm.com/software/ibmi/products/odbc/</a>.</p>
+<h3 id="red-hat-based-distribution-setup">Red Hat-based Distribution Setup</h3>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">curl</span><span> https://public.dhe.ibm.com/software/ibmi/products/odbc/rpms/ibmi-acs.repo </span><span style="color:#56b6c2;">| </span><span style="color:#e06c75;">sudo</span><span> tee /etc/yum.repos.d/ibmi-acs.repo
+</span></code></pre>
+<h3 id="suse-based-distribution-setup">SUSE-based Distribution Setup</h3>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">curl</span><span> https://public.dhe.ibm.com/software/ibmi/products/odbc/rpms/ibmi-acs.repo </span><span style="color:#56b6c2;">| </span><span style="color:#e06c75;">sudo</span><span> tee /etc/zypp/repos.d/ibmi-acs.repo
+</span></code></pre>
+<h3 id="debian-based-and-ubuntu-based-distribution-setup">Debian-based and Ubuntu-based Distribution Setup</h3>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">curl</span><span> https://public.dhe.ibm.com/software/ibmi/products/odbc/debs/dists/1.1.0/ibmi-acs-1.1.0.list </span><span style="color:#56b6c2;">| </span><span style="color:#e06c75;">sudo</span><span> tee /etc/apt/sources.list.d/ibmi-acs-1.1.0.list
+</span></code></pre>
+<h2 id="installing-the-odbc-driver">Installing the ODBC driver</h2>
+<h3 id="red-hat-based-distribution-installation">Red Hat-based Distribution Installation</h3>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">sudo</span><span> dnf install</span><span style="font-style:italic;color:#e06c75;"> --refresh</span><span> ibm-iaccess
+</span></code></pre>
+<h3 id="suse-based-distribution-installation">SUSE-based Distribution Installation</h3>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">sudo</span><span> zypper refresh
+</span><span style="color:#e06c75;">sudo</span><span> zypper install ibm-iaccess
+</span></code></pre>
+<h3 id="debian-based-and-ubuntu-based-distribution-installation">Debian-based and Ubuntu-based Distribution Installation</h3>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">sudo</span><span> apt update
+</span><span style="color:#e06c75;">sudo</span><span> apt install ibm-iaccess
+</span></code></pre>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2022-02-21-jan-2022-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates January 2022</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2023-04-10-macos-odbc-repo/">
+                            <span class="button__text">IBM-provided macOS ODBC Driver Repositories</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates April 2021</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2021-06-04-apr-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2021-06-04-apr-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2021-06-04-apr-oss-updates/">IBM i Open Source Updates April 2021</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2021-06-04
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Well, I'm a month late, but let's not dawdle any further -- on to the updates!</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="node-js-16">Node.js 16</h3>
+<p>Node.js 16 was released in April and we have had it since day 2 (missed day 1 by a few hours unfortunately, but gotta leave some room for improvement 😉). If you want to know more about what's in Node.js 16, check out Bethany Griggs' writeup <a href="https://medium.com/the-node-js-collection/node-js-16-available-now-7f5099a97e70">here</a>.</p>
+<p>Note that Node.js 16 will <em>become</em> the next LTS version in October, but it's currently receiving active updates until then. Additionally, Node.js 16 is only available on IBM i 7.3 and up from our <a href="https://public.dhe.ibm.com/software/ibmi/products/pase/rpms/ibm-7.3.repo">7.3+ repo</a>. For now, you'll need to add this repo manually, but hopefully not in the future.</p>
+<p>With the release of Node.js 16, this also marks the end of support for Node.js 10 and it will receive no more updates.</p>
+<h3 id="gcc-10">GCC 10</h3>
+<p>GCC 10 is the first public version upgrade for GCC. While we originally started building our open source ecosystem with GCC 4.8 back in 2017, we upgraded to GCC 6.3 when we started packaging Node.js 8 as an rpm and we've been there ever since.</p>
+<p>With GCC 10 for the first time we're building our own version of GCC on IBM i in PASE instead of using binaries built by the AIX team. This means we can more tailor our package to our platform and when issues arise, we can fix them. This is also the first time we've had to think about an upgrade path and integration, since many packages link to libgcc_s and libstdc++. We can't just rebuild the world with GCC 10 and call it a day since there are others building their own software (and even their own repositories of software) and they rely on our libraries being stable.</p>
+<p>GCC 10 libraries will now upgrade the existing GCC 6 libraries and the compiler binaries, header files, and other files co-exist between the existing GCC 6 and new GCC 10 packages. There are still some rough edges with GCC 10, for instance Fortran support is not yet provided, so for the time being it's recommended to use GCC 6 unless you need GCC 10.</p>
+<p>Like OpenBLAS and Node.js 16, we are only providing GCC 10 in our <a href="https://public.dhe.ibm.com/software/ibmi/products/pase/rpms/ibm-7.3.repo">7.3+ repo</a>.</p>
+<h3 id="libtiff">LibTIFF</h3>
+<p><a href="http://www.simplesystems.org/libtiff/">LibTIFF</a> is a library for reading image data in the &quot;Tagged Image File Format&quot;. In March's update, I mentioned that we had built R linking with this package, but apparently we had never shipped it. That got fixed in April.</p>
+<h3 id="icu">ICU</h3>
+<p><a href="http://site.icu-project.org/">ICU</a> is a package which provides functions and utilities for doing Internationalization (i18n). This includes things like conversions between text encodings, collation, text formatting for numbers, dates, and currency amounts, etc.</p>
+<p>This library is required by the PHP intl extension and can be used by various packages, including R.</p>
+<h3 id="cairo">Cairo</h3>
+<p><a href="https://www.cairographics.org/">cairo</a> is a 2D graphics library.</p>
+<h3 id="pango">Pango</h3>
+<p><a href="http://www.pango.org">Pango</a> is a library for laying out and rendering text. It can make use of cairo or X11 libraries to generate glyphs from font data and also uses HarfBuzz for laying out complex text.</p>
+<h3 id="tn5250">tn5250</h3>
+<p><a href="https://sourceforge.net/projects/tn5250/">tn5250</a> is an ncurses-based 5250 client which runs in a Unix terminal. While it's been available on Linux and other platforms for some time, you can now run it on IBM i over SSH. This now means you don't have to switch away from your SSH terminal to access a 5250 terminal (say via IBM i Access Client Solutions) when you need such a thing. Of course, tn5250 is no replacement for ACS, but it may work well for what you need or in a pinch.</p>
+<h3 id="freetds">freetds</h3>
+<p><a href="https://www.freetds.org/">FreeTDS</a> is a set of open source libraries which implement the Tabular Data Stream (TDS) protocol used by Microsoft SQL Server and Sybase DBMSes. This also provides an ODBC driver in the freetds-odbc package which can be used with node-odbc or pyODBC and PHP also provides a freetds extension.</p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="unixodbc-2-3-9">unixODBC 2.3.9</h3>
+<p>While normally minor version bumps only contain bugfixes, <code>isql</code> and <code>iusql</code> in unixODBC 2.3.9 now support history. Just like in BASH, you can now scroll back through previous SQL queries from the same session or even previous sessions (stored in ~/.isql_history).</p>
+<h3 id="gnu-coreutils">GNU Coreutils</h3>
+<p>The GNU <code>uname -p</code> now matches the PASE version in returning &quot;powerpc&quot; instead of &quot;unknown&quot;. This fixes a bug in CMake, which uses the output of <code>uname -p</code> for certain processing.</p>
+<h3 id="gnupg">GnuPG</h3>
+<p>GnuPG is now built with zlib and bzip2 compression support.</p>
+<h3 id="node-js-10-12-14">Node.js 10, 12, 14</h3>
+<p>A patch was applied, which fixed a crash when a network interface name was longer than 10 characters, which is only possible when using VLANs. In addition, we now appropriately strip off the VLAN id to get the associated line description needed by QDCRLIND.</p>
+<p><a href="https://github.com/libuv/libuv/issues/3062">https://github.com/libuv/libuv/issues/3062</a></p>
+<h3 id="r">R</h3>
+<p>R has been built with Pango and Cairo support. This should greatly improve the quality of the graphs and images it generates.</p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>nodejs10 was updated to <a href="https://nodejs.org/en/blog/release/v10.24.1/">10.24.1</a>.</li>
+<li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.22.1/">12.22.1</a>.</li>
+<li>nodejs14 was updated to <a href="https://nodejs.org/en/blog/release/v14.16.1/">14.16.1</a>.</li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>Between GCC 10, Node.js 16, and R improvements there were lots of big changes in April. What was your favorite?</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2021-06-04-may-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates May 2021</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2021-12-07-ibmi-repos/">
+                            <span class="button__text">IBM-provided Repositories and YUM Updates</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Korinne&#x27;s Ramblings</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="Ramblings of an Open Source chick working on IBM i.">
+
+    <meta property="og:description" content="Ramblings of an Open Source chick working on IBM i.">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kadler.io/blog/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="Ramblings of an Open Source chick working on IBM i.">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+        <div class="posts">
+                <div class="post on-list">
+                    
+    <h1 class="post-title"><a href="https://kadler.io/blog/2018-09-28-using-system-naming-in-ibm-db/">Using System Naming in Python ibm_db</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2018-09-28
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibm-db/">#ibm_db</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/python/">#python</a></span>
+    
+
+
+                    
+        <div class="post-content">
+            <p>Like last-week's post about commitment control in Python ibm_db, you may run in to this unexpected error as well:</p>
+<pre data-lang="python" style="background-color:#282c34;color:#abb2bf;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#56b6c2;">&gt;&gt;&gt; </span><span>cur.</span><span style="color:#e06c75;">callproc</span><span>(</span><span style="color:#98c379;">&#39;qcmdexc&#39;</span><span>, (</span><span style="color:#98c379;">&#39;ADDLIBLE QIWS&#39;</span><span>,))
+</span><span>(</span><span style="color:#98c379;">&#39;ADDLIBLE QIWS&#39;</span><span>,)
+</span><span style="color:#56b6c2;">&gt;&gt;&gt; </span><span>cur.</span><span style="color:#e06c75;">execute</span><span>(</span><span style="color:#98c379;">&quot;select * from qcustcdt&quot;</span><span>)
+</span><span style="color:#e06c75;">Traceback </span><span>(most recent call last):
+</span><span>  File </span><span style="color:#98c379;">&quot;/QOpenSys/pkgs/lib/python3.6/site-packages/ibm_db_dbi.py&quot;</span><span>, line </span><span style="color:#d19a66;">1254</span><span>, </span><span style="color:#c678dd;">in </span><span>_prepare_helper
+</span><span>    </span><span style="color:#e5c07b;">self</span><span>.stmt_handler </span><span style="color:#56b6c2;">= </span><span>ibm_db.</span><span style="color:#e06c75;">prepare</span><span>(</span><span style="color:#e5c07b;">self</span><span>.conn_handler, operation)
+</span><span>Exception: </span><span style="color:#e5c07b;">QCUSTCDT </span><span style="color:#c678dd;">in </span><span style="color:#e5c07b;">KADLER </span><span style="color:#56b6c2;">type *</span><span style="color:#e5c07b;">FILE </span><span style="color:#c678dd;">not </span><span>found. </span><span style="color:#e5c07b;">SQLSTATE</span><span style="color:#56b6c2;">=</span><span style="color:#d19a66;">42704 </span><span style="color:#e5c07b;">SQLCODE</span><span style="color:#56b6c2;">=-</span><span style="color:#d19a66;">204
+</span><span>
+</span><span>During handling of the above exception, another exception occurred:
+</span><span>
+</span><span style="color:#e06c75;">Traceback </span><span>(most recent call last):
+</span><span>  File </span><span style="color:#98c379;">&quot;&lt;stdin&gt;&quot;</span><span>, line </span><span style="color:#d19a66;">1</span><span>, </span><span style="color:#c678dd;">in </span><span style="color:#56b6c2;">&lt;</span><span>module</span><span style="color:#56b6c2;">&gt;
+</span><span>  File </span><span style="color:#98c379;">&quot;/QOpenSys/pkgs/lib/python3.6/site-packages/ibm_db_dbi.py&quot;</span><span>, line </span><span style="color:#d19a66;">1394</span><span>, </span><span style="color:#c678dd;">in </span><span>execute
+</span><span>    </span><span style="color:#e5c07b;">self</span><span>.</span><span style="color:#e06c75;">_prepare_helper</span><span>(operation)
+</span><span>  File </span><span style="color:#98c379;">&quot;/QOpenSys/pkgs/lib/python3.6/site-packages/ibm_db_dbi.py&quot;</span><span>, line </span><span style="color:#d19a66;">1257</span><span>, </span><span style="color:#c678dd;">in </span><span>_prepare_helper
+</span><span>    </span><span style="color:#c678dd;">raise </span><span style="color:#e5c07b;">self</span><span>.messages[</span><span style="color:#56b6c2;">-</span><span style="color:#d19a66;">1</span><span>]
+</span><span>ibm_db_dbi.ProgrammingError: ibm_db_dbi::ProgrammingError: </span><span style="color:#e5c07b;">QCUSTCDT </span><span style="color:#c678dd;">in </span><span style="color:#e5c07b;">KADLER </span><span style="color:#56b6c2;">type *</span><span style="color:#e5c07b;">FILE </span><span style="color:#c678dd;">not </span><span>found. </span><span style="color:#e5c07b;">SQLSTATE</span><span style="color:#56b6c2;">=</span><span style="color:#d19a66;">42704 </span><span style="color:#e5c07b;">SQLCODE</span><span style="color:#56b6c2;">=-</span><span style="color:#d19a66;">204
+</span></code></pre>
+
+        </div>
+        <div>
+            <!-- &#xFE0E; -- force text style - some devices render this as emoji -->
+            <a class="read-more button" href="https://kadler.io/blog/2018-09-28-using-system-naming-in-ibm-db/">
+                <span class="button__text">Read more</span>&nbsp;
+                <span class="button__icon">&#8617;&#xFE0E;</span>
+            </a>
+        </div>
+    
+
+                </div>
+            
+                <div class="post on-list">
+                    
+    <h1 class="post-title"><a href="https://kadler.io/blog/2018-09-20-using-python-ibm-db-with-un-journaled-files/">Using Python ibm_db with Un-journaled Tables</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2018-09-20
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibm-db/">#ibm_db</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/python/">#python</a></span>
+    
+
+
+                    
+        <div class="post-content">
+            <p>When using the Python ibm_db package to interact with the Db2 for i database, you may run in to this error:</p>
+<pre data-lang="python" style="background-color:#282c34;color:#abb2bf;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#56b6c2;">&gt;&gt;&gt; </span><span>cur.</span><span style="color:#e06c75;">execute</span><span>(</span><span style="color:#98c379;">&#39;insert into qtemp.foo values(1)&#39;</span><span>)
+</span><span style="color:#e06c75;">Traceback </span><span>(most recent call last):
+</span><span>  File </span><span style="color:#98c379;">&quot;/QOpenSys/pkgs/lib/python3.6/site-packages/ibm_db_dbi.py&quot;</span><span>, line </span><span style="color:#d19a66;">1311</span><span>, </span><span style="color:#c678dd;">in </span><span>_execute_helper
+</span><span>    return_value </span><span style="color:#56b6c2;">= </span><span>ibm_db.</span><span style="color:#e06c75;">execute</span><span>(</span><span style="color:#e5c07b;">self</span><span>.stmt_handler)
+</span><span>Exception: Statement Execute Failed: </span><span style="color:#e5c07b;">FOO </span><span style="color:#c678dd;">in </span><span style="color:#e5c07b;">QTEMP </span><span style="color:#c678dd;">not </span><span>valid </span><span style="color:#c678dd;">for </span><span>operation. </span><span style="color:#e5c07b;">SQLSTATE</span><span>=55019 </span><span style="color:#e5c07b;">SQLCODE</span><span>=-7008
+</span><span>
+</span><span>During handling of the above exception, another exception occurred:
+</span><span>
+</span><span style="color:#e06c75;">Traceback </span><span>(most recent call last):
+</span><span>  File </span><span style="color:#98c379;">&quot;&lt;stdin&gt;&quot;</span><span>, line </span><span style="color:#d19a66;">1</span><span>, </span><span style="color:#c678dd;">in </span><span style="color:#56b6c2;">&lt;</span><span>module</span><span style="color:#56b6c2;">&gt;
+</span><span>  File </span><span style="color:#98c379;">&quot;/QOpenSys/pkgs/lib/python3.6/site-packages/ibm_db_dbi.py&quot;</span><span>, line </span><span style="color:#d19a66;">1396</span><span>, </span><span style="color:#c678dd;">in </span><span>execute
+</span><span>    </span><span style="color:#e5c07b;">self</span><span>.</span><span style="color:#e06c75;">_execute_helper</span><span>(parameters)
+</span><span>  File </span><span style="color:#98c379;">&quot;/QOpenSys/pkgs/lib/python3.6/site-packages/ibm_db_dbi.py&quot;</span><span>, line </span><span style="color:#d19a66;">1321</span><span>, </span><span style="color:#c678dd;">in </span><span>_execute_helper
+</span><span>    </span><span style="color:#c678dd;">raise </span><span style="color:#e5c07b;">self</span><span>.messages[</span><span style="color:#56b6c2;">-</span><span style="color:#d19a66;">1</span><span>]
+</span><span>ibm_db_dbi.ProgrammingError: ibm_db_dbi::ProgrammingError: Statement Execute Failed: </span><span style="color:#e5c07b;">FOO </span><span style="color:#c678dd;">in </span><span style="color:#e5c07b;">QTEMP </span><span style="color:#c678dd;">not </span><span>valid </span><span style="color:#c678dd;">for </span><span>operation. </span><span style="color:#e5c07b;">SQLSTATE</span><span>=55019 </span><span style="color:#e5c07b;">SQLCODE</span><span>=-7008
+</span></code></pre>
+
+        </div>
+        <div>
+            <!-- &#xFE0E; -- force text style - some devices render this as emoji -->
+            <a class="read-more button" href="https://kadler.io/blog/2018-09-20-using-python-ibm-db-with-un-journaled-files/">
+                <span class="button__text">Read more</span>&nbsp;
+                <span class="button__icon">&#8617;&#xFE0E;</span>
+            </a>
+        </div>
+    
+
+                </div>
+            
+                <div class="post on-list">
+                    
+    <h1 class="post-title"><a href="https://kadler.io/blog/2018-05-29-calling-qsh-utilities-from-pase/">Calling QSH utilities from PASE</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2018-05-29
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/pase/">#pase</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/qsh/">#qsh</a></span>
+    
+
+
+                    
+        <div class="post-content">
+            <p>QSH provides a wonderful utility called <code>db2</code> which allows you to run SQL queries from within the QSH shell, but what if you're in a QP2TERM shell or using SSH - what then?</p>
+
+        </div>
+        <div>
+            <!-- &#xFE0E; -- force text style - some devices render this as emoji -->
+            <a class="read-more button" href="https://kadler.io/blog/2018-05-29-calling-qsh-utilities-from-pase/">
+                <span class="button__text">Read more</span>&nbsp;
+                <span class="button__icon">&#8617;&#xFE0E;</span>
+            </a>
+        </div>
+    
+
+                </div>
+            
+                <div class="post on-list">
+                    
+    <h1 class="post-title"><a href="https://kadler.io/blog/2018-01-08-fetching-python-database-cursors-by-column-name/">Fetching Python Database Cursors by Column Name</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2018-01-08
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibm-db/">#ibm_db</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/python/">#python</a></span>
+    
+
+
+                    
+        <div class="post-content">
+            <p>Today I got asked if you can index in to rows returned by <code>ibm_db_dbi</code> by column name. While this doesn't come out of the box, it can be done pretty easily.</p>
+
+        </div>
+        <div>
+            <!-- &#xFE0E; -- force text style - some devices render this as emoji -->
+            <a class="read-more button" href="https://kadler.io/blog/2018-01-08-fetching-python-database-cursors-by-column-name/">
+                <span class="button__text">Read more</span>&nbsp;
+                <span class="button__icon">&#8617;&#xFE0E;</span>
+            </a>
+        </div>
+    
+
+                </div>
+            
+                <div class="post on-list">
+                    
+    <h1 class="post-title"><a href="https://kadler.io/blog/2017-11-17-how-to-libpath/">Mucking with the Runtime Library Search Path on PASE</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2017-11-17
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/libpath/">#libpath</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/pase/">#pase</a></span>
+    
+
+
+                    
+        <div class="post-content">
+            <p>In my last blog I showed how the <code>LIBPATH</code> gets used and also how the runtime search path in the binary gets used. <code>LIBPATH</code> is obviously set as an environment variable, but how does that runtime search path get generated? Let's explore!</p>
+
+        </div>
+        <div>
+            <!-- &#xFE0E; -- force text style - some devices render this as emoji -->
+            <a class="read-more button" href="https://kadler.io/blog/2017-11-17-how-to-libpath/">
+                <span class="button__text">Read more</span>&nbsp;
+                <span class="button__icon">&#8617;&#xFE0E;</span>
+            </a>
+        </div>
+    
+
+                </div>
+            <div class="pagination">
+                <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/page/6/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Newer posts</span>
+                        </a>
+                    </span>
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/page/8/">
+                            <span class="button__text">Older posts</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

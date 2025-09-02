@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates May 2020</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2020-06-22-may-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2020-06-22-may-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2020-06-22-may-oss-updates/">IBM i Open Source Updates May 2020</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-06-22
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Well, I mentioned before that the May update was gonna be big and boy is it a doozy!</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="logrotate">logrotate</h3>
+<p><a href="https://linux.die.net/man/8/logrotate">logrotate</a> is a tool that can rotate your logs — you can configure it to automatically rotate, compress, and even remove your log files. This is very useful for log files that may grow very big if left unchecked. The HTTP Server for i supports this out of the box with log cycling, but not all products do this, so having a specialized tool can be useful.</p>
+<p>logrotate is very configurable:</p>
+<ul>
+<li>should archived logs be numbered or dated (and if dated, what format)?</li>
+<li>how many logs do you want to keep before removal?</li>
+<li>how old should a log get before it's considered for rotation (daily, weekly, etc)?</li>
+<li>how big do you want a log to get before it's considered for rotation?</li>
+<li>Should the logs be compressed and if so, what compresion to use? (default is gzip)</li>
+</ul>
+<p><code>logrotate</code> is not a service that runs continuously — instead you must run it periodically. It will then analyze all the log files which it is configured to rotate and rotate the files as needed. You can set it up to run via the job scheduler. Perhaps one day it will even run via cron 😉.</p>
+<p>This fulfills RFE <a href="http://www.ibm.com/developerworks/rfe/execute?use_case=viewRfe&amp;CR_ID=125282">125282</a>.</p>
+<h3 id="postgresql-12">PostgreSQL 12</h3>
+<p><a href="https://www.postgresql.org/">PostgreSQL</a> describes itself as</p>
+<blockquote>
+<p>a powerful, open source object-relational database system that uses and extends the SQL language combined with many features that safely store and scale the most complicated data workloads. The origins of PostgreSQL date back to 1986 as part of the POSTGRES project at the University of California at Berkeley and has more than 30 years of active development on the core platform.</p>
+<p>PostgreSQL has earned a strong reputation for its proven architecture, reliability, data integrity, robust feature set, extensibility, and the dedication of the open source community behind the software to consistently deliver performant and innovative solutions. </p>
+</blockquote>
+<p>PostgreSQL joins SQLite as another open source database available on IBM i from IBM. If you'd like to learn more on how to get started with PostgreSQL on IBM i, Richard Schoen has graciously contributed a <a href="http://ibm.biz/postgres-ibmi-get-started">guide</a> on our examples repo.</p>
+<p>If you're wondering why you'd want to use PostgreSQL on IBM i when Db2 exists out of the box, well I hear that Jesse Gorzinski will be talking all about that in a future entry on his <a href="https://www.ibmsystemsmag.com/Power-Systems/open-your-i-blog">blog</a> 😉.</p>
+<h3 id="update-alternatives">update-alternatives</h3>
+<p>update-alternatives is a utility which manages sets of symlinks of alternative versions of a package. This allows you to install multiple packages which could provide some command, say <code>node</code>, and then choose <em>which</em> one of those packages will be the default. This is similar in concept to the rudimentary <code>nodever</code> script we have provided going all the way back to Node.js v4 shipped in 5733-OPS. update-alternatives is a much more general tool, however, and is more featureful to boot!</p>
+<p>If you'd like to learn more about how <code>update-alternatives</code> impacts you and what that means for <code>nodever</code>, please check out <a href="https://www.ibmsystemsmag.com/Power-Systems/05/2020/update-alternatives">this</a> guest blog by Mark Irish.</p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="node-and-nodever">Node and nodever</h3>
+<p>As we move to use update-alternatives instead of nodever, all the Node packages (8, 10, 12) were updated. In addition, Node 12 was updated to <a href="https://nodejs.org/en/blog/release/v12.16.2/">12.16.2</a>.</p>
+<p>As we are using update-alternatives to manage the various Node versions, nodever was re-written to be a wrapper around update-alternatives. As such, we bumped it to 1.0 and deprecated it. It should still work as it did previously, but we recommend users to use update-alternatives instead.</p>
+<h3 id="git">git</h3>
+<p>git was one of our oldest packages which had never been updated. Until now we've continued to ship the same version that we shipped with 5733-OPS in 2016!</p>
+<p>No longer, thoug as we've updated to the latest<sup>1</sup> version: <a href="https://github.blog/2020-03-22-highlights-from-git-2-26/">2.26.2</a> fixing <a href="https://nvd.nist.gov/vuln/detail/CVE-2017-14867">CVE-2017-14867</a> and <a href="https://nvd.nist.gov/vuln/detail/CVE-2020-5260">CVE-2020-5260</a> as well as bringing in over 3 years of improvements!</p>
+<p><sup>1</sup> well it was when we shipped it 🙃</p>
+<h3 id="python-2">Python 2</h3>
+<p>Python 2 was updated to <a href="https://blog.python.org/2020/04/python-2718-last-release-of-python-2.html">2.7.18</a> which has the distinction of being the <em>very last</em> version of Python 2 that will <em>ever</em> be released.</p>
+<p>Python 2 went out of support at the end of 2019 and 2.7.18 was really only a ceremonial release. We do not plan to support it any further, other than what's necessary to support yum. Many Python packages have already dropped Python 2 support and many more are on their way so if you're still using Python 2, be warned!</p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>openssl 1.1 was updated to <a href="https://www.openssl.org/news/openssl-1.1.1-notes.html">1.1.1g</a> for <a href="https://www.openssl.org/news/vulnerabilities.html#2020-1967">CVE-2020-1967</a></li>
+<li>libuv was updated to <a href="https://github.com/libuv/libuv/releases/tag/v1.38.0">1.38</a></li>
+<li>rpm was updated to <a href="https://rpm.org/wiki/Releases/4.13.1">4.13.1</a> fixing <a href="https://nvd.nist.gov/vuln/detail/CVE-2017-7501">CVE-2017-7501</a></li>
+<li>expat was updated to <a href="https://github.com/libexpat/libexpat/blob/R_2_2_9/expat/Changes">2.2.9</a> to fix <a href="https://nvd.nist.gov/vuln/detail/CVE-2019-15903">CVE-2019-15903</a></li>
+<li>python3-dateutil was updated to <a href="https://dateutil.readthedocs.io/en/stable/changelog.html#version-2-8-0-2019-02-04">2.8.0</a></li>
+<li>libutil was updated to <a href="https://github.com/IBM/portlibfori/releases/tag/0.8.0">0.8.0</a> bringing initial support for the <code>backtrace_symbols_fd</code> function and a fix from Calvin Buckley to deal with signal handler stack frames.</li>
+<li>db2util was updated to <a href="https://github.com/IBM/ibmi-db2util/releases/tag/v1.0.10">1.0.10</a> bringing some JSON and CSV escaping fixes contributed by Liam Allen</li>
+</ul>
+<h2 id="package-fixes">Package Fixes</h2>
+<h3 id="cmake-3-16">CMake 3.16</h3>
+<p>We updated CMake to 3.16 back in March. This was quite a major update that changed how it does linking on AIX. Due to this, we had to make some adjustments to get things working again in PASE. It's still going through some teething issues, so for now we recommend continuing to use cmake 3.7.2 which is also on the repo.</p>
+<h3 id="libxml2">libxml2</h3>
+<p>We fixed an issue in xml2-config that causes packages building with libxml2 to require a bunch of unnecessary libraries.</p>
+<h3 id="yum-utils">yum-utils</h3>
+<p>I mentioned our changelog updates and yum-plugin-changelog in my <a href="/2020/01/08/oss-updates.html#changelog-updates">January update</a>. Unfortunately, you could only use <code>yum changelog all</code>, as we had no python2-dateutil package, only python3-dateutil. We have now shipped the Python 2 version of dateutil and updated yum-plugin-changelog to require it. This allows you to query changelogs by date range (eg. <code>yum changelog 2020-Jan git</code>) or by most recent count (eg. <code>yum changelog 4 python3</code>).</p>
+<h3 id="gnu-make">GNU make</h3>
+<p>When GNU make runs with multiple jobs it tries to synchronize its output using stdout as a file lock. This does not work on IBM i when stdout is a pipe, such as when running in Jenkins or other batch build tools, and produces this spurious message: <code>fcntl(): Invalid Argument</code>. Since we know this will never work, the message is disabled an significantly cleans up build logs, especially for recursive make files.</p>
+<h2 id="closing">Closing</h2>
+<p>Wow! PostgreSQL 12, <del>nodever 1.0</del> update-alternatives, a new git version after 3+ years, <em>and</em> the last Python 2 version <em>ever</em>? Talk about a big month! What update in May was most important to you?</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-05-20-apr-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates Apr 2020</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2020-07-15-jun-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates June 2020</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

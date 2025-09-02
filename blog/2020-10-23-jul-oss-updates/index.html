@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates July 2020</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2020-10-23-jul-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2020-10-23-jul-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2020-10-23-jul-oss-updates/">IBM i Open Source Updates July 2020</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-10-23
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Been a while so let's get right to it.</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="node-js-14">Node.js 14</h3>
+<p>While Node.js 14 was released back in April we managed to get legal approval in
+July to ship it. Initially version 14.4, but later we updated it to 14.5 and
+14.6.</p>
+<p>Note that although Node 15 was just released a few days ago (as of this
+writing), Node 14 has still not entered the LTS phase. I believe there should be
+a new release shortly to mark it entering LTS.</p>
+<p>For more information on what's new with Node.js 14, check out this great
+<a href="https://nodejs.medium.com/node-js-version-14-available-now-8170d384567e">article</a>
+by Michael Dawson and Bethany Griggs.</p>
+<h3 id="ansible">Ansible</h3>
+<p><a href="https://www.ansible.com/">Ansible</a> is an open source technology developed by
+Red Hat for IT automation and orchestration. We now have the base packages
+needed to integrate IBM i in to the Ansible stack.</p>
+<p>Here's some resources if you'd like to know more about what Ansible is or how to
+get started:</p>
+<ul>
+<li><a href="https://ibm.github.io/cloud-i-blog/archivers/2020_0602_automate_your_ibm_i_tasks_with_ansible">https://ibm.github.io/cloud-i-blog/archivers/2020_0602_automate_your_ibm_i_tasks_with_ansible</a></li>
+<li><a href="https://www.ibm.com/support/pages/ansible-support-ibm-i">https://www.ibm.com/support/pages/ansible-support-ibm-i</a></li>
+<li><a href="https://galaxy.ansible.com/ibm/power_ibmi">https://galaxy.ansible.com/ibm/power_ibmi</a></li>
+</ul>
+<h3 id="gnu-man-db-groff-and-gdbm">GNU man-db, groff, and GDBM</h3>
+<p>Have you ever been at the command line but just couldn't remember some command
+line arguments to a program. Maybe you forgot whether the target or the link
+name goes first on the <code>ln</code> command. Well fret no more, because we now have
+man-db on IBM i!</p>
+<p>I hear those eyes glazing over, so maybe I should explain further. GNU man-db
+provides the <code>man</code> command and a system for caching man pages in a database
+(thus the &quot;db&quot; part of &quot;man-db&quot;). The database it uses is the GNU variant of the
+traditional UNIX &quot;dbm&quot;: GDBM. This database is not a traditional database like
+you might expect, but more a key-value store.</p>
+<p>Anyway! man-db will find all those fancy man pages that we've been shipping and
+wasting space on your filesystem with no way to view them. Until now that is,
+since you can use the <code>man</code> command to view them, eg. <code>man ln</code>. This will load
+up the man page, pipe it through <code>groff</code> (the GNU text layout tool) and display
+it in your favorite pager, <code>less</code>:</p>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>LN(1)                             User Commands                             LN(1)
+</span><span>
+</span><span>NAME
+</span><span>       ln - make links between files
+</span><span>
+</span><span>SYNOPSIS
+</span><span>       ln [OPTION]... [-T] TARGET LINK_NAME   (1st form)
+</span><span>       ln [OPTION]... TARGET                  (2nd form)
+</span><span>       ln [OPTION]... TARGET... DIRECTORY     (3rd form)
+</span><span>       ln [OPTION]... -t DIRECTORY TARGET...  (4th form)
+</span><span>
+</span><span>DESCRIPTION
+</span><span>       In  the 1st form, create a link to TARGET with the name LINK_NAME.  In the
+</span><span>       2nd form, create a link to TARGET in the current directory.   In  the  3rd
+</span><span>       and  4th  forms,  create  links  to each TARGET in DIRECTORY.  Create hard
+</span><span>       links by default, symbolic links with --symbolic.  By default, each desti‐
+</span><span>       nation  (name  of  new link) should not already exist.  When creating hard
+</span><span>       links, each TARGET must exist.  Symbolic links can hold arbitrary text; if
+</span><span>       later  resolved,  a relative link is interpreted in relation to its parent
+</span><span>       directory.
+</span><span> Manual page ln(1) line 1 (press h for help or q to quit)
+</span></code></pre>
+<p>man-db can display an man page on the system and most of our rpms have man
+pages, but we still don't have man pages for things provided by PASE itself.
+Maybe some day...</p>
+<h3 id="psycopg2">psycopg2</h3>
+<p>In [May]({% post_url 2020-06-22-may-oss-updates %}) we released PostgreSQL 12.
+Now, with <a href="https://www.psycopg.org/">psycopg2</a> you can easily connect to
+postgres from Python.</p>
+<h3 id="python-packages">Python packages</h3>
+<p>To support Ansible, we've added Python 3 rpms of both <a href="https://pyyaml.org/">PyYaml</a>
+and <a href="https://pypi.org/project/MarkupSafe/">MarkupSafe</a>.</p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="python-update-alternatives-integration">Python update-alternatives Integration</h3>
+<p>Both Python 2 and 3 are now supported in update-alternatives. This means that
+like Node.js you can pick the default python version, ie. when you run <code>python</code>
+which version do you get? The default is Python 3, but you can set it to Python
+2 if you really want to. Just be warned, Python 2 is EOL as of 2020-01-01:
+https://pythonclock.org/ and many projects are dropping support for Python 2 by
+the end of 2020: https://python3statement.org/</p>
+<p>As Node.js, to configure we use update-alternatives:</p>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>$ alternatives --config python   
+</span><span>There are 2 choices for the alternative python (providing /QOpenSys/pkgs/bin/python).
+</span><span>
+</span><span>  Selection    Path                          Priority   Status
+</span><span>------------------------------------------------------------
+</span><span>* 0            /QOpenSys/pkgs/bin/python3.6   306       auto mode
+</span><span>  1            /QOpenSys/pkgs/bin/python2.7   207       manual mode
+</span><span>  2            /QOpenSys/pkgs/bin/python3.6   306       manual mode
+</span><span>
+</span><span>Press &lt;enter&gt; to keep the current choice[*], or type selection number:
+</span></code></pre>
+<p>Hint: If you forget how to use update-alternatives, you can always check the man
+page 😉.</p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.18.2/">12.18.2</a>.</li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>Fairly exciting month with both Node.js 14, Ansible, man pages and usability
+improvements for Python. </p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-07-15-jun-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates June 2020</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2020-10-28-aug-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates August &amp; September 2020</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

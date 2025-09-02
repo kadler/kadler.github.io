@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates February 2021</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2021-03-03-feb-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2021-03-03-feb-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2021-03-03-feb-oss-updates/">IBM i Open Source Updates February 2021</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2021-03-03
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>New year, new rpm updates! In this post, we'll go over updates for both January and February.</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<p>No new packages.</p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="util-linux">util-linux</h3>
+<p>Previously, we only shipped the libuuid subset of this package, but now we have enabled various other utilities:</p>
+<ul>
+<li>cal</li>
+</ul>
+<p>It's a known fact that date and time math is the most complicated math in the universe, especially in a pandemic. If you need a reminder and can't find a calendar anywhere, but have an SSH terminal available just type <code>cal</code> to bring up the current month's calendar:</p>
+<pre data-lang="sh" style="background-color:#282c34;color:#abb2bf;" class="language-sh "><code class="language-sh" data-lang="sh"><span>     </span><span style="color:#e06c75;">March</span><span> 2021     
+</span><span style="color:#e06c75;">Su</span><span> Mo Tu We Th Fr Sa
+</span><span>    </span><span style="color:#e06c75;">1</span><span>  2  3  4  5  6
+</span><span> </span><span style="color:#e06c75;">7</span><span>  8  9 10 11 12 13
+</span><span style="color:#e06c75;">14</span><span> 15 16 17 18 19 20
+</span><span style="color:#e06c75;">21</span><span> 22 23 24 25 26 27
+</span><span style="color:#e06c75;">28</span><span> 29 30 31
+</span></code></pre>
+<ul>
+<li>rev</li>
+</ul>
+<p>Ever do some ASCII/EBCDIC translations and it took the wrong turn at Albuqurque and came out backwards? Well, <code>rev</code> will reverse each line of text you feed it:</p>
+<pre data-lang="sh" style="background-color:#282c34;color:#abb2bf;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#56b6c2;">echo </span><span style="color:#98c379;">&#39;Paul is dead&#39; </span><span style="color:#56b6c2;">| </span><span style="color:#e06c75;">rev
+</span><span style="color:#e06c75;">daed</span><span> si luaP
+</span></code></pre>
+<ul>
+<li>uuidgen</li>
+</ul>
+<p>If you need to generate a <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier">Universally unique identifier</a>, <code>uuidgen</code> can fit the bill, supporting all manner of UUIDs:</p>
+<pre data-lang="sh" style="background-color:#282c34;color:#abb2bf;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#e06c75;">uuidgen</span><span style="font-style:italic;color:#e06c75;"> --random
+</span><span style="color:#e06c75;">uuidgen</span><span style="font-style:italic;color:#e06c75;"> --time
+</span><span style="color:#e06c75;">uuidgen</span><span style="font-style:italic;color:#e06c75;"> --sha1 --namespace</span><span> @dns</span><span style="font-style:italic;color:#e06c75;"> --name </span><span style="color:#98c379;">&quot;www.example.com&quot;
+</span><span style="color:#e06c75;">uuidgen</span><span style="font-style:italic;color:#e06c75;"> --sha1 --namespace</span><span> @url</span><span style="font-style:italic;color:#e06c75;"> --name </span><span style="color:#98c379;">&quot;https://kadler.io&quot;
+</span></code></pre>
+<ul>
+<li>hexdump</li>
+</ul>
+<p>Finally, my favorit addition: <code>hexdump</code>! How many times have you had bad ASCII/EBCDIC conversions or ASCII/UTF-8 differences or CRLF/LF line feed issues or a variety of other problems and just want to look at the raw data of a file? You could use the hex option in DSPF, but who wants to go to a green screen when you can use <code>hexdump</code> from your SSH terminal?</p>
+<p>While <code>od -x</code> <em>does work</em>, <code>hexdump</code> has a variety of options to make the output nicer to view and use. My favorite is <code>hexdump -C</code> which shows the hex bytes on the left and the ASCII equivalent on the right.</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>hexdump -C test_rs.py 
+</span><span>00000000  69 6d 70 6f 72 74 20 73  71 6c 61 6c 63 68 65 6d  |import sqlalchem|
+</span><span>00000010  79 20 61 73 20 73 61 0a  0a 65 6e 67 69 6e 65 20  |y as sa..engine |
+</span><span>00000020  3d 20 73 61 2e 63 72 65  61 74 65 5f 65 6e 67 69  |= sa.create_engi|
+</span><span>00000030  6e 65 28 22 69 62 6d 69  3a 2f 2f 2a 43 55 52 52  |ne(&quot;ibmi://*CURR|
+</span><span>00000040  45 4e 54 40 6c 6f 63 61  6c 68 6f 73 74 22 29 0a  |ENT@localhost&quot;).|
+</span><span>00000050  0a 63 6e 78 6e 20 3d 20  65 6e 67 69 6e 65 2e 63  |.cnxn = engine.c|
+</span><span>00000060  6f 6e 6e 65 63 74 28 29  0a 6d 65 74 61 64 61 74  |onnect().metadat|
+</span><span>00000070  61 20 3d 20 73 61 2e 4d  65 74 61 44 61 74 61 28  |a = sa.MetaData(|
+</span><span>00000080  29 0a 74 61 62 6c 65 20  3d 20 73 61 2e 54 61 62  |).table = sa.Tab|
+</span><span>00000090  6c 65 28 27 44 45 4d 4f  54 42 4c 31 27 2c 20 6d  |le(&#39;DEMOTBL1&#39;, m|
+</span><span>000000a0  65 74 61 64 61 74 61 2c  20 61 75 74 6f 6c 6f 61  |etadata, autoloa|
+</span><span>000000b0  64 3d 54 72 75 65 2c 20  61 75 74 6f 6c 6f 61 64  |d=True, autoload|
+</span><span>000000c0  5f 77 69 74 68 3d 65 6e  67 69 6e 65 2c 20 73 63  |_with=engine, sc|
+</span><span>000000d0  68 65 6d 61 3d 27 50 59  44 45 4d 4f 31 27 29 0a  |hema=&#39;PYDEMO1&#39;).|
+</span><span>000000e0  0a 71 75 65 72 79 20 3d  20 73 61 2e 73 65 6c 65  |.query = sa.sele|
+</span><span>000000f0  63 74 28 5b 74 61 62 6c  65 5d 29 0a 0a 72 65 73  |ct([table])..res|
+</span><span>00000100  75 6c 74 20 3d 20 63 6e  78 6e 2e 65 78 65 63 75  |ult = cnxn.execu|
+</span><span>00000110  74 65 28 71 75 65 72 79  29 0a 72 65 73 75 6c 74  |te(query).result|
+</span><span>00000120  20 3d 20 72 65 73 75 6c  74 2e 66 65 74 63 68 61  | = result.fetcha|
+</span><span>00000130  6c 6c 28 29 0a 0a 23 20  70 72 69 6e 74 20 66 69  |ll()..# print fi|
+</span><span>00000140  72 73 74 20 65 6e 74 72  79 0a 70 72 69 6e 74 28  |rst entry.print(|
+</span><span>00000150  72 65 73 75 6c 74 5b 30  5d 29 0a 0a              |result[0])..|
+</span><span>0000015c
+</span></code></pre>
+<h3 id="bash">bash</h3>
+<ul>
+<li>The <code>liblist</code> builtin was updated to work properly when the job CCSID is 65535.</li>
+<li>The <code>-K</code> option to the <code>cl</code> builtin now works the same as <code>system</code> and the help text updated to note that it is only supported when <code>-s</code> is also specified.</li>
+</ul>
+<h3 id="perl">perl</h3>
+<p>The <a href="https://perldoc.perl.org/Cwd">Cwd</a> module now works properly inside a chroot.</p>
+<h3 id="ncursees">ncursees</h3>
+<p>The ncurses6-config and ncursesw6-config scripts and associated man pages were moved to ncurses-devel.</p>
+<h3 id="slang">slang</h3>
+<p>slang is now built with ncurses and uses the ncurses terminfo database, allowing out of the box 256-color support and 24-bit color support when <code>COLORTERM=truecolor</code> environment variable is set.</p>
+<p>Just look at this fancy beast!</p>
+
+  <figure class="center" >
+    <img src="/images/mc-24bit.png" decoding="async" loading="lazy"/>
+    
+      <figcaption class="left" style="font-weight: bold; font-style: italic;"><p>Midnight Commander, in glorious 24-bit color</p>
+</figcaption>
+    
+  </figure>
+
+<h3 id="nginx">nginx</h3>
+<p>NGINX was patched to understand IBM i special authorities a bit better. It no longer requires to be running as &quot;root&quot; (ie. QSECOFR) to use the user directive. Instead, any user with <code>*ALLOBJ</code> authority can do so.</p>
+<p>In addition, the default port was changed to port 80 always instead of 8000 when not run as &quot;root&quot;. Of course, these port usages are still subject to <a href="https://www.ibm.com/support/pages/tcpip-port-restrictions">IBM i TCP/IP Port Restrictions</a>.</p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>nodejs10 was updated to <a href="https://nodejs.org/en/blog/release/v10.23.1/">10.23.1</a>.</li>
+<li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.20.1/">12.20.1</a>.</li>
+<li>nodejs14 was updated to <a href="https://nodejs.org/en/blog/release/v14.15.4/">14.15.4</a>.</li>
+<li>libuv was updated to <a href="https://github.com/libuv/libuv/releases/tag/v1.40.0">1.40.0</a> and <a href="https://github.com/libuv/libuv/releases/tag/v1.41.0">1.41.0</a></li>
+<li>openssl was updated to <a href="https://www.openssl.org/news/openssl-1.1.1-notes.html">1.1.1i</a></li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>So far the updates have been pretty quiet, but there are some bigger updates coming. As always, be sure to check out next months update for more!</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-12-23-bash-builtins/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">getjobid, cl, and liblist — Oh, My!</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2021-04-07-mar-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates March 2021</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

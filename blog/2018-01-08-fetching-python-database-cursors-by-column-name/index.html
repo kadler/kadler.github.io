@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Fetching Python Database Cursors by Column Name</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2018-01-08-fetching-python-database-cursors-by-column-name/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2018-01-08-fetching-python-database-cursors-by-column-name/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2018-01-08-fetching-python-database-cursors-by-column-name/">Fetching Python Database Cursors by Column Name</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2018-01-08
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibm-db/">#ibm_db</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/python/">#python</a></span>
+    
+
+        <div class="post-content">
+            <p>Today I got asked if you can index in to rows returned by <code>ibm_db_dbi</code> by column name. While this doesn't come out of the box<sup id="a1"><a href="https://kadler.io/blog/2018-01-08-fetching-python-database-cursors-by-column-name/#f1">1</a></sup>, it can be done pretty easily.</p>
+<span id="continue-reading"></span>
+<p>Here's some bog-standard Python code that executes a query and prints out each row:</p>
+<pre data-lang="python" style="background-color:#282c34;color:#abb2bf;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#c678dd;">import </span><span>ibm_db_dbi </span><span style="color:#c678dd;">as </span><span>db2 
+</span><span>
+</span><span>cur </span><span style="color:#56b6c2;">= </span><span>db2.</span><span style="color:#e06c75;">connect</span><span>().</span><span style="color:#e06c75;">cursor</span><span>()
+</span><span>cur.</span><span style="color:#e06c75;">execute</span><span>(</span><span style="color:#98c379;">&#39;select * from example&#39;</span><span>)
+</span><span>
+</span><span style="color:#c678dd;">for </span><span>row </span><span style="color:#c678dd;">in </span><span>cur:
+</span><span>    </span><span style="color:#56b6c2;">print</span><span>(row)
+</span></code></pre>
+<p>This produces the output below:</p>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>(1, &#39;Bob&#39;, &#39;Sales&#39;)
+</span><span>(2, &#39;Joe&#39;, &#39;Accounting&#39;)
+</span><span>(3, &#39;Vera&#39;, &#39;Development&#39;)
+</span><span>(4, &#39;Yu&#39;, &#39;Support&#39;)
+</span></code></pre>
+<p>Notice that each row is a Python <code>tuple</code> and thus can only be indexed by column index. However, PEP 249 requires the column names (and other metadata) to be stored in the cursor <a href="https://www.python.org/dev/peps/pep-0249/#description">description</a> attribute. With that information, we can easily map column index to column name with that. In fact, with a quick Google search, I found a recipe in the <a href="https://www.safaribooksonline.com/library/view/python-cookbook/0596001673/ch08s09.html">Python Cookbook</a> that does just that:</p>
+<pre data-lang="python" style="background-color:#282c34;color:#abb2bf;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#c678dd;">def </span><span style="color:#61afef;">fields</span><span>(</span><span style="font-style:italic;color:#e06c75;">cursor</span><span>):
+</span><span>    </span><span style="font-style:italic;color:#7f848e;">&quot;&quot;&quot; Given a DB API 2.0 cursor object that has been executed, returns
+</span><span style="font-style:italic;color:#7f848e;">    a dictionary that maps each field name to a column index; 0 and up. &quot;&quot;&quot;
+</span><span>    results </span><span style="color:#56b6c2;">= </span><span>{}
+</span><span>    column </span><span style="color:#56b6c2;">= </span><span style="color:#d19a66;">0
+</span><span>    </span><span style="color:#c678dd;">for </span><span>d </span><span style="color:#c678dd;">in </span><span>cursor.description:
+</span><span>        results[d[</span><span style="color:#d19a66;">0</span><span>]] </span><span style="color:#56b6c2;">= </span><span>column
+</span><span>        column </span><span style="color:#56b6c2;">= </span><span>column </span><span style="color:#56b6c2;">+ </span><span style="color:#d19a66;">1
+</span><span>
+</span><span>    </span><span style="color:#c678dd;">return </span><span>results
+</span><span>
+</span><span>field_map </span><span style="color:#56b6c2;">= </span><span style="color:#e06c75;">fields</span><span>(cur)
+</span><span>
+</span><span style="color:#c678dd;">for </span><span>row </span><span style="color:#c678dd;">in </span><span>cur:
+</span><span>    </span><span style="color:#56b6c2;">print</span><span>(row[field_map[</span><span style="color:#98c379;">&#39;NAME&#39;</span><span>]])
+</span></code></pre>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>Bob
+</span><span>Joe
+</span><span>Vera
+</span><span>Yu
+</span></code></pre>
+<p>The downfall of this approach is that we have to first generate a column index map and then every time we want to index by name, we have to look up the column name in the map to find its column index. We can certainly do better with the help of Python <a href="https://wiki.python.org/moin/Generators">generators</a>! A generator implements the <a href="https://en.wikipedia.org/wiki/Iterator_pattern">Iterator Pattern</a>, giving back a value when <code>__next__()</code> is called until a <code>StopIteration</code> exception is thrown. This is usually done implicitly using a <code>for</code> loop and not called directly. We can create a generator class which returns a dictionary, mapping the values in the tuple to their column name using the descriptions in the cursor object. Since a cursor object is itself a generator, it's easy to write a simple wrapper:</p>
+<pre data-lang="python" style="background-color:#282c34;color:#abb2bf;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#c678dd;">class </span><span>CursorByName():
+</span><span>    </span><span style="color:#c678dd;">def </span><span style="color:#56b6c2;">__init__</span><span>(</span><span style="font-style:italic;color:#e06c75;">self</span><span>, </span><span style="font-style:italic;color:#e06c75;">cursor</span><span>):
+</span><span>        </span><span style="color:#e5c07b;">self</span><span>._cursor </span><span style="color:#56b6c2;">= </span><span>cursor
+</span><span>    
+</span><span>    </span><span style="color:#c678dd;">def </span><span style="color:#56b6c2;">__iter__</span><span>(</span><span style="font-style:italic;color:#e06c75;">self</span><span>):
+</span><span>        </span><span style="color:#c678dd;">return </span><span style="color:#e5c07b;">self
+</span><span>
+</span><span>    </span><span style="color:#c678dd;">def </span><span style="color:#56b6c2;">__next__</span><span>(</span><span style="font-style:italic;color:#e06c75;">self</span><span>):
+</span><span>        row </span><span style="color:#56b6c2;">= </span><span style="color:#e5c07b;">self</span><span>._cursor.</span><span style="color:#56b6c2;">__next__</span><span>()
+</span><span>
+</span><span>        </span><span style="color:#c678dd;">return </span><span>{ description[</span><span style="color:#d19a66;">0</span><span>]: row[col] </span><span style="color:#c678dd;">for </span><span>col, description </span><span style="color:#c678dd;">in </span><span style="color:#56b6c2;">enumerate</span><span>(</span><span style="color:#e5c07b;">self</span><span>._cursor.description) }
+</span><span>    
+</span><span style="color:#c678dd;">for </span><span>row </span><span style="color:#c678dd;">in </span><span style="color:#e06c75;">CursorByName</span><span>(cur):
+</span><span>    </span><span style="color:#56b6c2;">print</span><span>(row)
+</span></code></pre>
+<p>All the magic happens in the <code>__next__</code> function. It simply calls the <code>self._cursor.__next__()</code> to get the next row, while letting the <code>StopIteration</code> bubble up to the caller. We then use a <code>dict comprehension</code> to map the items in the tuple to a dictionary. We use the <a href="https://docs.python.org/3/library/functions.html#enumerate">enumerate</a> built-in function to loop through each column description in the cursor description along with its column index. Now each row you get back is a dictionary:</p>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>{&#39;ID&#39;: 1, &#39;NAME&#39;: &#39;Bob&#39;, &#39;DEPT&#39;: &#39;Sales&#39;}
+</span><span>{&#39;ID&#39;: 2, &#39;NAME&#39;: &#39;Joe&#39;, &#39;DEPT&#39;: &#39;Accounting&#39;}
+</span><span>{&#39;ID&#39;: 3, &#39;NAME&#39;: &#39;Vera&#39;, &#39;DEPT&#39;: &#39;Development&#39;}
+</span><span>{&#39;ID&#39;: 4, &#39;NAME&#39;: &#39;Yu&#39;, &#39;DEPT&#39;: &#39;Support&#39;}
+</span></code></pre>
+<p>An interesting idea would be to create a class which acts as both a <code>dict</code> and <code>tuple</code>, such that you could mimic <a href="http://php.net/manual/en/function.db2-fetch-both.php">db2_fetch_both</a> from the PHP <code>ibm_db2</code> interface. While you could just add column index keys to the dictionary above, but you will lose out on slicing and other sequence operations that you can do on tuples.</p>
+<p><b id="f1">1</b> You can actually do this by using <code>ibm_db</code> directly by calling either <code>ibm_db.fetch_assoc</code> or <code>ibm_db.fetch_both</code>, but using <code>ibm_db</code> is a pain and you lose out on all the PEP 249 goodness as well.<a href="https://kadler.io/blog/2018-01-08-fetching-python-database-cursors-by-column-name/#a1">↩</a></p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2017-11-17-how-to-libpath/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Mucking with the Runtime Library Search Path on PASE</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2018-05-29-calling-qsh-utilities-from-pase/">
+                            <span class="button__text">Calling QSH utilities from PASE</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

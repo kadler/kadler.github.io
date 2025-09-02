@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Migrating IBM i RPMs to use OpenSSL 3</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2024-08-12-openssl3-migration/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2024-08-12-openssl3-migration/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2024-08-12-openssl3-migration/">Migrating IBM i RPMs to use OpenSSL 3</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2024-08-12
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Today, we're pushing out updates to various rpms to migrate from OpenSSL 1.1.1
+to OpenSSL 3. As you may know, OpenSSL 1.1.1 is no longer supported by the
+upstream OpenSSL project so we had to rebuild our packages to use OpenSSL 3.0,
+the current Long Term Support (LTS) release.</p>
+<span id="continue-reading"></span>
+<p>While OpenSSL 1.1.1 and 3.0 are relatively API compatible, so most software
+using OpenSSL needed little to no changes to make it build with OpenSSL 3.0
+instead. However, in the process we ran in to some major issues which caused
+this migration to take longer than one might otherwise expect. These issues
+should now be resolved and we have a <a href="https://ibmi-oss-docs.readthedocs.io/en/latest/yum/OPENSSL3_MIGRATION.html">documentation
+page</a>
+detailing the issues a bit. I'll be going in to more details below, if you want
+to learn more.</p>
+<p>Long story short: With the mitigations in place the transition <em>should</em> be
+pretty smooth. It's still recommended to update <em>all</em> packages, so that you
+don't end up with a mixture of OpenSSL 1.1.1 and 3.0 using packages, but our
+mitigations should handle that should it occur.</p>
+<h2 id="issues-found">Issues Found</h2>
+<p>While rebuilding the rpms, I would install the built rpms in to a sandbox to
+play around with them first before merging. After building curl against
+OpenSSL, <code>yum</code> commands started to segfault:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> yum install mc
+</span><span style="color:#e06c75;">https://public.dhe.ibm.com/software/ibmi/products/pase/rpms/repo-base-7.3/repodata/repomd.xml: </span><span style="color:#c678dd;">[</span><span>Errno 14</span><span style="color:#c678dd;">]</span><span> curl#35 - </span><span style="color:#98c379;">&quot;OpenSSL SSL_connect: SSL_ERROR_SYSCALL in connection to public.dhe.ibm.com:443 &quot;
+</span><span style="color:#e06c75;">Trying</span><span> other mirror.
+</span><span style="color:#e06c75;">Segmentation</span><span> fault (core dumped)
+</span></code></pre>
+<p>The backtrace was rather interesting:</p>
+<pre data-lang="text" style="background-color:#282c34;color:#abb2bf;" class="language-text "><code class="language-text" data-lang="text"><span>#0  0x090000000c2e9cfc in ?? () from /QOpenSys/pkgs/lib/libcrypto.so.1.1(shr_64.o)
+</span><span>#1  0x090000000c387018 in ?? () from /QOpenSys/pkgs/lib/libcrypto.so.1.1(shr_64.o)
+</span><span>#2  0x090000000c387018 in ?? () from /QOpenSys/pkgs/lib/libcrypto.so.1.1(shr_64.o)
+</span><span>#3  0x090000000c8e62d4 in ?? () from /QOpenSys/pkgs/lib/libcrypto.so.3(shr_64.o)
+</span><span>...
+</span><span>#6  0x090000000c8bfcd8 in ?? () from /QOpenSys/pkgs/lib/libcrypto.so.3(shr_64.o)
+</span><span>#7  0x090000000c7ca654 in ?? () from /QOpenSys/pkgs/lib/libssl.so.3(shr_64.o)
+</span><span>...
+</span><span>#9  0x090000000c798ff0 in ?? () from /QOpenSys/pkgs/lib/libssl.so.3(shr_64.o)
+</span><span>#10 0x090000000c6d490c in ?? () from /QOpenSys/pkgs/lib/libcurl.so.4(shr_64.o)
+</span><span>...
+</span><span>#20 0x090000000c6ab204 in ?? () from /QOpenSys/pkgs/lib/libcurl.so.4(shr_64.o)
+</span><span>#21 0x090000000cddfc30 in ?? () from /QOpenSys/pkgs/lib/python2.7/site-packages/pycurl.so
+</span><span>#22 0x09000000076dd9c4 in PyEval_EvalFrameEx () from /QOpenSys/pkgs/lib/libpython2.7.so
+</span></code></pre>
+<p>The pycurl package calls in to Curl (libcurl.so.4), which ends up calling in to
+OpenSSL 3 (libssl.so.3). OpenSSL is composed of two libraries: libssl which has
+high-level SSL/TLS related functions and libcrypto, which has low-level
+cryptographic algorithms. The OpenSSL 3 TLS code eventually calls in to
+libcrypto.so.3, but at some point from there it calls in to libcrypto.so.1.1.
+<strong>This is bad</strong>. OpenSSL 1.1.1 and 3.0 are not ABI compatible and they have
+separate global state.</p>
+<p>So we knew what was the problem, but now the million dollar question: why?</p>
+<h2 id="debugging">Debugging</h2>
+<p>So the first question was why is OpenSSL 1.1.1 and OpenSSL 3.0 being loaded
+together in the first place. This it turns out was easy to answer: when yum
+starts it ends up loading both the built in
+<a href="https://docs.python.org/3/library/ssl.html">ssl</a> Python module and pycurl.
+Because we hadn't rebuilt Python 2 with OpenSSL 3, it was still using 1.1.1 and
+we ended up with both versions of OpenSSL loaded once pycurl was loaded.</p>
+<p>So the next question was why is this causing a problem? On AIX (and PASE by
+extension), unlike many other platforms, function references are resolved at
+link time. We can see this by using the <code>dump</code> command with the <code>-Tv</code> flags to
+show the symbols:</p>
+<p>libcurl.so.4:</p>
+<pre data-lang="text" style="background-color:#282c34;color:#abb2bf;" class="language-text "><code class="language-text" data-lang="text"><span>[374]   0x00000000    undef      IMP     DS EXTref libssl.so.3(shr_64.o) SSL_new
+</span></code></pre>
+<p>_ssl.so:</p>
+<pre data-lang="text" style="background-color:#282c34;color:#abb2bf;" class="language-text "><code class="language-text" data-lang="text"><span>[206]   0x00000000    undef      IMP     DS EXTref libssl.so.1.1(shr_64.o) SSL_new
+</span></code></pre>
+<p>We can see that each library specifies that it wants to call the <code>SSL_new</code>
+function, but libcurl.so.4 says it should be found in libssl.so.3 while _ssl.so
+says to load it from libssl.so.1.1. So we <em>should</em> be fine, right??? Well,
+turns out it's not so simple.</p>
+<h2 id="debug-rabit-hole">Debug Rabit Hole</h2>
+<p>We started by creating a simple example program which would load mock OpenSSL
+1.1.1 and 3.0 libssl and libcrypto libraries. Once we had the example in place
+and it was able to recreate the problem, we could do more diagnosis. We tried
+the same examples on AIX directly and discovered that we weren't able to
+recreate the problem there. We do use different default compile options in our
+gcc compiler, so was it a PASE bug or a difference in compiler? To determine
+this, we took the binaries from AIX and copied them in to PASE and the binaries
+from PASE and copied them to AIX. With a bit of <a href="https://kadler.io/blog/2017-09-08-libpath/">LIBPATH magic</a>
+we were able to get them running with their corresponding libgcc libraries and
+discovered that the PASE binaries failed on AIX while the AIX binaries were
+fine. 🤔</p>
+<p>We played around with a variety of compiler and linker options trying to
+determine what was different between our build and AIX. The main culprit was
+the Runtime Linking flag <code>-brtl</code>. This flag causes a variety of changes to be
+more compatible with Linux applications, where function references are resolved
+at runtime instead of link time which is exactly what we were experiencing.
+However this flag didn't seem to make any difference when building our mock
+libraries. It turns out we were missing a critical piece of information:
+whether the runtime linker is used or not is based on whether the <em>main program
+binary</em> has runtime linking enabled or not and how the libraries it loads were
+built doesn't matter <em>at all</em>. So <em>of course</em> the flag didn't make any
+difference on the <em>libraries</em>, we needed to apply that to the example <em>binary</em>
+instead. Indeed, this was our issue and linking the main program without
+<code>-brtl</code> would allow OpenSSL 1.1.1 and 3.0 to coexist peacefully in the same
+process without crashing!</p>
+<h2 id="runtime-linking-considered-harmful">Runtime Linking Considered Harmful?</h2>
+<p>Ok, so we had our smoking gun: runtime linking was causing the crash. Any
+program using runtime linking (ie. <strong>all</strong> of them in our RPM ecosystem) would
+crash if they loaded both OpenSSL libraries at the same time. Now the question
+is how do we deal with this problem?</p>
+<p>Well, we don't really <em>need</em> runtime linking. Pretty much all of the software
+we build doesn't depend on this behavior, so why do we enable it automatically
+unlike on AIX? Well, we use it because it makes packaging software for RPMs
+easier to deal with vs the traditional AIX library packaging scheme. It allows
+the linker to find libraries with the .so extension like on Linux and are
+produced when using the <code>--with-aix-soname=svr4</code> configure flag from
+<a href="https://www.gnu.org/software/libtool/manual/html_node/LT_005fINIT.html">libtool</a>.
+Maybe one day I'll write a post explaining how all this works, but for now all
+you need to know is that it makes it easier for us to build RPMs and that it
+requires using libraries with a .so extension.</p>
+<h2 id="in-search-of-a-solution">In Search of a Solution</h2>
+<p>Now, the simplest solution to this problem is just don't have the problem in
+the first place. If we upgraded everything to use OpenSSL 3.0 all at once, well
+then there's no problem, right? Well, this solution is not ideal for a few
+reasons:</p>
+<ul>
+<li>it causes a <a href="https://en.wikipedia.org/wiki/Flag_day_(computing)">flag day</a>
+and we can't control when and how users upgrade</li>
+<li>we don't have control over third-party applications, which may still be using
+OpenSSL 1.1.1</li>
+<li>some software we don't want to upgrade (eg. Python 2, which is EOL)</li>
+</ul>
+<p>What we really wanted was a way to get the &quot;please search for .so files&quot;
+behavior without the &quot;enable runtime linking&quot; linker behavior that comes with
+<code>-brtl</code>. Unfortunately, after looking over the <a href="https://www.ibm.com/docs/en/aix/7.2?topic=l-ld-command">linker docs</a>
+it didn't seem like there was anything, but as a hail mary I asked a new team
+member if he knew anything. He had recently come over from AIX development and
+still knew someone who worked on the linker code. After talking with his
+contact, we learned that there is indeed a way to do this using an undocumented
+🤫 command line option <code>-blibsuff:so</code>.</p>
+<p>With this, we had our solution: rebuild any packages using OpenSSL (either
+directly or <em>indirectly</em> via dependencies) with <code>-blibsuff:so</code> instead of
+<code>-brtl</code>. One final snag was that of the third pary software I could check, PHP
+was using OpenSSL <em>and</em> it turns out it actually <em>requires</em> runtime linking
+behavior in its default build configuration. If you are using the
+<a href="https://www.seidengroup.com/communityplus-php-for-ibm-i/">CP+ PHP</a> from Seiden
+Group, they have a modified version of PHP which runs without runtime linking.</p>
+<h2 id="path-forward">Path Forward</h2>
+<p>So we've now rebuilt all software using OpenSSL without runtime linking
+enabled, but we didn't rebuild everything. There's still a lot of software to
+rebuild without <code>-brtl</code> and eventually we no longer want to be using it at all.
+To this end, our recently released GCC 12 package has replaced <code>-brtl</code> with
+<code>-blibsuff:so</code> in its default linker options. There's still more investigation
+we need to do on how removing <code>-brtl</code> will affect libtool builds as well, but
+if you are building and packaging PASE software you should building with the
+<code>-bnortl</code> linker flag or using GCC 12 to ensure your software doesn't depend on
+runtime linking behavior.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2024-05-17-blog-update/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Blog Update</span>
+                        </a>
+                    </span>
+                
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

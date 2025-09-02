@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bash Command Oddities</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2018-10-02-bash-command-oddities/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2018-10-02-bash-command-oddities/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2018-10-02-bash-command-oddities/">Bash Command Oddities</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2018-10-02
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/bash/">#bash</a></span>
+    
+
+        <div class="post-content">
+            <p>Sometimes when using bash, you can run in to an oddity where it keeps running the &quot;wrong&quot; command. Let's explore.</p>
+<span id="continue-reading"></span><h2 id="it-was-a-dark-and-stormy-night">It was a dark and stormy night...</h2>
+<p>You want to install a Python package and you're using the new Python 3.6 installed via yum:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>bash-4.4$ export PATH=/QOpenSys/pkgs/bin:$PATH
+</span><span>bash-4.4$ python3 --version
+</span><span>Python 3.6.6
+</span></code></pre>
+<p>When you install <code>xlsxwriter</code>, though it can't be found:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>bash-4.4$ pip3 install xlsxwriter
+</span><span>Downloading/unpacking xlsxwriter
+</span><span>  Downloading XlsxWriter-1.1.1-py2.py3-none-any.whl (142kB): 142kB downloaded
+</span><span>Installing collected packages: xlsxwriter
+</span><span>Successfully installed xlsxwriter
+</span><span>Cleaning up...
+</span><span>bash-4.4$ python3
+</span><span>Python 3.6.6 (default, Jul  7 2018, 22:45:07) 
+</span><span>[GCC 6.3.0] on aix6
+</span><span>Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+</span><span>&gt;&gt;&gt; import xlsxwriter
+</span><span>Traceback (most recent call last):
+</span><span>  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+</span><span>ModuleNotFoundError: No module named &#39;xlsxwriter&#39;
+</span></code></pre>
+<p>Hmm... You investigate a bit and discover that <code>pip3</code> is the 5733-OPS version of pip!</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>bash-4.4$ pip3 --version
+</span><span>pip 1.5.6 from /QOpenSys/QIBM/ProdData/OPS/Python3.4/lib/python3.4/site-packages (python 3.4)
+</span><span>bash-4.4$ which pip3
+</span><span>/QOpenSys/usr/bin/pip3
+</span></code></pre>
+<p>You know what you need to do, install <code>pip3</code> with yum:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>bash-4.4$ yum install -y python3-pip
+</span><span>Setting up Install Process
+</span><span>Resolving Dependencies
+</span><span>--&gt; Running transaction check
+</span><span>---&gt; Package python3-pip.noarch 0:9.0.1-2 will be installed
+</span><span>--&gt; Finished Dependency Resolution
+</span><span>
+</span><span>Dependencies Resolved
+</span><span>
+</span><span>===============================================================================================================
+</span><span> Package                     Arch                   Version                  Repository                   Size
+</span><span>===============================================================================================================
+</span><span>Installing:
+</span><span> python3-pip                 noarch                 9.0.1-2                  ibm                 1.9 M
+</span><span>
+</span><span>Transaction Summary
+</span><span>===============================================================================================================
+</span><span>Install       1 Package
+</span><span>
+</span><span>Total size: 1.9 M
+</span><span>Installed size: 5.9 M
+</span><span>Downloading Packages:
+</span><span>Running Transaction Check
+</span><span>Running Transaction Test
+</span><span>Transaction Test Succeeded
+</span><span>Running Transaction
+</span><span>  Installing : python3-pip-9.0.1-2.noarch                                                                  1/1 
+</span><span>
+</span><span>Installed:
+</span><span>  python3-pip.noarch 0:9.0.1-2                                                                                 
+</span><span>
+</span><span>Complete!
+</span></code></pre>
+<h2 id="crisis-averted-or-was-it">Crisis averted. Or was it?</h2>
+<p>But still, it's using the OPS version!</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>bash-4.4$ pip3 --version
+</span><span>pip 1.5.6 from /QOpenSys/QIBM/ProdData/OPS/Python3.4/lib/python3.4/site-packages (python 3.4)
+</span></code></pre>
+<p><strong>What the heck?</strong></p>
+<p>This is because bash caches command name lookups. So when you first run a command, it looks up the name via the <code>$PATH</code> and then caches it away in a hash for later lookup later. If you install a different command with the same name in to a folder earlier on the path, it won't know and will continue to use the older version. It's deceiving because the <code>which</code> command will show the right output:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>bash-4.4$ which pip3
+</span><span>/QOpenSys/pkgs/bin/pip3
+</span></code></pre>
+<p>This is because <code>which</code> is a separate command and not part of bash, so it doesn't know anything about bash's cache and <em>always</em> uses the <code>$PATH</code> to find the binary.</p>
+<p>Instead, we can use the <code>type</code> bash built-in to determine where it's coming from:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>bash-4.4$ type pip3
+</span><span>pip3 is hashed (/QOpenSys/usr/bin/pip3)
+</span></code></pre>
+<p>Here, pip3 has already been found at <code>/QOpenSys/usr/bin/pip3</code> and is being cached there. To clear the cache, use <code>hash -r</code>:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>bash-4.4$ hash -r
+</span><span>bash-4.4$ type pip3
+</span><span>pip3 is /QOpenSys/pkgs/bin/pip3
+</span><span>bash-4.4$ pip3 --version
+</span><span>pip 9.0.1 from /QOpenSys/pkgs/lib/python3.6/site-packages (python 3.6)
+</span><span>bash-4.4$ type pip3
+</span><span>pip3 is hashed (/QOpenSys/pkgs/bin/pip3)
+</span></code></pre>
+<p>After resetting the lookup cache, pip3 is no longer hashed and bash does a normal <code>$PATH</code> lookup. Only after actully running it, will it get hashed again.</p>
+<h2 id="why-have-i-never-seen-this-before">Why have I never seen this before?</h2>
+<p>Note that when you change the <code>$PATH</code> variable, bash is smart enough to invalidate its cache. This means it's pretty rare to hit this issue. In order to encounter it you'd have to:</p>
+<ol>
+<li>run an unqualified command which already exists</li>
+<li>have that command be found in a directory later on the <code>$PATH</code></li>
+<li>install a different version of that command in to a directory earlier on the <code>$PATH</code> than the previous command</li>
+</ol>
+<h2 id="got-any-more-info">Got any more info?</h2>
+<p>Sure. The docs for the hash (and other built-ins) are <a href="https://www.gnu.org/software/bash/manual/html_node/Bourne-Shell-Builtins.html">here</a>.</p>
+<h2 id="what-about-shells-other-than-bash">What about shells other than bash?</h2>
+<p>Good question! For <code>zsh</code>, the command is <code>rehash</code>. For other shells, I'm not sure.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2018-09-28-using-system-naming-in-ibm-db/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Using System Naming in Python ibm_db</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2020-01-08-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates Dec 2019</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

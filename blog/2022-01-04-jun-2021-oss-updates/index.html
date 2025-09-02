@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates June 2021</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2022-01-04-jun-2021-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2022-01-04-jun-2021-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2022-01-04-jun-2021-oss-updates/">IBM i Open Source Updates June 2021</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2022-01-04
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Hey, it's been a while! I got way behind on pushing out update blogs, so I'll be pushing out updates to catch up on the 2021 and try to be more consistent for 2022.</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="python-rpm-macros">python-rpm-macros</h3>
+<p>This package contains improved rpm macros for Python. The rpm-devel package already ships some Python macros in /QOpenSys/pkgs/lib/rpm/macros.python3, but these have been removed from the latest version of rpm and replaced by the macros in this package.</p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="gnu-readline">GNU Readline</h3>
+<p>GNU Readline was updated to version 8.1, which now ships libreadline8 instead of libreadline6. Both Readline packages are available, so existing packages will not have problems, but packages will link to libreadline8 as they get updated.</p>
+<h3 id="bash">BASH</h3>
+<p>BASH was updated to 5.1. There are a variety of changes since 4.4. You can read more about the changes in <a href="https://lists.gnu.org/archive/html/bug-bash/2019-01/msg00063.html">5.0</a> and <a href="https://lists.gnu.org/archive/html/info-gnu/2020-12/msg00003.html">5.1</a> in the release announcements.</p>
+<h3 id="libidn2">libidn2</h3>
+<p>The package was updated to handle upgrading from community versions of libidn2.</p>
+<h3 id="ansible">Ansible</h3>
+<p>Ansible was updated to force using /QOpenSys/pkgs/bin/python3.6 instead of /QOpenSys/pkgs/bin/python3. The python3 symlink depends on the update-alternatives choice for Python 3 and while today we only have one alternative (Python 3.6), that won't be the case for long.</p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>python3-pip was updated to 21.1.2</li>
+<li>python3-setuptools was updated to 57.0.0</li>
+<li>python3-wheel was updated to 0.36.2</li>
+<li>ant was updated to 1.10.10</li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>Well, 6 months through 2021. Lots of stuff delivered and lots of stuff to come. Hopefully back in a few days with a report on July 2021.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2021-12-07-ibmi-repos/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM-provided Repositories and YUM Updates</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2022-01-07-july-2021-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates July 2021</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

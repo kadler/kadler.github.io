@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>getjobid, cl, and liblist — Oh, My!</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2020-12-23-bash-builtins/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2020-12-23-bash-builtins/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2020-12-23-bash-builtins/">getjobid, cl, and liblist — Oh, My!</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-12-23
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>With the latest update to BASH, there are 3 new IBM i-specific BASH builtin
+functions: <code>liblist</code>, <code>cl</code>, and <code>getjobid</code>. These builtins function nearly
+identically to the <code>liblist</code>, <code>system</code>, and <code>getjobid</code> commands that exist in
+PASE and/or QSH.</p>
+<span id="continue-reading"></span>
+<p>If these commands already exist, why add them to BASH? Let's explore:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ /QOpenSys/usr/bin/getjobid
+</span><span>Process identifier 1575015 is 073984/QSECOFR/QP0ZSPWT
+</span><span>$ /QOpenSys/usr/bin/getjobid
+</span><span>Process identifier 1575016 is 073985/QSECOFR/QP0ZSPWT
+</span><span>$ /QOpenSys/usr/bin/getjobid
+</span><span>Process identifier 1575017 is 073986/QSECOFR/QP0ZSPWT
+</span></code></pre>
+<p>Every time I run getjobid, I'm getting the job id of the <code>getjobid</code> process, not
+my shell's jobid. If I want to get my shell's job id, I have to remember to pass
+the shell's pid (which is helpfully in the <code>$$</code> special variable)</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">/QOpenSys/usr/bin/getjobid </span><span>$</span><span style="color:#e5c07b;">$
+</span></code></pre>
+<p>Kind of a pain, but once you figure it out it's not sooooo bad.</p>
+<span id="continue-reading"></span><h2 id="cl-to-the-rescue">CL to the Rescue?</h2>
+<p>Ok, so now let's say I am trying to run a PASE program which is running in to
+problems while calling some ILE code. The ILE code is writing messages to the
+job log, but the job log isn't being saved due to the log level of the job!
+Let's use the <code>system</code> command to change the log level:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">/QOpenSys/usr/bin/system </span><span style="color:#98c379;">&quot;CHGJOB LOG(4 00 *SECLVL)&quot;
+</span></code></pre>
+<p>If I run this, I will get no difference in behavior.</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ /QOpenSys/usr/bin/system &#39;dspjob&#39; | grep -E -A3 &#39;LOG$&#39;
+</span><span>   Message logging:                                 LOG
+</span><span>     Level  . . . . . . . . . . . . . . . . . . :                4
+</span><span>     Severity . . . . . . . . . . . . . . . . . :                0
+</span><span>     Text . . . . . . . . . . . . . . . . . . . :                *NOLIST
+</span></code></pre>
+<p>What gives? Oh, duh! I forgot to add the <code>-i</code> flag to run in the current
+process. Silly me. Wait, even after adding <code>-i</code>, it's still not working. <em>womp,
+womp</em></p>
+<p>What is going on? Well, if you understand the Unix process model, this does
+starts to makes sense: we executed the <code>system</code> command, causing BASH to start a
+<em>new process</em> in which the <code>system</code> command starts up (and if the <code>-i</code> flag is
+not passed, <code>system</code> spawns <em>an additional job</em>), calls <code>CHGJOB</code>, and
+immediately exits. It sort of looks like this:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>bash
+</span><span>└── system -i ... -&gt; CHGJOB
+</span><span>
+</span><span>bash
+</span><span>└── system ...
+</span><span>    └── &lt;spawned job&gt; -&gt; CHGJOB
+</span></code></pre>
+<p>In either case, this is quite pointless (even more so without <code>-i</code>), as it still
+hasn't affected <em>our job</em>. Luckily, the <code>CHGJOB</code> command supports passing in a
+job name, so we can use <code>getjobid</code> to retrieve it:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">/QOpenSys/usr/bin/system </span><span style="color:#98c379;">&quot;CHGJOB JOB($(</span><span style="color:#e06c75;">/QOpenSys/usr/bin/getjobid</span><span style="font-style:italic;color:#e06c75;"> -s </span><span style="color:#98c379;">$</span><span style="color:#e5c07b;">$</span><span style="color:#98c379;">)) LOG(4 00 *SECLVL)&quot;
+</span></code></pre>
+<p>What a pain in the butt! Of course this only works because <code>CHGJOB</code> allows you
+to specify a job name to affect. Other CL commands are not so lucky, like
+<code>ADDLIBLE</code> or <code>CHGCURLIB</code> 😞...</p>
+<h2 id="bash-to-the-rescue">Bash to the Rescue</h2>
+<p>Ok, so back to BASH. Because these new functions are <em>builtins</em> and not
+commands, they execute in BASH itself, ie. <em>the current job</em>. This means when we
+run <code>getjobid</code> it gives you what you probably expected:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ getjobid
+</span><span>Process identifier 1574877 is 073846/QSECOFR/QP0ZSPWT
+</span><span>$ getjobid
+</span><span>Process identifier 1574877 is 073846/QSECOFR/QP0ZSPWT
+</span><span>$ getjobid $$
+</span><span>Process identifier 1574877 is 073846/QSECOFR/QP0ZSPWT
+</span></code></pre>
+<p>In addition, we also have a <code>cl</code> function, which behaves almost the same as
+<code>system</code>, except it defaults to running in the current job, so no <code>-i</code> is
+needed. With that, we don't even need <code>getjobid</code> for the above example:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">cl </span><span style="color:#98c379;">&quot;CHGJOB LOG(4 00 *SECLVL)&quot;
+</span></code></pre>
+<p>And of course with builtins, it's finally possible to implement a <code>liblist</code>
+utility to change the library list of PASE jobs:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ liblist -a kadler
+</span><span>CPC2196: Library KADLER added to library list. 
+</span><span>$ liblist -d kadler
+</span><span>CPC2197: Library KADLER removed from library list.
+</span><span>$ liblist -c kadler
+</span><span>CPC2198: Current library changed to KADLER.
+</span><span>$ liblist
+</span><span>QSYS        SYS  
+</span><span>QSYS2       SYS  
+</span><span>QHLPSYS     SYS  
+</span><span>QUSRSYS     SYS  
+</span><span>QSHELL      PRD  
+</span><span>KADLER      CUR  
+</span><span>QGPL        USR  
+</span><span>QTEMP       USR  
+</span><span>QDEVELOP    USR  
+</span><span>QBLDSYS     USR  
+</span></code></pre>
+<p>And because we're using the the
+<a href="https://www.ibm.com/support/knowledgecenter/en/ssw_ibm_i_74/rzajq/rzajqviewliblinfo.htm">LIBRARY_LIST_INFO</a>
+SQL service, we get the schema name for free so I figured why not add a <code>-s</code>
+option?</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ liblist -a LONGSCHEM
+</span><span>CPC2196: Library LONGSCHEM added to library list.
+</span><span>
+</span><span>$ liblist -s
+</span><span>QSYS        SYS  QSYS
+</span><span>QSYS2       SYS  QSYS2
+</span><span>QHLPSYS     SYS  QHLPSYS
+</span><span>QUSRSYS     SYS  QUSRSYS
+</span><span>QSHELL      PRD  QSHELL
+</span><span>KADLER      CUR  KADLER
+</span><span>LONGSCHEM   USR  longschemaname
+</span><span>QGPL        USR  QGPL
+</span><span>QTEMP       USR  QTEMP
+</span><span>QDEVELOP    USR  QDEVELOP
+</span><span>QBLDSYS     USR  QBLDSYS
+</span></code></pre>
+<p>Note that for compatibility with QSH liblist, the default output is kept the same.</p>
+<p>Finally, ff that wasn't enough, if you ever forget what the command line
+arguments do, we have much better help text than the PASE or QSH equivalents
+😁</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ cl --help
+</span><span>cl: cl [-beEhiIkKnOpqsSv] COMMAND [ARG ...]
+</span><span>    Executes a CL command.
+</span><span>    
+</span><span>    Options:
+</span><span>      -i        Run COMMAND in the current job (default)
+</span><span>      -S        Run COMMAND in a spawned job
+</span><span>      -K        Keep all spool files generated by COMMAND and the job log
+</span><span>      -k        Keep all spool files generated by COMMAND
+</span><span>      -n        Do not include the message identifier when writing the messages to standard error
+</span><span>      -p        Only write the messages sent to the program&#39;s message queue by COMMAND to standard error
+</span><span>      -q        Do not write messages generated by COMMAND to standard error
+</span><span>      -s        Do not write spool files generated by COMMAND to standard output
+</span><span>      -v        Write the complete command string to standard output before executing it
+</span><span>    
+</span><span>      -b        Force binary mode for standard streams used by the CL command
+</span><span>      -e        Copy PASE for i environment variables to ILE before running COMMAND
+</span><span>      -I        Force CCSID conversion for standard input used by COMMAND
+</span><span>      -O        Force CCSID conversion for standard output used by COMMAND
+</span><span>      -E        Force CCSID conversion for standard error used by COMMAND
+</span><span>    
+</span><span>    Arguments:
+</span><span>      COMMAND   The CL command to run.
+</span><span>      ARG       One or more arguments to pass to the CL command
+</span></code></pre>
+<h2 id="questions-caveats-and-more">Questions, Caveats, and More</h2>
+<h3 id="checking-for-support">Checking for support</h3>
+<p>These builtins are available once you install bash 4.4-3. You can check if you
+have the support and ensure you're using the builtin by using the <code>type</code>
+builtin:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ type liblist
+</span><span>liblist is a shell builtin
+</span><span>$ type cl
+</span><span>cl is a shell builtin
+</span><span>$ type getjobid
+</span><span>getjobid is a shell builtin
+</span></code></pre>
+<p>Note, the <code>which</code> command will give you different results, since <code>which</code> is an
+external <em>command</em> and not a BASH <em>builtin</em>:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ which getjobid
+</span><span>/QOpenSys/usr/bin/getjobid
+</span></code></pre>
+<h3 id="how-do-i-use-them">How do I use them?</h3>
+<p>Just call them like you would any other command. It's likely you're already
+using BASH builtins and didn't even know it! (Things like <code>echo</code>, <code>cd</code>, and even
+more used in scripting are also BASH builtins.)</p>
+<p>When BASH has a builtin, it takes precedence over any external command found on
+the <code>$PATH</code>:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ which getjobid
+</span><span>/QOpenSys/usr/bin/getjobid
+</span><span>$ type getjobid
+</span><span>getjobid is a shell builtin
+</span></code></pre>
+<h3 id="why-cl-and-not-system">Why 'cl' and not 'system'?</h3>
+<p>While both <code>getjobid</code> and <code>liblist</code> match the names their PASE/QSH counterparts,
+we decided not to do the same with <code>cl</code> — even though it has all the same
+options. We did initially have it as <code>system</code>, but there was concern that too
+many existing PASE scripts relied on <code>system</code> and depending on whether you ran a
+script in <code>bash</code> vs <code>bsh</code>, <code>ksh</code>, etc you could get unexpected behavior.</p>
+<p>You can always create a BASH alias for <code>system</code> if you like. Run the following
+or add it to one of BASH's <a href="https://www.gnu.org/software/bash/manual/html_node/Bash-Startup-Files.html">startup
+files</a>
+(eg. ~/.bashrc):</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#56b6c2;">alias </span><span style="color:#61afef;">system</span><span style="color:#56b6c2;">=</span><span style="color:#98c379;">cl
+</span></code></pre>
+<p>In addition, because we didn't have to worry about full compatibility with
+<code>system</code>, we could change the default behavior to running in the current job,
+which is probably what you want most of the time anyway. 🎉 This means no
+<code>-i</code> is not needed (but supported for compatibility) and also a new
+builtin-specific option <code>-S</code> has been added to force <code>cl</code> to spawn a new job.
+This spawned job will run in a non-multithreaded job and without PASE loaded,
+which can be useful for some commands.</p>
+<h3 id="how-do-i-run-the-non-builtin-version">How do I run the non-builtin version?</h3>
+<p>Since builtins have higher precedence over external commands, changing your
+<code>$PATH</code> will have no effect. You need to either fully qualify the command or
+disable the shell builtin.</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#7f848e;"># Fully qualify getjobid
+</span><span style="color:#e06c75;">/QOpenSys/usr/bin/getjobid
+</span><span>
+</span><span style="color:#7f848e;"># Disable getjobid builtin for the current session
+</span><span style="color:#56b6c2;">enable</span><span> -n getjobid
+</span></code></pre>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-12-23-dec-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates December 2020</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2021-03-03-feb-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates February 2021</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

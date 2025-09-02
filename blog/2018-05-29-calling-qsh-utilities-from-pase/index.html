@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Calling QSH utilities from PASE</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="Using the program name argument for fun and for profit">
+
+    <meta property="og:description" content="Using the program name argument for fun and for profit">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2018-05-29-calling-qsh-utilities-from-pase/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="Using the program name argument for fun and for profit">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2018-05-29-calling-qsh-utilities-from-pase/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2018-05-29-calling-qsh-utilities-from-pase/">Calling QSH utilities from PASE</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2018-05-29
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/pase/">#pase</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/qsh/">#qsh</a></span>
+    
+
+        <div class="post-content">
+            <p>QSH provides a wonderful utility called <code>db2</code> which allows you to run SQL queries from within the QSH shell, but what if you're in a QP2TERM shell or using SSH - what then?</p>
+<span id="continue-reading"></span><h2 id="qsh-from-pase">QSH from PASE</h2>
+<p>Well, PASE provides a <code>qsh</code> utility which allows you to call programs within the QSH environment. Like most shells, QSH provides a <code>-c</code> option, which allows you to pass a string of commands to be executed instead of reading from <code>stdin</code>, so we can call <code>db2</code> like so:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">-bash-4.3$</span><span> qsh</span><span style="font-style:italic;color:#e06c75;"> -c </span><span style="color:#98c379;">&quot;db2 &#39;select 30 from sysibm.sysdummy1&#39;&quot;
+</span><span>
+</span><span style="color:#e06c75;">00001      
+</span><span style="color:#e06c75;">-----------
+</span><span>         </span><span style="color:#e06c75;">30
+</span><span>
+</span><span>  </span><span style="color:#e06c75;">1</span><span> RECORD(S) </span><span style="color:#e06c75;">SELECTED.
+</span><span>
+</span></code></pre>
+<p>Notice that we had to quote the commands twice. What happens if we need to use quotes inside our SQL?</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">-bash-4.3$</span><span> qsh</span><span style="font-style:italic;color:#e06c75;"> -c </span><span style="color:#98c379;">&quot;db2 </span><span style="color:#56b6c2;">\&quot;</span><span style="color:#98c379;">select message_id, message_timestamp from table(qsys2.joblog_info(&#39;*&#39;)) x</span><span style="color:#56b6c2;">\&quot;</span><span style="color:#98c379;">&quot;
+</span><span>
+</span><span style="color:#e06c75;">MESSAGE_ID</span><span>  MESSAGE_TIMESTAMP         
+</span><span style="color:#e06c75;">-----------</span><span> --------------------------
+</span><span style="color:#e06c75;">CPC7301</span><span>     2018-05-29-10.50.07.842411
+</span><span>
+</span><span>  </span><span style="color:#e06c75;">1</span><span> RECORD(S) </span><span style="color:#e06c75;">SELECTED.
+</span><span>
+</span></code></pre>
+<p>Since you can't escape inside a single-quoted string, we had to switch to using double quotes around the SQL statement and then had to escape those, since they're inside a double quoted string already. This is starting to get messy. Now what if we need to use delimited names?</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">-bash-4.3$</span><span> qsh</span><span style="font-style:italic;color:#e06c75;"> -c </span><span style="color:#98c379;">&quot;db2 </span><span style="color:#56b6c2;">\&quot;</span><span style="color:#98c379;">select message_id, message_timestamp from table(</span><span style="color:#56b6c2;">\\\&quot;</span><span style="color:#98c379;">QSYS2</span><span style="color:#56b6c2;">\\\&quot;</span><span style="color:#98c379;">.</span><span style="color:#56b6c2;">\\\&quot;</span><span style="color:#98c379;">JOBLOG_INFO</span><span style="color:#56b6c2;">\\\&quot;</span><span style="color:#98c379;">(&#39;*&#39;)) x</span><span style="color:#56b6c2;">\&quot;</span><span style="color:#98c379;">&quot;
+</span><span>
+</span><span style="color:#e06c75;">MESSAGE_ID</span><span>  MESSAGE_TIMESTAMP         
+</span><span style="color:#e06c75;">-----------</span><span> --------------------------
+</span><span style="color:#e06c75;">CPC7301</span><span>     2018-05-29-10.52.08.632485
+</span><span>
+</span><span>  </span><span style="color:#e06c75;">1</span><span> RECORD(S) </span><span style="color:#e06c75;">SELECTED.
+</span></code></pre>
+<p>Ugh! Now we had to double-escape the quoted strings! That's nearly vomit inducing!</p>
+<h2 id="symlink-trickery">Symlink Trickery</h2>
+<p>One thing you may not have realized is that the PASE <code>qsh</code> utility has a few tricks up its sleeve. Try this:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">-bash-4.3$</span><span> ln</span><span style="font-style:italic;color:#e06c75;"> -s</span><span> /QOpenSys/usr/bin/qsh /QOpenSys/usr/bin/db2
+</span><span style="color:#e06c75;">-bash-4.3$</span><span> db2 </span><span style="color:#98c379;">&quot;select message_id, message_timestamp from table(</span><span style="color:#56b6c2;">\&quot;</span><span style="color:#98c379;">QSYS2</span><span style="color:#56b6c2;">\&quot;</span><span style="color:#98c379;">.</span><span style="color:#56b6c2;">\&quot;</span><span style="color:#98c379;">JOBLOG_INFO</span><span style="color:#56b6c2;">\&quot;</span><span style="color:#98c379;">(&#39;*&#39;)) x&quot;
+</span><span>
+</span><span style="color:#e06c75;">MESSAGE_ID</span><span>  MESSAGE_TIMESTAMP         
+</span><span style="color:#e06c75;">-----------</span><span> --------------------------
+</span><span style="color:#e06c75;">CPD000D</span><span>     2018-05-29-10.54.07.331486
+</span><span style="color:#e06c75;">CPC7301</span><span>     2018-05-29-10.54.07.335762
+</span><span>
+</span><span>  </span><span style="color:#e06c75;">2</span><span> RECORD(S) </span><span style="color:#e06c75;">SELECTED.
+</span><span>
+</span></code></pre>
+<p>Now you can call db2 &quot;directly&quot; and everything just works! No messing with <code>qsh -c</code> and less escaping. But how does it work?</p>
+<h2 id="diving-under-the-hood">Diving Under the Hood</h2>
+<p>The <code>qsh</code> PASE command is actually a shell script and it has special code to check what the first argument was. The first argument, being stored at index 0 is the name and path of the program which was run (in shell scripts, this is the <code>$0</code> variable). By creating a symlink to the same shell script called <code>db2</code>, when it gets called it will think it's the <code>db2</code> program instead of <code>qsh</code>. Thus, instead of calling <code>/usr/bin/qsh</code>, the script will call <code>/usr/bin/db2</code> instead! You can do this with any IBM i program you want, so long as there's a symlink in <code>/usr/bin</code> (just be aware that for RPG and CL programs, the parameters need to be padded out).</p>
+<p>One thing to note is that when you call programs this way instead of using <code>qsh -c</code>, they will run in a multi-threaded job, which may give you issues. If that is a problem, you can always make a copy of the <code>qsh</code> script and remove the <code>-i</code> argument to <code>system</code> on the last line of the script, then symlink to your <code>qsh</code> copy instead. This will cause <code>system</code> to execute in a new job, just as <code>qsh -c</code> would have.</p>
+<h2 id="use-it-or-lose-it">Use it or Lose it</h2>
+<p>Just remember that the program name is an argument just like any other and you can take advantage of it in your own programs! In shell scripts you can use the special variable <code>$0</code>; in Python use <code>sys.argv[0]</code>; and in C/C++ it's in <code>argv[0]</code> (in PASE this gives you <code>/path/to/program</code>, while in ILE it gives you <code>LIBRARY/PROGRAM</code>).</p>
+<p>Are there any situations you can think of where this would be useful?</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2018-01-08-fetching-python-database-cursors-by-column-name/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Fetching Python Database Cursors by Column Name</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2018-09-20-using-python-ibm-db-with-un-journaled-files/">
+                            <span class="button__text">Using Python ibm_db with Un-journaled Tables</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

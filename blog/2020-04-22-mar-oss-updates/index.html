@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates Mar 2020</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2020-04-22-mar-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2020-04-22-mar-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2020-04-22-mar-oss-updates/">IBM i Open Source Updates Mar 2020</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-04-22
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Alright folks, strap in because March was a busy month!</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="tmux">tmux</h3>
+<p><a href="https://github.com/tmux/tmux/wiki">tmux</a> is a Terminal MUltipleXer. It allows you to create multiple sessions that are persistent - you can disconnect (or become disconnected, eg. wifi drops off) and then reconnect and everything will be as it was before. Within sessions you can have multiple windows which you can switch between and you can also have multiple panes within windows, showing multiple things on the screen at once.</p>
+<p>Here's an example of a <code>tmux</code> session running that has 2 windows (window1 and window2, with window1 being visible) and 3 panes in window1:</p>
+
+  
+  
+    
+    
+  
+  <img src="https://kadler.io/images/tmux.png" class="center" decoding="async" loading="lazy"/>
+
+<p>If you want to get started with <code>tmux</code>, here's some references:</p>
+<ul>
+<li><a href="https://github.com/tmux/tmux/wiki/Getting-Started">https://github.com/tmux/tmux/wiki/Getting-Started</a></li>
+<li><a href="https://linuxize.com/post/getting-started-with-tmux/">https://linuxize.com/post/getting-started-with-tmux/</a></li>
+<li><a href="https://tmuxcheatsheet.com/">https://tmuxcheatsheet.com/</a></li>
+</ul>
+<p>I want to thank Calvin Buckley for figuring out how to make this work on IBM i.</p>
+<h3 id="python3-paramiko">python3-paramiko</h3>
+<p><a href="http://paramiko.org/">Paramiko</a> makes it easy to use SSH, SCP, and SFTP from within Python. Why is that important? Two reasons:</p>
+<p><strong>1. Easy remote access to XMLSERVICE</strong></p>
+<p>Traditionally for remote XMLSERVICE access, the options were basically the XMLSERVICE FastCGI plugin to Apache or over ODBC, but both have issues:</p>
+<ul>
+<li>FastCGI requires creating an Apache instance (or glomming on to an existing one); adding security through authentication and SSL must be configured manually</li>
+<li>ODBC requires installing the ODBC driver on all your systems as well as configuring DSNs</li>
+<li>For IBM i Cloud instances both may require port-forwarding and other setup </li>
+</ul>
+<p>By-far the easiest way now to make remote XMLSERVICE calls (especially to IBM i instances in IBM Cloud) is through SSH and <code>xmlservice-cli</code> (part of <code>itoolkit-utils</code>). <a href="https://python-itoolkit.readthedocs.io/en/latest/api.html#ssh-transport">python-itoolkit</a> has supported this since v1.6 and requires Paramiko. The upcoming node-itoolkit v1.0 will also support SSH.</p>
+<p><strong>2. Programatic access to remote SSH resources</strong></p>
+<p>Many users use SSH/SFTP as part of their business procedures: pushing or pulling data to/from business partners, etc. Many times due to external requirements, users cannot use key-based authentication and must use passwords. It is difficult to automate SSH and SFTP using passwords so many users resort to things like <a href="/2020/04/15/feb-oss-updates.html#expect">expect</a> or other tools. Paramiko allows you to control exactly how you want to connect and supports password authentication. You control how and where you get the password from: hard code it, read it from an <a href="https://docs.python.org/3/library/os.html#os.environ">environment variable</a>, read it from a database entry, whatever — since it's all Python, you can do whatever Python allows you to do.</p>
+<p>Here's an example connecting to a system and running some commands through SSH as well as using SFTP:</p>
+<pre data-lang="python" style="background-color:#282c34;color:#abb2bf;" class="language-python "><code class="language-python" data-lang="python"><span>hostname </span><span style="color:#56b6c2;">= </span><span style="color:#98c379;">&#39;ibmi.example.com&#39;
+</span><span>username </span><span style="color:#56b6c2;">= </span><span style="color:#98c379;">&#39;myuser&#39;
+</span><span>password </span><span style="color:#56b6c2;">= </span><span style="color:#98c379;">&#39;mypassword&#39;
+</span><span style="color:#c678dd;">with </span><span>paramiko.</span><span style="color:#e06c75;">SSHClient</span><span>() </span><span style="color:#c678dd;">as </span><span>ssh:
+</span><span>    ssh.</span><span style="color:#e06c75;">set_missing_host_key_policy</span><span>(paramiko.</span><span style="color:#e06c75;">AutoAddPolicy</span><span>())
+</span><span>    ssh.</span><span style="color:#e06c75;">connect</span><span>(hostname, </span><span style="font-style:italic;color:#e06c75;">username</span><span style="color:#56b6c2;">=</span><span>username,
+</span><span>                </span><span style="font-style:italic;color:#e06c75;">password</span><span style="color:#56b6c2;">=</span><span>password)
+</span><span>    
+</span><span>    cmd </span><span style="color:#56b6c2;">= </span><span style="color:#98c379;">&#39;system &quot;DLTF MYLIB/MYFILE&quot;&#39;
+</span><span>    stdin, stdout, stderr </span><span style="color:#56b6c2;">= </span><span>ssh.</span><span style="color:#e06c75;">exec_command</span><span>(cmd)
+</span><span>    messages </span><span style="color:#56b6c2;">= </span><span>stdout.</span><span style="color:#e06c75;">readlines</span><span>() </span><span style="color:#56b6c2;">+ </span><span>stderr.</span><span style="color:#e06c75;">readlines</span><span>()
+</span><span>    
+</span><span>    ok </span><span style="color:#56b6c2;">= </span><span style="color:#d19a66;">False
+</span><span>    </span><span style="color:#c678dd;">for </span><span>line </span><span style="color:#c678dd;">in </span><span>messages:
+</span><span>        </span><span style="color:#c678dd;">if </span><span>line.</span><span style="color:#e06c75;">startswith</span><span>(</span><span style="color:#98c379;">&quot;CPC2191&quot;</span><span>):
+</span><span>            ok </span><span style="color:#56b6c2;">= </span><span style="color:#d19a66;">True
+</span><span>            </span><span style="color:#c678dd;">break
+</span><span>    
+</span><span>    ftp </span><span style="color:#56b6c2;">= </span><span>ssh.</span><span style="color:#e06c75;">open_sftp</span><span>()
+</span><span>
+</span><span>    </span><span style="color:#7f848e;"># Get or put a local file directly
+</span><span>    ftp.</span><span style="color:#e06c75;">put</span><span>(</span><span style="color:#98c379;">&quot;&quot;&quot;C:</span><span style="color:#56b6c2;">\\</span><span style="color:#98c379;">myfile.txt&quot;&quot;&quot;</span><span>, </span><span style="color:#98c379;">&quot;/home/kadler/myfile.txt&quot;</span><span>)
+</span><span>    ftp.</span><span style="color:#e06c75;">get</span><span>(</span><span style="color:#98c379;">&quot;/home/kadler/myfile.txt&quot;</span><span>,
+</span><span>            </span><span style="color:#98c379;">&quot;/Users/kadler/myfile.txt&quot;</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#7f848e;"># Write a file programatically
+</span><span>    </span><span style="color:#c678dd;">with </span><span>ftp.</span><span style="color:#e06c75;">file</span><span>(</span><span style="color:#98c379;">&quot;/home/kadler/test-sftp&quot;</span><span>, </span><span style="color:#98c379;">&quot;w&quot;</span><span>) </span><span style="color:#c678dd;">as </span><span>file:
+</span><span>        file.</span><span style="color:#e06c75;">write</span><span>(</span><span style="color:#98c379;">&quot;Hello from Paramiko!</span><span style="color:#56b6c2;">\n</span><span style="color:#98c379;">&quot;</span><span>)
+</span></code></pre>
+<h3 id="chsh">chsh</h3>
+<p>We've had numerous ways to set your login shell over the years. In fact, Jesse Gorzinski went over a few in his &quot;Be Like a Turtle!&quot; <a href="https://ibmsystemsmag.com/Power-Systems/8/2017/be-like-a-turtle">blog entry</a>, but none are as easy to use as the new <code>chsh</code>:</p>
+<pre data-lang="sh" style="background-color:#282c34;color:#abb2bf;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#e06c75;">yum</span><span> install chsh
+</span><span>
+</span><span style="color:#e06c75;">chsh</span><span style="font-style:italic;color:#e06c75;"> -s</span><span> /QOpenSys/pkgs/bin/bash
+</span></code></pre>
+<p>No SQL to look up or execute, just a simple command to change your shell (or any user's shell that you have <code>*USE</code> authority to).</p>
+<h3 id="pigz">pigz</h3>
+<p><a href="https://zlib.net/pigz/">pigz</a> is a parallelized version of <a href="http://gzip.org/">gzip</a>. If can take advantage of multiple CPU cores to speed up compression over standard <code>gzip</code>.</p>
+<p>This fulfills RFE <a href="http://www.ibm.com/developerworks/rfe/execute?use_case=viewRfe&amp;CR_ID=123949">123949</a>.</p>
+<h3 id="libuv">libuv</h3>
+<p><a href="https://github.com/libuv/libuv">libuv</a> is the asynchronous event and I/O library that underpins Node.js. Each Node.js release we've shipped going back to Node v0.x has included <code>libuv</code>. However, it was not made available as a separate library for other packages to use. We've found many other open source packages have wanted to make use of this library for their own needs, so we're now shipping a standalone version.</p>
+<h3 id="help2man">help2man</h3>
+<p><a href="https://www.gnu.org/software/help2man/">help2man</a> is a package which generates <a href="https://en.wikipedia.org/wiki/Man_page">&quot;man pages&quot;</a> from command help text (ie. <code>foo --help</code>). It is used by 3 packages we ship: <code>flex</code>, <code>libtool</code>, and <code>rpmdevtools</code>. Without this package being available anyone wishing to build these packages from the source rpm would be unable to do so.</p>
+<h3 id="libevent">libevent</h3>
+<p>Like <code>libuv</code>, <a href="https://libevent.org/">libevent</a> is an asynchronous event library. This package seems to have rather unstable compatibility support and regularly changes its ABI. We recommend users use <code>libuv</code> instead, since it has a strong compatibility guarantee and is supported by our team upstream (soon to be included in the CI!). While we would rather packages use <code>libuv</code> over <code>libevent</code>, we make it available for those packages that require it, such as <code>tmux</code>.</p>
+<h2 id="package-updates">Package Updates</h2>
+<ul>
+<li>python3 was updated to <a href="https://docs.python.org/3.6/whatsnew/changelog.html#python-3-6-10-final">3.6.10</a></li>
+<li>cmake was updated to <a href="https://cmake.org/cmake/help/v3.16/release/3.16.html">3.16</a></li>
+<li>libutil was updated to <a href="https://github.com/IBM/portlibfori/releases/tag/0.7.0">0.7.0</a></li>
+<li>libarchive was updated to <a href="https://github.com/libarchive/libarchive/wiki/ReleaseNotes#libarchive-333">3.3.3</a> and now supports zstd compression.</li>
+<li>activemq was updated to <a href="https://activemq.apache.org/activemq-51512-release">5.15.12</a></li>
+</ul>
+<h2 id="package-fixes">Package Fixes</h2>
+<h3 id="less">less</h3>
+<p><code>less</code> is now linked with ncurses instead of the PASE curses library. This means that it has access to the ncurses terminfo database. The terminfo database supplied by PASE (files under <code>/QOpenSys/usr/share/lib/terminfo/</code>) only supported two terminals: <code>xterm</code> and <code>aixterm</code>. If there was no terminal definition found for your terminal (identified by <code>$TERM</code>), <code>less</code> would give the following warning and not work correctly:</p>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>-bash-4.4$ less test
+</span><span>WARNING: terminal is not fully functional
+</span><span>test  (press RETURN)
+</span></code></pre>
+<p>Newer versions of Linux terminal emulators, Terminal.app in macOS, and WSL on Windows now use <code>xterm-256color</code> instead of <code>xterm</code> to indicate they support more than the original 16 ANSI colors. Additionally, <code>tmux</code> uses <code>screen</code> for compatibility with GNU screen. However, neither <code>screen</code> nor <code>xterm-256-color</code> are terminals that are supported by PASE out of the box, so packages using the PASE curses library will not be able to properly function under these terminals. Linking to ncurses fixes this problem and gives those packages additional features to boot!</p>
+<h3 id="cmake">cmake</h3>
+<p>In addition to the version bump, <code>cmake</code> has been enhanced to set the proper <code>CMAKE_SYSTEM_PREFIX_PATH</code> for our IBM i Open Source environment. This means it will now by default search /QOpenSys/pkgs/lib for libraries and /QOpenSys/pkgs/include for header files. In addition, the <code>ccmake</code> binary is built with <code>ncurses</code>.</p>
+<h3 id="tar">tar</h3>
+<p>A few bugs were fixed in GNU tar that snuck in when we rebuilt for IBM i 7.2:</p>
+<ul>
+<li>Using <code>--newer</code> or <code>--after-date</code> would produce an error like so:</li>
+</ul>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>$ tar -cf test.tar --newer test mydir
+</span><span>tar: test: Cannot stat: A system call received a parameter that is not valid.
+</span><span>tar: Date sample file not found
+</span><span>Try &#39;tar --help&#39; or &#39;tar --usage&#39; for more information.
+</span></code></pre>
+<ul>
+<li>Using <code>-C</code> would produce an error like so:</li>
+</ul>
+<pre style="background-color:#282c34;color:#abb2bf;"><code><span>-bash-4.4$ tar -C /home/kadler -c -f test.tar /home/kadler/test
+</span><span>tar: /home/kadler: Cannot open: Invalid argument
+</span><span>tar: Error is not recoverable: exiting now
+</span></code></pre>
+<p>Both of these issues are now fixed with the latest version of tar-gnu.</p>
+<h2 id="closing">Closing</h2>
+<p>Aaaaaaannnnnnnnndddddd we're all caught up!</p>
+<p>Of course, next week is still April, so I wouldn't have the April update then, so instead I'll cover all the non-RPM stuff my team's been up to.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-04-15-feb-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates Feb 2020</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2020-05-20-apr-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates Apr 2020</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

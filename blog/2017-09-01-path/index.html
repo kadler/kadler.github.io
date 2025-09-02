@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>PATH vs LIBPATH</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="The what's and why's of PATH and LIBPATH">
+
+    <meta property="og:description" content="The what's and why's of PATH and LIBPATH">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2017-09-01-path/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="The what's and why's of PATH and LIBPATH">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2017-09-01-path/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2017-09-01-path/">PATH vs LIBPATH</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2017-09-01
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/libpath/">#libpath</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/pase/">#pase</a></span>
+    
+
+        <div class="post-content">
+            <p>I see this kind of tip suggested a lot when dealing with PASE issues:</p>
+<pre data-lang="sh" style="background-color:#282c34;color:#abb2bf;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#c678dd;">export </span><span style="color:#e06c75;">PATH</span><span style="color:#56b6c2;">=</span><span style="color:#98c379;">/my/path/bin:/other/path/bin:$</span><span style="color:#e06c75;">PATH
+</span><span style="color:#c678dd;">export </span><span style="color:#e06c75;">LIBPATH</span><span style="color:#56b6c2;">=</span><span style="color:#98c379;">/my/path/bin:/other/path/bin:$</span><span style="color:#e06c75;">LIBPATH
+</span></code></pre>
+<p><img src="http://e.lvme.me/v8ccqht.jpg" alt="That's not how this works! That's not how any of this works!" /></p>
+<p>This misguided suggestion bugs me to no end, so today I'm here to educate and clear up confusion over <code>LIBPATH</code>.</p>
+<span id="continue-reading"></span><h2 id="we-re-on-the-road-path-to-nowhere">We're on the <del>Road</del> PATH to Nowhere</h2>
+<p>Let's start by looking at the <code>PATH</code>. What is <code>PATH</code>?</p>
+<p><code>PATH</code> is an environment variable that is used by applications when they want to execute a program using an unqalified path to that application. For instance, you type in <code>ls</code> in your shell and hit enter. Because <code>ls</code> is not a qualified path, your shell<sup id="a1"><a href="https://kadler.io/blog/2017-09-01-path/#f1">1</a></sup> has to qualify the path to <code>ls</code> and it does so using the colon-separated list of directories given on the <code>PATH</code>. You can think of <code>PATH</code> as equivalent to the library list used by MI programs.</p>
+<p>So lets say your <code>PATH</code> looks like this:</p>
+<pre data-lang="sh" style="background-color:#282c34;color:#abb2bf;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#e06c75;">/QOpenSys/usr/bin:/usr/ccs/bin:/QOpenSys/usr/bin/X11:/usr/sbin:/usr/bin
+</span></code></pre>
+<p>When you execute <code>ls</code>, each of these dirctories will be searched in the order specified for an executable file named <code>ls</code>:</p>
+<ul>
+<li><code>/QOpenSys/usr/bin</code></li>
+<li><code>/usr/ccs/bin</code></li>
+<li><code>/QOpenSys/usr/bin/X11</code></li>
+<li><code>/usr/sbin</code></li>
+<li><code>/usr/bin</code></li>
+</ul>
+<p>Once it find a file at one of those paths, it will try to execute it. We can easily see where a program is found using the <code>which</code> command:</p>
+<pre data-lang="sh" style="background-color:#282c34;color:#abb2bf;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#e06c75;">$</span><span> which ls
+</span><span style="color:#e06c75;">/QOpenSys/usr/bin/ls
+</span></code></pre>
+<p>This means that when you type <code>ls</code>at the command prompt, <code>/QOpenSys/usr/bin/ls</code> will be executed.</p>
+<p>This colon-separated list of directories is a very powerful and useful tool and thus has been <del>stolen</del> appropriated by other utilities for their own use:</p>
+<ul>
+<li><code>PYTHONPATH</code> - list of directories to find Python modules</li>
+<li><code>GEM_PATH</code> - list of directories to find Ruby Gems</li>
+<li><code>CLASSPATH</code> - list of directories to find Java class files</li>
+<li><code>LIBPATH</code> - list of directories to find PASE/AIX shared libraries</li>
+<li>...</li>
+</ul>
+<h2 id="path-classpath-libpath">PATH != CLASSPATH != LIBPATH != ...</h2>
+<p>The thing to remember is that although these <code>PATH</code>-like variables look and act the same, their use is different. You would not normally expect Java <code>.class</code> files to exist in the same directory as Python <code>.py</code> files or Ruby <code>.rb</code> files or PASE binaries. This brings us back to <code>LIBPATH</code>: PASE shared libraries (<code>.a</code> and <code>.so</code> files) are normally stored in paths that end in <code>lib/</code> or <code>lib64/</code>, not <code>bin/</code> --- <code>bin/</code> is where your programs live.</p>
+<p>You should never set your <code>LIBPATH</code> and <code>PATH</code> to the same thing or add the same paths to both, unless you're doing something really odd, in which case I'd suggest you <em>not</em> do that and do something sensible instead. 😉</p>
+<p>In the next entries, I'll talk about how AIX/PASE loading works, how <code>LIBAPTH</code> works, and why you should rarely need to set the <code>LIBPATH</code> at all anyway.</p>
+<p><b id="f1">1</b> Really, the hard works is probably done by <a href="https://www.ibm.com/support/knowledgecenter/en/ssw_aix_71/com.ibm.aix.basetrf1/exec.htm">execvp</a> <a href="https://kadler.io/blog/2017-09-01-path/#a1">↩</a></p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2016-12-23-first-post/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">First Post</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2017-09-08-libpath/">
+                            <span class="button__text">LIBPATH... How Does It Work?</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

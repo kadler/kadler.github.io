@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Korinne&#x27;s Ramblings</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="Ramblings of an Open Source chick working on IBM i.">
+
+    <meta property="og:description" content="Ramblings of an Open Source chick working on IBM i.">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kadler.io/ebcdic/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="Ramblings of an Open Source chick working on IBM i.">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/ebcdic/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li class="active"><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        <h1 class="post-title">EBCDIC Code Pages</h1>
+
+        <ul>
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-037/">IBM-037</a>
+                
+                - SBCS for US, Canada, Netherlands, Portugal, Brazil, New Zealand, Australia
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-256/">IBM-256</a>
+                
+                - SBCS for Netherlands
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-273/">IBM-273</a>
+                
+                - SBCS for Austria, Germany
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-277/">IBM-277</a>
+                
+                - SBCS for Denmark, Norway
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-278/">IBM-278</a>
+                
+                - SBCS for Finland, Sweden
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-280/">IBM-280</a>
+                
+                - SBCS for Italy
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-284/">IBM-284</a>
+                
+                - SBCS for Spanish, Latin America
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-285/">IBM-285</a>
+                
+                - SBCS for United Kingdom
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-290/">IBM-290</a>
+                
+                - SBCS for Japan Katakana
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-297/">IBM-297</a>
+                
+                - SBCS for France
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-420/">IBM-420</a>
+                
+                - SBCS for Arabic-speaking countries
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-423/">IBM-423</a>
+                
+                - SBCS for Greece
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-424/">IBM-424</a>
+                
+                - SBCS for Hebrew
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-425/">IBM-425</a>
+                
+                - SBCS for Arabic-speaking countries
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-500/">IBM-500</a>
+                
+                - SBCS for Belgium, Canada, Switzerland, International Latin-1
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-833/">IBM-833</a>
+                
+                - SBCS for Korea (extended range)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-836/">IBM-836</a>
+                
+                - SBCS for Simplified Chinese (extended range)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-838/">IBM-838</a>
+                
+                - SBCS for Thailand (extended range)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-870/">IBM-870</a>
+                
+                - SBCS for Latin-2 Multilingual
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-871/">IBM-871</a>
+                
+                - SBCS for Iceland
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-875/">IBM-875</a>
+                
+                - SBCS for Greece
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-880/">IBM-880</a>
+                
+                - SBCS for Cyrillic Multilingual
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-905/">IBM-905</a>
+                
+                - SBCS for Turkey Latin-3
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-918/">IBM-918</a>
+                
+                - SBCS for Urdu
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-924/">IBM-924</a>
+                
+                - SBCS for Latin-9
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1025/">IBM-1025</a>
+                
+                - SBCS for Cyrillic Multilingual
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1026/">IBM-1026</a>
+                
+                - SBCS for Turkey Latin-5 (CECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1027/">IBM-1027</a>
+                
+                - SBCS for Japan English (extended range)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1047/">IBM-1047</a>
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1097/">IBM-1097</a>
+                
+                - SBCS for Farsi
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1112/">IBM-1112</a>
+                
+                - SBCS for Baltic, Multilingual
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1122/">IBM-1122</a>
+                
+                - SBCS for Estonia
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1123/">IBM-1123</a>
+                
+                - SBCS for Cyrillic Ukraine
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1130/">IBM-1130</a>
+                
+                - SBCS for Vietnamese
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1132/">IBM-1132</a>
+                
+                - SBCS for Lao
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1137/">IBM-1137</a>
+                
+                - SBCS for Devanagari
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1140/">IBM-1140</a>
+                
+                - SBCS for USA, Canada, Netherlands, Portugal, Brazil, Australia, New Zealand (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1141/">IBM-1141</a>
+                
+                - SBCS for Austria, Germany (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1142/">IBM-1142</a>
+                
+                - SBCS for Denmark, Norway (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1143/">IBM-1143</a>
+                
+                - SBCS for Finland, Sweden (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1144/">IBM-1144</a>
+                
+                - SBCS for Italy (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1145/">IBM-1145</a>
+                
+                - SBCS for Spain, Latin America (Spanish) (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1146/">IBM-1146</a>
+                
+                - SBCS for United Kingdom (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1147/">IBM-1147</a>
+                
+                - SBCS for France (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1148/">IBM-1148</a>
+                
+                - SBCS for International 1 (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1149/">IBM-1149</a>
+                
+                - SBCS for Iceland (ECECP)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1153/">IBM-1153</a>
+                
+                - SBCS for Latin-2; Multilingual with euro
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1154/">IBM-1154</a>
+                
+                - SBCS for Cyrillic Multilingual with euro
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1155/">IBM-1155</a>
+                
+                - SBCS for Turkey Latin-5 with euro
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1156/">IBM-1156</a>
+                
+                - SBCS for Baltic, Multilingual with euro
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1157/">IBM-1157</a>
+                
+                - SBCS for Estonia with euro
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1158/">IBM-1158</a>
+                
+                - SBCS for Cyrillic Ukraine with euro
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1160/">IBM-1160</a>
+                
+                - SBCS for Thai with euro
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1164/">IBM-1164</a>
+                
+                - SBCS for Vietnamese with euro
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1166/">IBM-1166</a>
+                
+                - SBCS for Cyrillic multilingual with Euro for Kazakhstan
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-1175/">IBM-1175</a>
+                
+                - SBCS for Turkey with Euro and Turkish Lira
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-4971/">IBM-4971</a>
+                
+                - SBCS for Greek (including euro)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-5123/">IBM-5123</a>
+                
+                - SBCS for Japanese Latin (includes euro)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-5233/">IBM-5233</a>
+                
+                - SBCS for Devanagari, including Indian Rupee
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-8612/">IBM-8612</a>
+                
+                - Arabic (base shapes only)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-9030/">IBM-9030</a>
+                
+                - SBCS for Thai (Extended)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-12708/">IBM-12708</a>
+                
+                - SBCS for Arabic (base shapes, Lamaleph ligatures and Hindi digits) (string type 7)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-13121/">IBM-13121</a>
+                
+                - SBCS for Korean (Extended)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-13124/">IBM-13124</a>
+                
+                - SBCS for Simplified Chinese (GBK, growing CS)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-28709/">IBM-28709</a>
+                
+                - SBCS for Traditional Chinese (extended range)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-57777/">IBM-57777</a>
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-61175/">IBM-61175</a>
+                
+                - SBCS for Turkey with Euro and Turkish Lira and quotation mark at invariant character positions (IBM i-specific)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-62211/">IBM-62211</a>
+                
+                - SBCS for Hebrew, string type 5 (IBM i-specific)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-62224/">IBM-62224</a>
+                
+                - SBCS for Arabic, string type 6 (IBM i-specific)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-62235/">IBM-62235</a>
+                
+                - SBCS for Hebrew, string type 6 (IBM i-specific)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-62245/">IBM-62245</a>
+                
+                - SBCS for Hebrew, string type 10 (IBM i-specific)
+                
+            </li>
+            
+            <li class="tag-list">
+                <a href="https://kadler.io/ebcdic/ibm-62251/">IBM-62251</a>
+                
+            </li>
+            </ul>
+        <div>
+            <h2 class="post-title">Terms</h2>
+            <ul>
+                <li>EBCDIC - Extended Binary Codeded Decimal Interchange Code</li>
+                <li>CCSID - Coded Character Set Identifier</li>
+                <li>CS - Character Set</li>
+                <li>CP - Code Page</li>
+                <li>SBCS - Single Byte Character Set</li>
+                <li>DBCS - Double Byte Character Set</li>
+                <li>MBCS - Mixed Byte Character Set (SBCS + DBCS via SI/SO)</li>
+                <li>SO - Shift Out. In MBCS EBCDIC, switches encoding from SBCS to DBCS</li>
+                <li>SI - Shift In. In MBCS EBCDIC, switches encoding from DBCS to SBCS</li>
+                <li>CECP - Country Extended Code Page</li>
+                <li>ECECP - Euro Country Extended Code Page</li>
+            </ul>
+        </div>
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

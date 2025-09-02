@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates August &amp; September 2020</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2020-10-28-aug-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2020-10-28-aug-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2020-10-28-aug-oss-updates/">IBM i Open Source Updates August &amp; September 2020</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-10-28
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>While August had some big hitters, September was very quiet so I decided to only
+do one update.</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="ghostscript">Ghostscript</h3>
+<p><a href="https://www.ghostscript.com/">Ghostscript</a> is a PostScript and PDF interpreter.
+It is primarily used to generate PDFs from various input formats. Note that
+Ghostscript is licensed under the <a href="https://www.gnu.org/licenses/agpl-3.0.html">Affero GNU Public
+Licence</a> (AGPL). This license
+requires releasing any source code which integrates with Ghostscript even when
+used in a Software as a Service model. <a href="https://medium.com/swlh/understanding-the-agpl-the-most-misunderstood-license-86fd1fe91275">This</a> article has
+a more thorough walkthrough of the implications.</p>
+<p>This fulfills RFE <a href="http://www.ibm.com/developerworks/rfe/execute?use_case=viewRfe&amp;CR_ID=131308">131308</a>.</p>
+<h3 id="gnu-texinfo">GNU Texinfo</h3>
+<p><a href="https://www.gnu.org/software/texinfo/">GNU Texinfo</a> is the official
+documentation format of the GNU project. It's similar to man pages, but are
+built to be a more comprehensive documentation.</p>
+<p>For instance, <code>man bash</code> will tell you the command line options that <code>bash</code>
+takes along with some information on how those options affect the behavior and
+some info on BASH syntax and things while running <code>info bash</code> will provide
+background on what a shell is, some history on BASH, how to write functions and
+pipelines and other things.</p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="python-bugfix-for-ibm-i-7-4">Python bugfix for IBM i 7.4</h3>
+<p>Building C++ Python extensions on IBM i 7.4 (eg. matplotlib) would fail with
+linker errors like <code>A symbol name may only be followed by an export attribute or an address. The line is being ignored.</code> as seen in <a href="https://bitbucket.org/ibmi/opensource/issues/129/yet-another-unable-to-install-matplotlib">this issue</a>. This has been fixed.</p>
+<h3 id="libsodium-sigill-fix">libsodium SIGILL fix</h3>
+<p>Certain libsodium functions were calling <code>mlock</code> and <code>madvise</code> which are not
+supported by PASE and trigger SIGILL. These functions have been disabled from
+the builds.</p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>nodejs14 was updated to <a href="https://nodejs.org/en/blog/release/v14.11.0/">14.11.0</a></li>
+<li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.18.4/">12.18.4</a></li>
+<li>nodejs10 was updated to <a href="https://nodejs.org/en/blog/release/v10.22.0/">10.22</a> and <a href="https://nodejs.org/en/blog/release/v10.22.1/">10.22.1</a></li>
+<li>sqlite3 was updated to <a href="https://sqlite.org/changes.html#version_3_32_3">3.23.3</a> for <a href="https://www.sqlite.org/draft/lang_UPSERT.html">UPSERT</a> support</li>
+<li>python3 was updated to <a href="https://www.python.org/downloads/release/python-3611/">3.6.11</a></li>
+<li>readline was updated to <a href="https://tiswww.cwru.edu/php/chet/readline/CHANGES">8.0</a></li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>I know a lot of people have been looking forward to Ghostscript for a long time.
+What do you think? Looking forward to anything else?</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-10-23-jul-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates July 2020</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2020-12-02-nov-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates October &amp; November 2020</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

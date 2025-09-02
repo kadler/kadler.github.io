@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Korinne&#x27;s Ramblings</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="Ramblings of an Open Source chick working on IBM i.">
+
+    <meta property="og:description" content="Ramblings of an Open Source chick working on IBM i.">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kadler.io/blog/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="Ramblings of an Open Source chick working on IBM i.">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+        <div class="posts">
+                <div class="post on-list">
+                    
+    <h1 class="post-title"><a href="https://kadler.io/blog/2017-09-08-libpath/">LIBPATH... How Does It Work?</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2017-09-08
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/libpath/">#libpath</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/pase/">#pase</a></span>
+    
+
+
+                    
+        <div class="post-content">
+            <p>So in the last entry, I described the differences between <code>PATH</code> and <code>LIBPATH</code>, but I didn't really explain how <code>LIBPATH</code> is actually used. I'm going to rectify that in this entry. First, though, we need to take a detour and learn how programs get loaded.</p>
+
+        </div>
+        <div>
+            <!-- &#xFE0E; -- force text style - some devices render this as emoji -->
+            <a class="read-more button" href="https://kadler.io/blog/2017-09-08-libpath/">
+                <span class="button__text">Read more</span>&nbsp;
+                <span class="button__icon">&#8617;&#xFE0E;</span>
+            </a>
+        </div>
+    
+
+                </div>
+            
+                <div class="post on-list">
+                    
+    <h1 class="post-title"><a href="https://kadler.io/blog/2017-09-01-path/">PATH vs LIBPATH</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2017-09-01
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/libpath/">#libpath</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/pase/">#pase</a></span>
+    
+
+
+                    
+        <div class="post-content">
+            <p>I see this kind of tip suggested a lot when dealing with PASE issues:</p>
+<pre data-lang="sh" style="background-color:#282c34;color:#abb2bf;" class="language-sh "><code class="language-sh" data-lang="sh"><span style="color:#c678dd;">export </span><span style="color:#e06c75;">PATH</span><span style="color:#56b6c2;">=</span><span style="color:#98c379;">/my/path/bin:/other/path/bin:$</span><span style="color:#e06c75;">PATH
+</span><span style="color:#c678dd;">export </span><span style="color:#e06c75;">LIBPATH</span><span style="color:#56b6c2;">=</span><span style="color:#98c379;">/my/path/bin:/other/path/bin:$</span><span style="color:#e06c75;">LIBPATH
+</span></code></pre>
+<p><img src="http://e.lvme.me/v8ccqht.jpg" alt="That's not how this works! That's not how any of this works!" /></p>
+<p>This misguided suggestion bugs me to no end, so today I'm here to educate and clear up confusion over <code>LIBPATH</code>.</p>
+
+        </div>
+        <div>
+            <!-- &#xFE0E; -- force text style - some devices render this as emoji -->
+            <a class="read-more button" href="https://kadler.io/blog/2017-09-01-path/">
+                <span class="button__text">Read more</span>&nbsp;
+                <span class="button__icon">&#8617;&#xFE0E;</span>
+            </a>
+        </div>
+    
+
+                </div>
+            
+                <div class="post on-list">
+                    
+    <h1 class="post-title"><a href="https://kadler.io/blog/2016-12-23-first-post/">First Post</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2016-12-23
+        </span>
+
+    </div>
+
+    
+
+
+                    <div class="post-content">
+            <p>First post here. More to come later. Happy X-mas to you all!</p>
+
+        </div>
+
+                </div>
+            <div class="pagination">
+                <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/page/7/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Newer posts</span>
+                        </a>
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

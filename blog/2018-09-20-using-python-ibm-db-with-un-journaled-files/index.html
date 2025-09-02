@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Using Python ibm_db with Un-journaled Tables</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2018-09-20-using-python-ibm-db-with-un-journaled-files/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2018-09-20-using-python-ibm-db-with-un-journaled-files/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2018-09-20-using-python-ibm-db-with-un-journaled-files/">Using Python ibm_db with Un-journaled Tables</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2018-09-20
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibm-db/">#ibm_db</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/python/">#python</a></span>
+    
+
+        <div class="post-content">
+            <p>When using the Python ibm_db package to interact with the Db2 for i database, you may run in to this error:</p>
+<pre data-lang="python" style="background-color:#282c34;color:#abb2bf;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#56b6c2;">&gt;&gt;&gt; </span><span>cur.</span><span style="color:#e06c75;">execute</span><span>(</span><span style="color:#98c379;">&#39;insert into qtemp.foo values(1)&#39;</span><span>)
+</span><span style="color:#e06c75;">Traceback </span><span>(most recent call last):
+</span><span>  File </span><span style="color:#98c379;">&quot;/QOpenSys/pkgs/lib/python3.6/site-packages/ibm_db_dbi.py&quot;</span><span>, line </span><span style="color:#d19a66;">1311</span><span>, </span><span style="color:#c678dd;">in </span><span>_execute_helper
+</span><span>    return_value </span><span style="color:#56b6c2;">= </span><span>ibm_db.</span><span style="color:#e06c75;">execute</span><span>(</span><span style="color:#e5c07b;">self</span><span>.stmt_handler)
+</span><span>Exception: Statement Execute Failed: </span><span style="color:#e5c07b;">FOO </span><span style="color:#c678dd;">in </span><span style="color:#e5c07b;">QTEMP </span><span style="color:#c678dd;">not </span><span>valid </span><span style="color:#c678dd;">for </span><span>operation. </span><span style="color:#e5c07b;">SQLSTATE</span><span>=55019 </span><span style="color:#e5c07b;">SQLCODE</span><span>=-7008
+</span><span>
+</span><span>During handling of the above exception, another exception occurred:
+</span><span>
+</span><span style="color:#e06c75;">Traceback </span><span>(most recent call last):
+</span><span>  File </span><span style="color:#98c379;">&quot;&lt;stdin&gt;&quot;</span><span>, line </span><span style="color:#d19a66;">1</span><span>, </span><span style="color:#c678dd;">in </span><span style="color:#56b6c2;">&lt;</span><span>module</span><span style="color:#56b6c2;">&gt;
+</span><span>  File </span><span style="color:#98c379;">&quot;/QOpenSys/pkgs/lib/python3.6/site-packages/ibm_db_dbi.py&quot;</span><span>, line </span><span style="color:#d19a66;">1396</span><span>, </span><span style="color:#c678dd;">in </span><span>execute
+</span><span>    </span><span style="color:#e5c07b;">self</span><span>.</span><span style="color:#e06c75;">_execute_helper</span><span>(parameters)
+</span><span>  File </span><span style="color:#98c379;">&quot;/QOpenSys/pkgs/lib/python3.6/site-packages/ibm_db_dbi.py&quot;</span><span>, line </span><span style="color:#d19a66;">1321</span><span>, </span><span style="color:#c678dd;">in </span><span>_execute_helper
+</span><span>    </span><span style="color:#c678dd;">raise </span><span style="color:#e5c07b;">self</span><span>.messages[</span><span style="color:#56b6c2;">-</span><span style="color:#d19a66;">1</span><span>]
+</span><span>ibm_db_dbi.ProgrammingError: ibm_db_dbi::ProgrammingError: Statement Execute Failed: </span><span style="color:#e5c07b;">FOO </span><span style="color:#c678dd;">in </span><span style="color:#e5c07b;">QTEMP </span><span style="color:#c678dd;">not </span><span>valid </span><span style="color:#c678dd;">for </span><span>operation. </span><span style="color:#e5c07b;">SQLSTATE</span><span>=55019 </span><span style="color:#e5c07b;">SQLCODE</span><span>=-7008
+</span></code></pre>
+<span id="continue-reading"></span>
+<p>The problem is that tables in un-journaled libraries cannot be modified when run under commitment control and ibm_db uses the IBM CLI default of <code>*CHG</code>.</p>
+<p>There's two ways to fix this:</p>
+<ol>
+<li>Modify your SQL to specify <code>WITH NC</code></li>
+<li>Disable commitment control in ibm_db</li>
+</ol>
+<p>Luckily, ibm_db allows the user to set arbitrary IBM CLI statement and connection attributes using the <code>set_option</code> method on the cursor or connection object. The only problem with this is you need to know what the integer values are for the attributes and their values, which means digging through IBM CLI header files or looking through the documentation.</p>
+<p>With ibm_db 2.0.5.7 and higher, <code>SQL_ATTR_TXN_ISOLATION</code> and the values associated with it are now defined by the <code>ibm_db_dbi</code> module for easy reference. The values you can use are:</p>
+<ul>
+<li><code>SQL_TXN_READ_UNCOMMITTED</code> (<code>*CHG</code> or <code>*UR</code>)</li>
+<li><code>SQL_TXN_READ_COMMITTED</code> (<code>*CS</code>)</li>
+<li><code>SQL_TXN_REPEATABLE_READ</code> (<code>*ALL</code> or <code>*RS</code>)</li>
+<li><code>SQL_TXN_SERIALIZABLE</code> (<code>*RR</code>)</li>
+<li><code>SQL_TXN_NO_COMMIT</code> (<code>*NONE</code> or <code>*NC</code>)</li>
+</ul>
+<p>Here's an example using this new functionality:</p>
+<pre data-lang="python" style="background-color:#282c34;color:#abb2bf;" class="language-python "><code class="language-python" data-lang="python"><span style="font-style:italic;color:#c678dd;">import </span><span>ibm_db_dbi </span><span style="color:#c678dd;">as </span><span>db2
+</span><span>
+</span><span>conn </span><span style="color:#56b6c2;">= </span><span>db2.</span><span style="color:#e06c75;">connect</span><span>()
+</span><span>conn.</span><span style="color:#e06c75;">set_option</span><span>({ db2.</span><span style="color:#e5c07b;">SQL_ATTR_TXN_ISOLATION</span><span>:
+</span><span>                  db2.</span><span style="color:#e5c07b;">SQL_TXN_NO_COMMIT </span><span>})
+</span><span>
+</span><span>cur </span><span style="color:#56b6c2;">= </span><span>conn.</span><span style="color:#e06c75;">cursor</span><span>()
+</span><span>cur.</span><span style="color:#e06c75;">execute</span><span>(</span><span style="color:#98c379;">&#39;create table qtemp.foo(i int)&#39;</span><span>)
+</span><span>cur.</span><span style="color:#e06c75;">execute</span><span>(</span><span style="color:#98c379;">&#39;insert into qtemp.foo values(1)&#39;</span><span>)
+</span></code></pre>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2018-05-29-calling-qsh-utilities-from-pase/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">Calling QSH utilities from PASE</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2018-09-28-using-system-naming-in-ibm-db/">
+                            <span class="button__text">Using System Naming in Python ibm_db</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

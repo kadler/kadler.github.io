@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Korinne&#x27;s Ramblings</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="SBCS for Devanagari">
+
+    <meta property="og:description" content="SBCS for Devanagari">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/ebcdic/ibm-1137/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="SBCS for Devanagari">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/ebcdic/ibm-1137/">
+
+<link rel="stylesheet" href="https://kadler.io/ebcdic-table.css">
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li class="active"><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/ebcdic/ibm-1137/">IBM-1137</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date"></span>
+
+    </div>
+
+    
+
+        
+        <div>SBCS for Devanagari</div>
+        
+        
+<div class="ebcdic-table">
+<table>
+
+
+<tr>
+    <th></th>
+    <th>0</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+    <th>7</th>
+    <th>8</th>
+    <th>9</th>
+    <th>A</th>
+    <th>B</th>
+    <th>C</th>
+    <th>D</th>
+    <th>E</th>
+    <th>F</th>
+</tr>
+
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>0x</td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>NUL</span><br><small>0000</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SOH</span><br><small>0001</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>STX</span><br><small>0002</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>ETX</span><br><small>0003</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>ST</span><br><small>009C</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>HT</span><br><small>0009</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SSA</span><br><small>0086</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>DEL</span><br><small>007F</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>EPA</span><br><small>0097</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>RI</span><br><small>008D</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SS2</span><br><small>008E</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>VT</span><br><small>000B</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>FF</span><br><small>000C</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>CR</span><br><small>000D</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SO</span><br><small>000E</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SI</span><br><small>000F</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>1x</td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>DLE</span><br><small>0010</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>DC1</span><br><small>0011</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>DC2</span><br><small>0012</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>DC3</span><br><small>0013</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>OSC</span><br><small>009D</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>NEL</span><br><small>0085</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>BS</span><br><small>0008</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>ESA</span><br><small>0087</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>CAN</span><br><small>0018</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>EM</span><br><small>0019</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>PU2</span><br><small>0092</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SS3</span><br><small>008F</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>FS</span><br><small>001C</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>GS</span><br><small>001D</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>RS</span><br><small>001E</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>US</span><br><small>001F</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>2x</td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>PAD</span><br><small>0080</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>HOP</span><br><small>0081</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>BPH</span><br><small>0082</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>NBH</span><br><small>0083</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>IND</span><br><small>0084</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>LF</span><br><small>000A</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>ETB</span><br><small>0017</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>ESC</span><br><small>001B</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>HTS</span><br><small>0088</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>HTJ</span><br><small>0089</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>VTS</span><br><small>008A</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>PLD</span><br><small>008B</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>PLU</span><br><small>008C</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>ENQ</span><br><small>0005</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>ACK</span><br><small>0006</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>BEL</span><br><small>0007</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>3x</td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>DCS</span><br><small>0090</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>PU1</span><br><small>0091</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SYN</span><br><small>0016</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>STS</span><br><small>0093</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>CCH</span><br><small>0094</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>MW</span><br><small>0095</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SPA</span><br><small>0096</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>EOT</span><br><small>0004</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SOS</span><br><small>0098</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SGCI</span><br><small>0099</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SCI</span><br><small>009A</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>CSI</span><br><small>009B</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>DC4</span><br><small>0014</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>NAK</span><br><small>0015</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>PM</span><br><small>009E</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SUB</span><br><small>001A</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>4x</td>
+<td class="ebcdic-space-separator"><span class='ebcdic-glyph'>SP</span><br><small>0020</small></td>
+<td class="ebcdic-space-separator"><span class='ebcdic-glyph'>NBSP</span><br><small>00A0</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ँ</span><br><small>0901</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ं</span><br><small>0902</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ः</span><br><small>0903</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>अ</span><br><small>0905</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>आ</span><br><small>0906</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>इ</span><br><small>0907</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ई</span><br><small>0908</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>उ</span><br><small>0909</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ऊ</span><br><small>090A</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>.</span><br><small>002E</small></td>
+<td class="ebcdic-symbol ebcdic-invariant"><span class='ebcdic-glyph'>&lt;</span><br><small>003C</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>(</span><br><small>0028</small></td>
+<td class="ebcdic-symbol ebcdic-invariant"><span class='ebcdic-glyph'>+</span><br><small>002B</small></td>
+<td class="ebcdic-symbol"><span class='ebcdic-glyph'>|</span><br><small>007C</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>5x</td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>&amp;</span><br><small>0026</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ऋ</span><br><small>090B</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ऌ</span><br><small>090C</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ऍ</span><br><small>090D</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ऎ</span><br><small>090E</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ए</span><br><small>090F</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ऐ</span><br><small>0910</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ऑ</span><br><small>0911</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ऒ</span><br><small>0912</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ओ</span><br><small>0913</small></td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>!</span><br><small>0021</small></td>
+<td class="ebcdic-symbol"><span class='ebcdic-glyph'>$</span><br><small>0024</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>*</span><br><small>002A</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>)</span><br><small>0029</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>;</span><br><small>003B</small></td>
+<td class="ebcdic-symbol"><span class='ebcdic-glyph'>^</span><br><small>005E</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>6x</td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>-</span><br><small>002D</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>/</span><br><small>002F</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>औ</span><br><small>0914</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>क</span><br><small>0915</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ख</span><br><small>0916</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ग</span><br><small>0917</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>घ</span><br><small>0918</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ङ</span><br><small>0919</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>च</span><br><small>091A</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>छ</span><br><small>091B</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ज</span><br><small>091C</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>,</span><br><small>002C</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>%</span><br><small>0025</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>_</span><br><small>005F</small></td>
+<td class="ebcdic-symbol ebcdic-invariant"><span class='ebcdic-glyph'>&gt;</span><br><small>003E</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>?</span><br><small>003F</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>7x</td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>झ</span><br><small>091D</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ञ</span><br><small>091E</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ट</span><br><small>091F</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ठ</span><br><small>0920</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ड</span><br><small>0921</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ढ</span><br><small>0922</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ण</span><br><small>0923</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>त</span><br><small>0924</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>थ</span><br><small>0925</small></td>
+<td class="ebcdic-symbol"><span class='ebcdic-glyph'>`</span><br><small>0060</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>:</span><br><small>003A</small></td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>#</span><br><small>0023</small></td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>@</span><br><small>0040</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>&#x27;</span><br><small>0027</small></td>
+<td class="ebcdic-symbol ebcdic-invariant"><span class='ebcdic-glyph'>=</span><br><small>003D</small></td>
+<td class="ebcdic-punctuation ebcdic-invariant"><span class='ebcdic-glyph'>&quot;</span><br><small>0022</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>8x</td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>द</span><br><small>0926</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>a</span><br><small>0061</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>b</span><br><small>0062</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>c</span><br><small>0063</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>d</span><br><small>0064</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>e</span><br><small>0065</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>f</span><br><small>0066</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>g</span><br><small>0067</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>h</span><br><small>0068</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>i</span><br><small>0069</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ध</span><br><small>0927</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>न</span><br><small>0928</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>प</span><br><small>092A</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>फ</span><br><small>092B</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ब</span><br><small>092C</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>भ</span><br><small>092D</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>9x</td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>म</span><br><small>092E</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>j</span><br><small>006A</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>k</span><br><small>006B</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>l</span><br><small>006C</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>m</span><br><small>006D</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>n</span><br><small>006E</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>o</span><br><small>006F</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>p</span><br><small>0070</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>q</span><br><small>0071</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>r</span><br><small>0072</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>य</span><br><small>092F</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>र</span><br><small>0930</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ल</span><br><small>0932</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ळ</span><br><small>0933</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>व</span><br><small>0935</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>श</span><br><small>0936</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>Ax</td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>‌</span><br><small>200C</small></td>
+<td class="ebcdic-symbol"><span class='ebcdic-glyph'>~</span><br><small>007E</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>s</span><br><small>0073</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>t</span><br><small>0074</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>u</span><br><small>0075</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>v</span><br><small>0076</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>w</span><br><small>0077</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>x</span><br><small>0078</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>y</span><br><small>0079</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>z</span><br><small>007A</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ष</span><br><small>0937</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>स</span><br><small>0938</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ह</span><br><small>0939</small></td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>[</span><br><small>005B</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>़</span><br><small>093C</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ऽ</span><br><small>093D</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>Bx</td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ा</span><br><small>093E</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ि</span><br><small>093F</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ी</span><br><small>0940</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ु</span><br><small>0941</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ू</span><br><small>0942</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ृ</span><br><small>0943</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॄ</span><br><small>0944</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॅ</span><br><small>0945</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॆ</span><br><small>0946</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>े</span><br><small>0947</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ै</span><br><small>0948</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॉ</span><br><small>0949</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॊ</span><br><small>094A</small></td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>]</span><br><small>005D</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ो</span><br><small>094B</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ौ</span><br><small>094C</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>Cx</td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>{</span><br><small>007B</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>A</span><br><small>0041</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>B</span><br><small>0042</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>C</span><br><small>0043</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>D</span><br><small>0044</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>E</span><br><small>0045</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>F</span><br><small>0046</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>G</span><br><small>0047</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>H</span><br><small>0048</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>I</span><br><small>0049</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>्</span><br><small>094D</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॐ</span><br><small>0950</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>॑</span><br><small>0951</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>॒</span><br><small>0952</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SUB</span><br><small>001A</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>SUB</span><br><small>001A</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>Dx</td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>}</span><br><small>007D</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>J</span><br><small>004A</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>K</span><br><small>004B</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>L</span><br><small>004C</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>M</span><br><small>004D</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>N</span><br><small>004E</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>O</span><br><small>004F</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>P</span><br><small>0050</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>Q</span><br><small>0051</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>R</span><br><small>0052</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॠ</span><br><small>0960</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॡ</span><br><small>0961</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॢ</span><br><small>0962</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>ॣ</span><br><small>0963</small></td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>।</span><br><small>0964</small></td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>॥</span><br><small>0965</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>Ex</td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>\</span><br><small>005C</small></td>
+<td class="ebcdic-normal"><span class='ebcdic-glyph'>‍</span><br><small>200D</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>S</span><br><small>0053</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>T</span><br><small>0054</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>U</span><br><small>0055</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>V</span><br><small>0056</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>W</span><br><small>0057</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>X</span><br><small>0058</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>Y</span><br><small>0059</small></td>
+<td class="ebcdic-normal ebcdic-invariant"><span class='ebcdic-glyph'>Z</span><br><small>005A</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>०</span><br><small>0966</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>१</span><br><small>0967</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>२</span><br><small>0968</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>३</span><br><small>0969</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>४</span><br><small>096A</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>५</span><br><small>096B</small></td>
+
+</tr>
+<tr class='ebcdic-row'>
+<td class='ebcdic-th'>Fx</td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>0</span><br><small>0030</small></td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>1</span><br><small>0031</small></td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>2</span><br><small>0032</small></td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>3</span><br><small>0033</small></td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>4</span><br><small>0034</small></td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>5</span><br><small>0035</small></td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>6</span><br><small>0036</small></td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>7</span><br><small>0037</small></td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>8</span><br><small>0038</small></td>
+<td class="ebcdic-number ebcdic-invariant"><span class='ebcdic-glyph'>9</span><br><small>0039</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>६</span><br><small>096C</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>७</span><br><small>096D</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>८</span><br><small>096E</small></td>
+<td class="ebcdic-number"><span class='ebcdic-glyph'>९</span><br><small>096F</small></td>
+<td class="ebcdic-punctuation"><span class='ebcdic-glyph'>॰</span><br><small>0970</small></td>
+<td class="ebcdic-control-code"><span class='ebcdic-glyph'>APC</span><br><small>009F</small></td>
+
+</tr>
+
+<tr>
+    <th></th>
+    <th>0</th>
+    <th>1</th>
+    <th>2</th>
+    <th>3</th>
+    <th>4</th>
+    <th>5</th>
+    <th>6</th>
+    <th>7</th>
+    <th>8</th>
+    <th>9</th>
+    <th>A</th>
+    <th>B</th>
+    <th>C</th>
+    <th>D</th>
+    <th>E</th>
+    <th>F</th>
+</tr>
+
+
+</table>
+</div>
+
+
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

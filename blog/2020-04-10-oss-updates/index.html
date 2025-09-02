@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates Jan 2020</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2020-04-10-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2020-04-10-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2020-04-10-oss-updates/">IBM i Open Source Updates Jan 2020</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-04-10
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Well, I hadn't planned to take this long to get out another blog, but the world of OSS moves fast and things have been very busy around here. I'm planning on having more frequent updates than every other month. Let's start with what my team did in January.</p>
+<span id="continue-reading"></span><h2 id="package-updates">Package Updates</h2>
+<ul>
+<li>nodejs (8) was updated to <a href="https://nodejs.org/en/blog/release/v8.17.0/">8.17</a>.</li>
+<li>nodejs10 was updated to <a href="https://nodejs.org/en/blog/release/v10.18.0/">10.18</a></li>
+<li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.14.0/">12.14</a></li>
+</ul>
+<p>NOTE: Node.js 8.17 is the last update for the 8.x version.</p>
+<p>No more updates will be provided, security or otherwise. It is recommended to migrate to a newer version. Node.js v10 will be supported through April 2021 and v12 will be supported April 2022. See <a href="https://nodejs.org/en/about/releases">Node.js Releases</a> page for more info.</p>
+<h2 id="package-fixes">Package fixes</h2>
+<h3 id="nginx">NGINX</h3>
+<p>NGINX was patched to handle <code>ENDTCP</code> properly. Prior to this, NGINX would keep running if TCP/IP was ended, but any sockets it had open would always return <code>EUNATACH</code> and its event loop would spin furiously, generating massive error logs. Now, when NGINX receives <code>EUNATACH</code>, it exits.</p>
+<h3 id="r">R</h3>
+<p>R was updated to generate the libR.pc file correctly. This is a <a href="https://www.freedesktop.org/wiki/Software/pkg-config/">pkg-config</a> file used to build R extensions.</p>
+<h3 id="libarchive">libarchive</h3>
+<p>libarchive was patched to address <a href="https://nvd.nist.gov/vuln/detail/CVE-2019-18408">CVE-2019-18408</a>. This affects reading RAR format archives. We ship two packages that use libarchive: cmake and rpm. </p>
+<p>For cmake, this is only affects running <code>cmake -E tar tf</code> or <code>cmake -E tar xf</code> with a RAR file.</p>
+<p>For rpm, libarchive is only used by the <code>rpm2archive</code> command. This command only <em>writes</em> to files and never reads, so it is not affected.</p>
+<p>Regardless, it is always recommended to update for known security vulnerabilities.</p>
+<h2 id="bootstrap-updates">Bootstrap updates</h2>
+<p>While <code>yum</code> and <code>rpm</code> can install and update all the rpms we provide, they are not shipped with the IBM i OS itself. So if you need to have <code>yum</code> and <code>rpm</code> installed to install <code>yum</code> and <code>rpm</code>, how do you get it installed in the first place? Seems like a classic Catch-22!</p>
+<p>To get around this problem we need to &quot;bootstrap&quot; the environment. This bootstrap environment is an installation of <code>yum</code> and its dependencies that are in a separate format that a different installer can install. This is what we use when using either the ACS Open Source Package Management GUI or the offline install method and in January, we did some big updates to it.</p>
+<p>As we have now migrated to all packages being built for 7.2+, the bootstrap was updated with these packages built on 7.2. This now means you absolutely need 7.2 or later to install any of our open source environment. Sorry 7.1, but it's been 600+ days (700+ at the time of writing) since it went out of support. To prevent users from accidentally installing the 7.2 environment on a 7.1 system, a version check was added to the bootstrap installer. Additionally, a check was added to prevent accidentally running the bootstrap on an already bootstrapped system. Running the boostrap more than once on the same system is almost never needed and will likely cause more problems than when you started.</p>
+<p>Finally, the bootstrap install now includes <code>ca-certificates</code>/<code>ca-certificates-mozilla</code>, <code>yum-utils</code>, and <code>coreutils-gnu</code> packages by default.</p>
+<h3 id="ca-certificates">ca-certificates</h3>
+<p><code>ca-certificates</code> is a framework for managing various CA certificates in a central location. You can have multiple providers of certificates as well as multiple consumers of these certificates in different formats. Out of the box, <code>ca-certificates</code> knows how to generate trust stores for OpenSSL as well as Java Keystore (jks) files, but you can also add your own scripts to <code>/QOpenSys/etc/ca-certificates/update.d</code> to support different formats or trust store locations. Add your own internal or business partner's CA certificates in PEM or DER format to <code>/QOpenSys/etc/pki/trust/anchors</code> and run <code>update-ca-certificates</code> and all the configured trust stores will be updated for you.</p>
+<p>Of course, having a centralized management framework for CA certificates doesn't do a whole lot if you don't have any certificates. That's why we provide <code>ca-certificates-mozilla</code> and automatically install it by default now. These are the same set of CA certificates provided by Mozilla with Firefox and many Linux distributions uses this same set of trusted CAs.</p>
+<p>If you don't want to trust these CAs, you can remove <code>ca-certificates-mozilla</code> at any point. You can also more selectively distrust CAs by adding certificates to <code>/QOpenSys/etc/pki/trust/blacklist</code>.</p>
+<p>By providing these packages, the out of the box experience should be much better:</p>
+<ul>
+<li>Using <code>git</code> now works out of the box with GitHub, BitBucket, or GitLab HTTPS URLs and you no longer need to disable SSL verification</li>
+<li><code>curl</code> and <code>wget</code> should be able to retrieve most any HTTPS URL on the public internet</li>
+<li>Python, Node.js, and other packages using OpenSSL can properly validate HTTPS requests</li>
+</ul>
+<h3 id="yum-utils">yum-utils</h3>
+<p><code>yum-utils</code> is a collection of plugins for <code>yum</code> and adds the <code>yum-config-manager</code> utility. This utility makes it much easier to add or remove repositories, including third-party repos. You can browse the growing list of third-party repositories <a href="https://bitbucket.org/ibmi/opensource/src/master/docs/yum/3RD_PARTY_REPOS.md">here</a>.</p>
+<h3 id="coreutils-gnu">coreutils-gnu</h3>
+<p><code>coreutils-gnu</code> is a set of core UNIX utilities like <code>ls</code>, <code>cp</code>, <code>df</code>, etc. While PASE already includes most of these utilities, there are some which PASE does not include (eg. <code>readlink</code>, <code>base64</code>, <code>md5sum</code>, ...) and the GNU versions usually have more features than the standard UNIX versions.</p>
+<p>Users of Linux or other operating systems will find the GNU versions more familiar and all users should find them more comfortable and user-friendly.</p>
+<h2 id="wrapup">Wrapup</h2>
+<p>And that does it for January. Come back next time for February updates and stay safe out there!</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-01-08-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates Dec 2019</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2020-04-15-feb-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates Feb 2020</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

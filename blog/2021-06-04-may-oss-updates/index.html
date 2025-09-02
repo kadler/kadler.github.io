@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates May 2021</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2021-06-04-may-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2021-06-04-may-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2021-06-04-may-oss-updates/">IBM i Open Source Updates May 2021</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2021-06-04
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>May updates at the same time as April updates? Madness, I say!</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="harfbuzz">HarfBuzz</h3>
+<p><a href="https://harfbuzz.github.io/">HarfBuzz</a> is a text shaping library with quite a <a href="https://harfbuzz.github.io/why-is-it-called-harfbuzz.html">unique name</a>.</p>
+<p>I mentioned in April's update that Pango used Harfbuzz for complex text shaping. Well, apparently in our haste to ship Pango we forgot to ship harfbuzz too. Whoops!</p>
+<h3 id="gnu-idn-library">GNU IDN Library</h3>
+<p><a href="https://www.gnu.org/software/libidn/">GNU IDN</a> is a library which implements functions for handling internationalized hostnames. For example, this allows proper handling of the host name &lt;räksmörgås.josefsson.org&gt;</p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="ccache">Ccache</h3>
+<p>Ccache now supports being used with GCC 10.</p>
+<h3 id="curl">cURL</h3>
+<p>Curl has been built with brotli and libidn2, so these examples now work properly:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>$ curl --compressed https://httpbin.org/brotli 
+</span><span>{
+</span><span>  &quot;brotli&quot;: true, 
+</span><span>  &quot;headers&quot;: {
+</span><span>    &quot;Accept&quot;: &quot;*/*&quot;, 
+</span><span>    &quot;Accept-Encoding&quot;: &quot;deflate, gzip, br&quot;, 
+</span><span>    &quot;Host&quot;: &quot;httpbin.org&quot;, 
+</span><span>    &quot;User-Agent&quot;: &quot;curl/7.76.1&quot;, 
+</span><span>    &quot;X-Amzn-Trace-Id&quot;: &quot;Root=1-60ba8841-79dfa33d6c5a76b85b1d5863&quot;
+</span><span>  }, 
+</span><span>  &quot;method&quot;: &quot;GET&quot;, 
+</span><span>  &quot;origin&quot;: &quot;206.9.215.19&quot;
+</span><span>}
+</span><span>
+</span><span>curl -s &#39;https://räksmörgås.josefsson.org/&#39; | head
+</span><span>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 3.2 Final//EN&quot;&gt;
+</span><span>&lt;html&gt;
+</span><span>  &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
+</span><span>  &lt;head&gt;
+</span><span>    &lt;title&gt;Räksmörgås.josefßon.org aka xn--rksmrgs-5wao1o.josefsson.org&lt;/title&gt;
+</span><span>  &lt;/head&gt;
+</span><span>
+</span><span>  &lt;body&gt;
+</span><span>
+</span><span>    &lt;h1&gt;Räksmörgås.josefßon.org aka xn--rksmrgs-5wao1o.josefsson.org&lt;/h1&gt;
+</span></code></pre>
+<h3 id="node-js-10-12-14">Node.js 10, 12, 14</h3>
+<p>Versions of Node.js built on IBM i w/ GCC 6 cause the Node binary to export two C++ standard library functions. These functions are listed in node.exp, which is used for building C/C++ Node.js extensions. On Node.js 16, which is built with GCC 10, these functions are no longer exported by the node binary, causing problems for any extentions that expect the node binary to provide these functions (such as idb-connector).</p>
+<p>Node.js 10, 12, and 14 have been patched to no longer list these functions in the node.exp file. A version of idb-connector which is built with these fixed Node.js builds should be available shortly.</p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>openssl was updated to <a href="https://www.openssl.org/news/changelog.html#openssl-111">1.1.1k</a>.</li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>Slower month in May, but still important updates.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2021-04-07-mar-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates March 2021</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2021-06-04-apr-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates April 2021</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

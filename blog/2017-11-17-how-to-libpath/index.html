@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Mucking with the Runtime Library Search Path on PASE</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="Find out how the search path gets created in an AIX/PASE binary">
+
+    <meta property="og:description" content="Find out how the search path gets created in an AIX/PASE binary">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2017-11-17-how-to-libpath/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="Find out how the search path gets created in an AIX/PASE binary">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2017-11-17-how-to-libpath/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2017-11-17-how-to-libpath/">Mucking with the Runtime Library Search Path on PASE</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2017-11-17
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/libpath/">#libpath</a>&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/pase/">#pase</a></span>
+    
+
+        <div class="post-content">
+            <p>In my last blog I showed how the <code>LIBPATH</code> gets used and also how the runtime search path in the binary gets used. <code>LIBPATH</code> is obviously set as an environment variable, but how does that runtime search path get generated? Let's explore!</p>
+<span id="continue-reading"></span><pre data-lang="c" style="background-color:#282c34;color:#abb2bf;" class="language-c "><code class="language-c" data-lang="c"><span style="color:#c678dd;">#include </span><span style="color:#98c379;">&lt;stdio.h&gt;
+</span><span>
+</span><span style="color:#c678dd;">int </span><span style="color:#61afef;">main</span><span>(</span><span style="color:#c678dd;">int </span><span style="font-style:italic;color:#e06c75;">argc</span><span>, </span><span style="color:#c678dd;">char</span><span style="color:#56b6c2;">** </span><span style="font-style:italic;color:#e06c75;">argv</span><span>)
+</span><span>{
+</span><span>  </span><span style="color:#56b6c2;">printf</span><span>(</span><span style="color:#98c379;">&quot;Hello world!</span><span style="color:#56b6c2;">\n</span><span style="color:#98c379;">&quot;</span><span>);
+</span><span>  </span><span style="color:#c678dd;">return </span><span style="color:#d19a66;">0</span><span>;
+</span><span>}
+</span></code></pre>
+<p>Above is a pretty standard &quot;Hello World&quot; program in C. Let's compile it and look at its search path</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> gcc</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> hello hello.c
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> hello
+</span><span>
+</span><span style="color:#e06c75;">hello:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x0000000b       0x0000002b       0x000000d3
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x0000032c       0x00000039       0x000003ff
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /QOpenSys/opt/freeware/bin/../lib/gcc/powerpc-ibm-aix7.1.0.0/4.8.3:/QOpenSys/opt/freeware/bin/../lib/gcc:/QOpenSys/opt/freeware/bin/../lib/gcc/powerpc-ibm-aix7.1.0.0/4.8.3/../../..:/usr/lib:/lib
+</span><span style="color:#e06c75;">1</span><span>                                    libc.a              shr.o
+</span></code></pre>
+<p>What the what? Where did all that junk come from?</p>
+<p>The default behavior for the linker (<code>ld</code>) is to add whatever directories are passed to the linker to find libraries (via the <code>-L</code> argument) as well as the default search path (<code>/usr/lib:/lib</code>). We can see that GCC is automatically adding some of its own library directories to be searched whenever you tell it to compile a binary:</p>
+<ul>
+<li>/QOpenSys/opt/freeware/bin/../lib/gcc/powerpc-ibm-aix7.1.0.0/4.8.3</li>
+<li>/QOpenSys/opt/freeware/bin/../lib/gcc</li>
+<li>/QOpenSys/opt/freeware/bin/../lib/gcc/powerpc-ibm-aix7.1.0.0/4.8.3/../../..</li>
+</ul>
+<p>If we canonicalize the relative paths, they then become:</p>
+<ul>
+<li>/QOpenSys/opt/freeware/lib/gcc/powerpc-ibm-aix7.1.0.0/4.8.3</li>
+<li>/QOpenSys/opt/freeware/lib/gcc</li>
+<li>/QOpenSys/opt/freeware/lib</li>
+</ul>
+<span id="continue-reading"></span><h2 id="it-s-a-bypass-gotta-build-bypasses">&quot;It's a bypass! Gotta build bypasses!&quot;</h2>
+<p>Let's bypass GCC and link the binary ourselves:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> gcc</span><span style="font-style:italic;color:#e06c75;"> -c -o</span><span> hello.o hello.c
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> ld</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> hello hello.o /QOpenSys/usr/lib/crt0.o</span><span style="font-style:italic;color:#e06c75;"> -lc
+</span></code></pre>
+<p>We have to link in <code>crt0.o</code> as we define a <code>main()</code> function, but the default entry point for a program is <code>__start</code> on AIX, so there's a special glue module that does the necessary setup from the <code>__start</code> entry point to call <code>main()</code>. We also need to link with <code>libc</code>, to get access to <code>printf</code>. Let's look at the <code>dump</code> output now:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> hello
+</span><span>
+</span><span style="color:#e06c75;">hello:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000008       0x00000010       0x0000001e
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x000001a0       0x00000039       0x000001be
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /usr/lib:/lib
+</span><span style="color:#e06c75;">1</span><span>                                    libc.a              shr.o
+</span></code></pre>
+<p>See now it has only added the default search path, since we did not pass any additional <code>-L</code> arguments to <code>ld</code>. Let's see what happens when we add a path:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> ld</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> hello hello.o /QOpenSys/usr/lib/crt0.o</span><span style="font-style:italic;color:#e06c75;"> -lc -L</span><span>/this/path/is/bad/and/you/should/feel/bad
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> hello
+</span><span>
+</span><span style="color:#e06c75;">hello:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000008       0x00000010       0x00000048
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x000001a0       0x00000039       0x000001e8
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /this/path/is/bad/and/you/should/feel/bad:/usr/lib:/lib
+</span><span style="color:#e06c75;">1</span><span>                                    libc.a              shr.o
+</span></code></pre>
+<p>Boom! We added a path to the runtime search path. Sometimes you really don't want this, though. Let's say you're compiling a library and an application. The library is called <code>libfoo.a</code> and the binary is called <code>foo</code>. While building, you first build <code>libfoo.a</code> in to the current directory, then you go to build <code>foo</code>. Since <code>foo</code> needs to link to <code>libfoo</code>, you need to tell <code>ld</code> where to find it during build time. You might do something like this:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> ld</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> foo foo.o /QOpenSys/usr/lib/crt0.o</span><span style="font-style:italic;color:#e06c75;"> -L</span><span>.</span><span style="font-style:italic;color:#e06c75;"> -lfoo -lc
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> foo
+</span><span>
+</span><span style="color:#e06c75;">foo:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000008       0x00000010       0x00000048
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x000001a0       0x00000039       0x000001e8
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      .:/usr/lib:/lib
+</span><span style="color:#e06c75;">1</span><span>                                    libc.a              shr.o
+</span><span style="color:#e06c75;">2</span><span>                                    libfoo.a            shr.o
+</span></code></pre>
+<p>Now when you install the application, you copy <code>foo</code> in to <code>/usr/bin</code> and <code>libfoo.a</code> in to <code>/usr/lib</code>. You run your application and everything works great (since <code>libfoo.a</code> gets loaded from <code>/usr/lib/libfoo.a</code> via the runtime path). Now though, you're doing some more development and you run <code>foo</code> but it gives a load error about missing symbols. What gives? Well, the directory you're in happens to have an old <code>libfoo.a</code> and is found first via <code>./libfoo.a</code> due to '.' being on the runtime search path before <code>/usr/lib</code>! That's no good! Heck, that could even be a security issue if your application could be tricked in to loading a malicious library that the attacker tricks you in to uploading.</p>
+<p>So lets say we don't want to include these paths in our finished binary? How do we get rid of them. Well, <code>ld</code> has an option <code>-bnolibpath</code> that takes care of that:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> ld</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> foo foo.o /QOpenSys/usr/lib/crt0.o</span><span style="font-style:italic;color:#e06c75;"> -bnolibpath -L</span><span>.</span><span style="font-style:italic;color:#e06c75;"> -lfoo -lc
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> foo
+</span><span>
+</span><span style="color:#e06c75;">foo:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000008       0x00000010       0x00000048
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x000001a0       0x00000039       0x000001e8
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /usr/lib:/lib
+</span><span style="color:#e06c75;">1</span><span>                                    libc.a              shr.o
+</span><span style="color:#e06c75;">2</span><span>                                    libfoo.a            shr.o
+</span></code></pre>
+<p>One thing to know about the -bnolibpath option is that it isn't hard-coded to <code>/usr/lib:/lib</code>, but will use the value of the <code>LIBPATH</code> environment variable if it is set:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> LIBPATH=/QOpenSys/usr/lib ld</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> foo foo.o /QOpenSys/usr/lib/crt0.o</span><span style="font-style:italic;color:#e06c75;"> -bnolibpath -L</span><span>.</span><span style="font-style:italic;color:#e06c75;"> -lfoo -lc
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> foo
+</span><span>
+</span><span style="color:#e06c75;">foo:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000008       0x00000010       0x00000048
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x000001a0       0x00000039       0x000001e8
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /QOpenSys/usr/lib
+</span><span style="color:#e06c75;">1</span><span>                                    libc.a              shr.o
+</span><span style="color:#e06c75;">2</span><span>                                    libfoo.a            shr.o
+</span></code></pre>
+<p>Or you can use the <code>-blibpath</code> option to explicitly set it:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> ld</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> foo foo.o /QOpenSys/usr/lib/crt0.o</span><span style="font-style:italic;color:#e06c75;"> -L</span><span>.</span><span style="font-style:italic;color:#e06c75;"> -lfoo -lc -blibpath</span><span>:/opt/mypath:/QOpenSys/usr/lib
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> foo
+</span><span>
+</span><span style="color:#e06c75;">foo:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000008       0x00000010       0x00000048
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x000001a0       0x00000039       0x000001e8
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /opt/mypath:/QOpenSys/usr/lib
+</span><span style="color:#e06c75;">1</span><span>                                    libc.a              shr.o
+</span><span style="color:#e06c75;">2</span><span>                                    libfoo.a            shr.o
+</span></code></pre>
+<p>There's one other thing to know: you can also hard-code the path to a specific library so that it will not use the search path at all. You do this by passing the full path to the library as an input to <code>ld</code> instead of having <code>ld</code> find it via the <code>-l</code> option:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> ld</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> hello hello.o /QOpenSys/usr/lib/crt0.o /QOpenSys/usr/lib/libc.a
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> hello
+</span><span>
+</span><span style="color:#e06c75;">hello:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000008       0x00000010       0x00000048
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x000001a0       0x00000039       0x000001e8
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /usr/lib:/lib
+</span><span style="color:#e06c75;">1</span><span>      /QOpenSys/usr/lib             libc.a              shr.o
+</span></code></pre>
+<p>You can see above that the <code>PATH</code> field is set for index 2, so now <code>libc.a</code> will always be loaded from <code>/QOpenSys/usr/lib/libc.a</code> and will ignore the runtime search path as well as the <code>LIBPATH</code> environment variable. If that's not what you want, you can tell the linker to ignore qualified library paths given on the command line and always search for these at runtime with the <code>-bnoipath</code> option:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> ld</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> hello hello.o /QOpenSys/usr/lib/crt0.o</span><span style="font-style:italic;color:#e06c75;"> -bnoipath</span><span> /QOpenSys/usr/lib/libc.a
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> hello
+</span><span>
+</span><span style="color:#e06c75;">hello:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000008       0x00000010       0x00000048
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x000001a0       0x00000039       0x000001e8
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /usr/lib:/lib
+</span><span style="color:#e06c75;">1</span><span>                                    libc.a              shr.o
+</span></code></pre>
+<p>Ok, so we've learned about the <code>-bnolibpath</code>, <code>-blibpath</code>, and <code>-bnoipath</code> <code>ld</code> options, but most of the time we're not going to be calling <code>ld</code> directly, but instead we let our compiler handle calling the linker. How do we tell <code>gcc</code> to customize these options? Well, <code>gcc</code> has a way to pass linker flags to <code>ld</code> via the <code>-Wl,</code> option. Just prefix the linker option with <code>-Wl,</code> and pass it to <code>gcc</code>:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">$</span><span> gcc</span><span style="font-style:italic;color:#e06c75;"> -o</span><span> hello hello.c</span><span style="font-style:italic;color:#e06c75;"> -Wl</span><span>,-bnolibpath
+</span><span>
+</span><span style="color:#e06c75;">$</span><span> dump</span><span style="font-style:italic;color:#e06c75;"> -H</span><span> hello
+</span><span>
+</span><span style="color:#e06c75;">hello:
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Loader</span><span> Section</span><span style="color:#56b6c2;">***
+</span><span>                      </span><span style="color:#e06c75;">Loader</span><span> Header Information
+</span><span style="color:#e06c75;">VERSION#         </span><span style="color:#7f848e;">#SYMtableENT     #RELOCent        LENidSTR
+</span><span style="color:#e06c75;">0x00000001</span><span>       0x00000008       0x00000010       0x00000048
+</span><span>
+</span><span style="color:#7f848e;">#IMPfilID        OFFidSTR         LENstrTBL        OFFstrTBL
+</span><span style="color:#e06c75;">0x00000002</span><span>       0x000001a0       0x00000039       0x000001e8
+</span><span>
+</span><span>
+</span><span>                        </span><span style="color:#e06c75;">***Import</span><span> File Strings</span><span style="color:#56b6c2;">***
+</span><span style="color:#e06c75;">INDEX</span><span>  PATH                          BASE                MEMBER
+</span><span style="color:#e06c75;">0</span><span>      /usr/lib:/lib
+</span><span style="color:#e06c75;">1</span><span>                                    libc.a              shr.o
+</span></code></pre>
+<h2 id="and-that-s-all-i-have-to-say-about-that-for-now">And that's all I have to say about that. (For now?)</h2>
+<p>So what's the takeaway from all this?</p>
+<p>I recommend using the <code>-blibpath</code> option to explicitly set your runtime library search path. This prevents GCC from adding weird directories to your search path, potentially problematic paths like '.' to your search path, but prevents your users from having to set the <code>LIBPATH</code> to find your stuff thus relegating <code>LIBPATH</code> for when a user installs the library in to a different path or you need to override an installed library with your own for debug/test reasons.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2017-09-08-libpath/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">LIBPATH... How Does It Work?</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2018-01-08-fetching-python-database-cursors-by-column-name/">
+                            <span class="button__text">Fetching Python Database Cursors by Column Name</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

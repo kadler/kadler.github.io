@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates Feb 2020</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2020-04-15-feb-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2020-04-15-feb-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2020-04-15-feb-oss-updates/">IBM i Open Source Updates Feb 2020</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-04-15
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Wow, hasn't even been a week! In this blog entry, I'm going to go over what my team delivered in February.</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="jq">jq</h3>
+<p><a href="https://stedolan.github.io/jq/">jq</a> is described as &quot;<code>sed</code> for JSON&quot;. If you don't know what <code>sed</code> is, it stands for Stream EDitor and basically it allows you to slice and dice text in numerous ways. Equivallently, <code>jq</code> allows you to manipulate JSON. It's better than <code>sed</code> for this because it understands the structure of JSON data and lets you leverage that structure to manipulate it. If you'd like to see some examples of what it can do, check out their <a href="https://stedolan.github.io/jq/tutorial/">tutorial</a>.</p>
+<p>This addresses RFE <a href="http://www.ibm.com/developerworks/rfe/execute?use_case=viewRfe&amp;CR_ID=128972">128972</a>.</p>
+<h3 id="expect">expect</h3>
+<p><a href="https://core.tcl-lang.org/expect/index">expect</a> is a tool that many of our customers use when they need to automate some interactive tool. Many times this is used for doing sftp operations that require filling in passwords. Scott Klement has long had <code>expect</code> <a href="https://www.scottklement.com/expect">available</a> and we thank Scott for his excellent contributions, but this should make it even easier for users to acquire and use.</p>
+<p>NOTE: We found out after we started building this but before shipping that Calvin Buckley had already built this for <a href="https://repo.qseco.fr/">qseco.fr</a> repository. Because our packages are built differently, we adjusted our package to prevent getting a bad state. If you have already installed <code>jq</code> from that repository, it will seamlessly upgrade to our version.</p>
+<h3 id="autossh">autossh</h3>
+<p><a href="https://www.harding.motd.ca/autossh/">autossh</a> is a tool for keeping SSH tunnels open - it will automatically restart the tunnel if it crashes. You might think of it as a simplified VPN.</p>
+<p>This addresses RFE <a href="http://www.ibm.com/developerworks/rfe/execute?use_case=viewRfe&amp;CR_ID=123939">123939</a>, where the customer wanted to keep connections open between their IBM i system and systems in Amazon EC2.</p>
+<h3 id="oniguruma">oniguruma</h3>
+<p><a href="https://github.com/kkos/oniguruma">oniguruma</a> is a regular expression engine used by <code>jq</code>. While we mostly ported this to support <code>jq</code>, perhaps other packages can take advantage in the future.</p>
+<h2 id="package-updates">Package Updates</h2>
+<ul>
+<li>less was updated to <a href="http://www.greenwoodsoftware.com/less/news.551.html">551</a>. (I really wish I understood their versioning scheme 🤷‍♂️)</li>
+<li>pcre was updated to <a href="http://www.rexegg.com/pcre-doc/ChangeLog">8.43</a>.</li>
+<li>python3-cryptography was updated to <a href="https://cryptography.io/en/latest/changelog/#v2-8">2.8</a> (mostly for something we shipped in March 😉).</li>
+<li>nodejs10 was updated to <a href="https://nodejs.org/en/blog/release/v10.19.0/">10.19</a></li>
+<li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.15.0/">12.15</a> and then to <a href="https://nodejs.org/en/blog/release/v12.16.1/">12.16.1</a></li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>We had quite a few new packages ship this month and some good version updates to existing packages, but there was even more going on that we didn't get to. Some of it I'll be talking about in my next blog post. Hopefully, the rest I can cover in my April update.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-04-10-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates Jan 2020</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2020-04-22-mar-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates Mar 2020</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

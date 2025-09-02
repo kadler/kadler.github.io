@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates October &amp; November 2020</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2020-12-02-nov-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2020-12-02-nov-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2020-12-02-nov-oss-updates/">IBM i Open Source Updates October &amp; November 2020</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-12-02
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>October was a pretty slow month with mostly low-level improvements so I figured
+I'd combine them with the November updates. November turned out to be a pretty
+big, so here we go!</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="pcre2">PCRE2</h3>
+<p><a href="http://www.pcre.org/">PCRE</a> stands for Perl Compatible Regular Expressions, and
+is a regular expression library. While we previously shipped PCRE1, that version
+has been marked stable and is no longer developed. Instead, focus shifted to
+PCRE2 and many packages will only work with that version.</p>
+<h3 id="dos2unix">dos2unix</h3>
+<p>The <a href="http://waterlan.home.xs4all.nl/dos2unix.html">dos2unix</a> project provides a
+set of simple conversion utilities which convert newlines in files between
+DOS/Windows (CRLF), Unix (LF), and Classic Mac OS (CR).</p>
+<p>If you ever run in to problems transferring text files from a Windows system to
+IBM i and trying to use it in PASE, a simple fix might be running it through
+dos2unix:</p>
+<pre data-lang="bash" style="background-color:#282c34;color:#abb2bf;" class="language-bash "><code class="language-bash" data-lang="bash"><span style="color:#e06c75;">dos2unix</span><span> windows-file.txt
+</span></code></pre>
+<h3 id="snappy">Snappy</h3>
+<p><a href="https://github.com/google/snappy">Snappy</a> is a newer compression algorithm and
+library from Google, which aims for very high speed with reasonable compression.
+Unlike many other compression tools we've provide in the past such as gzip, xz,
+zstd, bzip2, etc. snappy does not provide a command line tool — only a library.</p>
+<h3 id="mongodb-c-driver">MongoDB C Driver</h3>
+<p><a href="http://mongoc.org">mongoc</a> is a MongoDB client library. This allows
+applications and language packages to connect to MongoDB instances. While this
+won't help you run MongoDB <em>on IBM i</em>, it will allow you to use MongoDB-based
+applications connecting to MongoDB instances on other systems.</p>
+<p>mongoc also provides libbson, which is a library for building, parsing, and
+iterating <a href="http://bsonspec.org/">BSON</a> documents.</p>
+<p>Unfortunately, the current build is missing libmongocrypt, so it does not yet
+support &quot;Client-Side Field Level Encryption&quot; but we are working on adding this
+for the future.</p>
+<h3 id="sshpass">sshpass</h3>
+<p><a href="https://sourceforge.net/projects/sshpass/">sshpass</a> is a tool for performing
+password authentication using keyboard-interactive in a non-interactive manner.
+Ideally, you would use public key authentication with SSH keys or certificates
+instead, but sometimes this is not available. Many users already use <code>expect</code> to
+do similar things, but now there is another option.</p>
+<h3 id="mariadb-10-3">MariaDB 10.3</h3>
+<p>This is by far the biggest update of October and November!
+<a href="https://mariadb.org/">MariaDB</a> is an open source database based off of MySQL
+from the original developers of MySQL. Zend has long shipped a version of
+MySQL/MariaDB in the <a href="https://www.zend.com/downloads/zend-dbi">ZendDBi</a> product,
+but now it's easier than ever to get MariaDB running on your system! The rpm
+version also has more modern defaults, such as using <code>utf8mb4</code> as the default
+charset so you can store all the emoji you want 🤗 🌈 🚀!</p>
+<p>One thing to note is that the rpm version we provide <em>does not</em> include the Db2
+storage engine. If that is something you need, please contact me directly and we
+can discuss further.</p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="autoconf-automake-dependency-fixes">autoconf / automake Dependency Fixes</h3>
+<p>The autoconf package now requires m4-gnu and automake now requires autoconf,
+fixing some package dependencies.</p>
+<h3 id="libutil-0-9">libutil 0.9</h3>
+<p>libutil has been updated to 0.9, which implements the GNU libc extension
+functions <code>asprintf</code> and <code>vasprintf</code>. For more info see the <a href="https://linux.die.net/man/3/asprintf">Linux man
+page</a></p>
+<h3 id="ssl-and-zstd-support-in-rsync">SSL and zstd Support in Rsync</h3>
+<p>rsync has been updated to 3.2.3, which now supports SSL encrypted connections to
+an rsync daemon as well as using zstd compression in addition to the existing
+zlib compression.</p>
+<h3 id="wget-built-with-pcre2">Wget built with PCRE2</h3>
+<p>Wget has been rebuilt with PCRE2 support. This allows you to use Perl-style
+regexes with the <code>--accept-regex</code> and <code>--reject-regex</code> options.</p>
+<h3 id="git-built-with-pcre2">git built with PCRE2</h3>
+<p>git has been rebuilt with PCRE2 support. You can now specify <code>--perl-regexp</code> to
+various git commands to use Perl-style regexes.</p>
+<h3 id="rpm-build-dependency-fixes">rpm-build Dependency Fixes</h3>
+<p>The rpm-build package now requires the following packages:</p>
+<ul>
+<li>bash</li>
+<li>coreutils-gnu</li>
+<li>findutils</li>
+<li>grep-gnu</li>
+<li>patch-gnu</li>
+<li>sed-gnu</li>
+<li>gzip</li>
+<li>tar-gnu</li>
+<li>make-gnu</li>
+</ul>
+<p>Various build scripts assume these packages are installed or assume they are
+using GNU tools, which may behave differently than PASE tools.</p>
+<p>In addition, it recommends the following packages:</p>
+<ul>
+<li>bzip2</li>
+<li>xz</li>
+<li>unzip</li>
+</ul>
+<p>These packages are optional and only needed when builing packages whose source
+archives are compressed using one of those packages. Currently, this
+recommendation has no effect, since yum does not support &quot;Recommends&quot; rpm
+dependencies.</p>
+<h3 id="curl-devel-dependency-fixes">curl-devel Dependency Fixes</h3>
+<p>The libraries curl links with — so called &quot;private libraries&quot; — were removed
+from the output of <code>curl-config --libs</code>. Packages which link to curl only need
+to link to libcurl, not the libraries which curl itself links to. This could
+cause linker errors when building against libcurl and libssh2-devel,
+openssl-devel, and zlib-devel were not also installed.</p>
+<h3 id="yum-allobj-check-fix">yum *ALLOBJ Check Fix</h3>
+<p>On some systems, yum would fail when attempting to check if the user has <code>*ALLOBJ</code> authority:</p>
+<pre data-lang="txt" style="background-color:#282c34;color:#abb2bf;" class="language-txt "><code class="language-txt" data-lang="txt"><span>File &quot;/QOpenSys/pkgs/bin/yum&quot;, line 29, in &lt;module&gt;
+</span><span>    yummain.user_main(sys.argv[1:], exit_code=True)
+</span><span>  File &quot;/QOpenSys/pkgs/share/yum-cli/yummain.py&quot;, line 288, in user_main
+</span><span>    errcode = main(args)
+</span><span>  File &quot;/QOpenSys/pkgs/share/yum-cli/yummain.py&quot;, line 98, in main
+</span><span>    base.getOptionsConfig(args)
+</span><span>  File &quot;/QOpenSys/pkgs/share/yum-cli/cli.py&quot;, line 230, in getOptionsConfig
+</span><span>    self.conf
+</span><span>  File &quot;/QOpenSys/pkgs/lib/python2.7/site-packages/yum/__init__.py&quot;, line 897, in &lt;lambda&gt;
+</span><span>    conf = property(fget=lambda self: self._getConfig(),
+</span><span>  File &quot;/QOpenSys/pkgs/lib/python2.7/site-packages/yum/__init__.py&quot;, line 357, in _getConfig
+</span><span>    self.conf.has_root_authority = misc.hasRootAuthority()
+</span><span>  File &quot;/QOpenSys/pkgs/lib/python2.7/site-packages/yum/misc.py&quot;, line 103, in hasRootAuthority
+</span><span>    has_auth = _root_authority_cache[euid] = hasAllObjectAuthority()
+</span><span>  File &quot;/QOpenSys/pkgs/lib/python2.7/site-packages/yum/misc.py&quot;, line 71, in hasAllObjectAuthority
+</span><span>    syscalls._RSLOBJ2(sysptr, ctypes.c_ushort(0x0201), b&#39;QSYCUSRS&#39;, b&#39;QSYS&#39;)
+</span><span>  File &quot;/QOpenSys/pkgs/lib/python2.7/ctypes/__init__.py&quot;, line 379, in __getattr__
+</span><span>    func = self.__getitem__(name)
+</span><span>  File &quot;/QOpenSys/pkgs/lib/python2.7/ctypes/__init__.py&quot;, line 384, in __getitem__
+</span><span>    func = self._FuncPtr((name_or_ordinal, self))
+</span><span>AttributeError
+</span></code></pre>
+<p>This has been fixed by loading the various ILE syscalls from libc.a instead of /unix.</p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.19.1/">12.19.1</a>.</li>
+<li>nodejs14 was updated to <a href="https://nodejs.org/en/blog/release/v14.15.1/">14.15.1</a>.</li>
+<li>python3 was updated to <a href="https://www.python.org/downloads/release/python-3612/">3.6.12</a></li>
+<li>libutil was updated to <a href="https://github.com/IBM/portlibfori/releases/tag/0.9.0">0.9.0</a>.</li>
+<li>freetype was updated to 2.10.4</li>
+<li>nano was updated to <a href="https://www.nano-editor.org/news.php">5.3</a> and UTF-8
+support was enabled.</li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>We had some big splashy new packages, some incremental version bumps, bug fixes,
+and some quality of life improvements. A solid update before the coming holiday
+wind down.</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-10-28-aug-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates August &amp; September 2020</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2020-12-23-dec-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates December 2020</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

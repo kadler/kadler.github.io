@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates June 2020</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2020-07-15-jun-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2020-07-15-jun-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2020-07-15-jun-oss-updates/">IBM i Open Source Updates June 2020</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2020-07-15
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Well, it's that time of the month again. Time to talk about all the OSS updates that's fit to print!</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="openj9-openjdk-java-11">OpenJ9 + OpenJDK Java 11</h3>
+<p>Definitely the biggest new package of June (possibly of the year) is the Early
+Access release of Java 11 for IBM i via RPM. This is built using a combination
+of the <a href="http://www.eclipse.org/openj9/">OpenJ9</a> JVM and the
+<a href="https://openjdk.java.net/">OpenJDK</a> class libraries. OpenJ9 is the open source
+version of the same J9 JVM that already ships on IBM i today. We now have a 100%
+open source Java runtime running on IBM i (albeit in Early Access form).</p>
+<p>There's a couple things to look out for in this new runtime:</p>
+<ol>
+<li>
+<p>Early Access<br />
+This is an Early Access version, which means that it's not production ready.
+While we have put it through its paces running various workloads in Jenkins,
+Apache Camel, ActiveMQ, and others, we have not completed comprehensive
+testing. It surely has bugs and you may experience crashes.</p>
+</li>
+<li>
+<p>No more IBM class libraries<br />
+While OpenJ9 should largely be the same as the traditional IBM J9, the RPM
+Java uses a completely different set of Java class libraries. This should not
+matter for most code, but if you have Java code which has made use of IBM
+extensions or specific behavior, this will no longer work.</p>
+</li>
+<li>
+<p>No ILE integration<br />
+This is a pure-PASE implementation and as such it has no integration with
+ILE. This means it can't integrate with RPG or Db2, it doesn't support ILE
+native methods, and it doesn't support passwordless JT400 logins as
+<code>*CURRENT</code>. It also does not work using the standard PASE or QSH <code>java</code>
+launcher commands, nor does it work with the <code>RUNJVA</code> CL command.</p>
+</li>
+</ol>
+<p>For more information on the Java 11 rpm, see our
+<a href="https://bitbucket.org/ibmi/opensource/src/master/docs/java11/JAVA11_EARLY_ACCESS.md">doc</a></p>
+<h3 id="gnu-privacy-guard">GNU Privacy Guard</h3>
+<p><a href="https://gnupg.org/">GNU Privacy Guard</a>, also referred to as GnuPG or GPG is an
+open source implementation of the OpenPGP standard.</p>
+<p>It uses public key cryptography to serve two main purposes:</p>
+<ol>
+<li>
+<p>Encryption<br />
+With gpg, you can encrypt data using a public key. Only the owner of the
+corresponding private key can decrypt it. Likewise, someone can encrypt
+something with your public key and only you can decrypt it.</p>
+</li>
+<li>
+<p>Signing<br />
+Using your private key, you can create attach a signature to data. Anyone
+receiving this data and signature can validate that you were the one who
+signed using your public key.</p>
+</li>
+</ol>
+<p>What kind of data can <code>gpg</code> work with? Really, any data can be used,
+though it's easiest to work with IFS files in the root (/) or QOpenSys
+filesystems. <code>gpg</code> can also used with git to sign your commits. You can read
+more about it in the <a href="https://git-scm.com/book/en/v2/Git-Tools-Signing-Your-Work">git docs</a>
+or from <a href="https://help.github.com/en/github/authenticating-to-github/signing-commits">GitHub's docs</a>.</p>
+<p>NOTE: Make sure to read <code>/QOpenSys/pkgs/share/doc/gnupg2-2.2.19/README.IBMi</code> for
+steps on how to correctly set the <code>GPG_TTY</code> environment variable. Without this,
+gpg can't prompt you for the password correctly. This also means that gpg will
+not work from QSH or QP2TERM if you use a password.</p>
+<p>This fulfills RFE <a href="http://www.ibm.com/developerworks/rfe/execute?use_case=viewRfe&amp;CR_ID=119042">119042</a>.</p>
+<h3 id="p7zip">p7zip</h3>
+<p><a href="http://p7zip.sourceforge.net/">p7zip</a> is a port of the command line version of
+<a href="http://www.7-zip.org">7-Zip</a> to Unix-like POSIX systems. If you need to decode 7-Zip
+archives (those ending with .7z) on IBM i, now you can!</p>
+<p>This fulfills RFE <a href="http://www.ibm.com/developerworks/rfe/execute?use_case=viewRfe&amp;CR_ID=123942">123942</a>.</p>
+<h3 id="zstd">zstd</h3>
+<p><a href="http://facebook.github.io/zstd">zstd</a> (or Zstandard) is a newer compression
+library from Facebook. It is designed for real-time compression, so it trades
+speed for compression ratio. That doesn't mean to say that it's compression is
+poor, however! It has very good compression, outperforming zlib across the board
+not only in compression ratio, but compression and decompression speed too!</p>
+<h3 id="libssh2">libssh2</h3>
+<p><a href="https://www.libssh2.org/">libssh2</a> is a library that implements the SSH2 client
+protocol. We'll be talking more about this later.</p>
+<h3 id="fontconfig">fontconfig</h3>
+<p><a href="https://www.freedesktop.org/wiki/Software/fontconfig/">fontconfig</a> is a library
+for configuring fonts, of course 😉. This along with
+<a href="https://www.freetype.org/">freetype</a> are used by open source software for font
+configuration and text rendering.</p>
+<p>Right now it's not actually used by anything, but watch this space.</p>
+<h3 id="json-c">json-c</h3>
+<p><a href="https://github.com/json-c/json-c">json-c</a> is a JSON parser library written in C.</p>
+<p>Like fontconfig, json-c isn't used by anything right now.</p>
+<h3 id="dejagnu">DejaGnu</h3>
+<p><a href="https://www.gnu.org/software/dejagnu/">DejaGnu</a> is a testing framework written
+by the GNU project. It's built upon <a href="http://tcl.tk/">Tcl</a> and
+<a href="https://core.tcl-lang.org/expect/index">Expect</a>.</p>
+<h3 id="libuuid-util-linux">libuuid / util-linux</h3>
+<p><a href="https://github.com/karelzak/util-linux">util-linux</a> is a project that provides
+a bunch of utilities for the Linux, though many work on other platforms
+including PASE on IBM i. We had originally built the libuuid package from this
+for fontconfig, but fontconfig removed that dependency. Since we had it built,
+we decided to ship it anyway.</p>
+<p>We may end up shipping other software from the util-linux collection. I'd
+especially like to see <a href="https://linux.die.net/man/1/hexdump">hexdump</a> 😁.</p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="curl-w-ssh-sftp-support">Curl w/ SSH/SFTP support</h3>
+<p>Curl has been upgraded to 7.70.0 and was also built with the newly released
+libssh2. This allows it to use ssh:// and sftp:// URLs.</p>
+<h3 id="ncurses-wide-apis">NCurses &quot;wide&quot; APIs</h3>
+<p>The ncurses package was updated to build the &quot;wide&quot; APIs and now provides the
+libncursesw shared library. Some software prefers or requires the libncursesw
+APIs.</p>
+<h3 id="man-page-compression">man page compression</h3>
+<p>RPM was updated to compress man pages automatically. This should save some disk
+space at the cost of some extra build-time processing. Of course, since we don't
+have a man page <em>viewer</em> it would save even more space to just not ship them. I
+wonder why we didn't do that? Hmm. 🤔</p>
+<h3 id="readline-minus-bexpfull">Readline minus -bexpfull</h3>
+<p>You should <em>never</em>, <em>ever</em>, <em>ever</em> use <code>-bexpall</code> or <code>-bexpfull</code> when building
+software in AIX or PASE. If you ever think you might need it, you should
+re-evaluate your life and figure out where you went wrong. Sadly, I didn't know
+any better — or at least I didn't have time to fix it properly — when I updated
+readline to use <code>-bexpfull</code> to allow GDB to work.</p>
+<p>I have now fixed Readline properly to not use <code>-bexpfull</code>. </p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>nodejs10 was updated to <a href="https://nodejs.org/en/blog/release/v10.21.0/">10.21</a></li>
+<li>nodejs12 was updated to <a href="https://nodejs.org/en/blog/release/v12.18.0/">12.18</a>.</li>
+<li>libutil was updated to <a href="https://github.com/IBM/portlibfori/releases/tag/0.8.1">0.8.1</a>
+fixed a bug in backtrace() introduced in 0.8.0.</li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>Another big month. I wonder how much we can keep this up. I guess you'll just have to find out next month. 😉</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2020-06-22-may-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates May 2020</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2020-10-23-jul-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates July 2020</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>

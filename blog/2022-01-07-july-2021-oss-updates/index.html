@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>IBM i Open Source Updates July 2021</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta name="robots" content="noodp"/>
+
+    <link rel="stylesheet" href="https://kadler.io/style.css">
+    <link rel="stylesheet" href="https://kadler.io/color/pink.css">
+
+        <link rel="stylesheet" href="https://kadler.io/color/background_blue.css">
+    
+    <link rel="stylesheet" href="https://kadler.io/font-hack-subset.css">
+
+    <meta name="description" content="">
+
+    <meta property="og:description" content="">
+    <meta property="og:title" content="Korinne's Ramblings">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://kadler.io/blog/2022-01-07-july-2021-oss-updates/">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:title" content="Korinne's Ramblings">
+    <meta property="twitter:domain" content="kadler.io">
+    <meta property="twitter:url" content="https://kadler.io/blog/2022-01-07-july-2021-oss-updates/">
+
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5/css/all.min.css"></noscript>
+</head>
+
+<body class="">
+<div class="container">
+    
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__logo">
+                    
+                <a href="https://kadler.io" style="text-decoration: none;">
+                    <div class="logo">
+                      
+                            Korinne&#x27;s Ramblings
+                        
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        
+        <nav class="menu">
+            <ul class="menu__inner">
+                <li class="active"><a href="https://kadler.io/blog">blog</a></li>
+            
+                <li><a href="https://kadler.io/tags">tags</a></li>
+            
+                <li><a href="https://kadler.io/about">about</a></li>
+            
+                <li><a href="https://kadler.io/ebcdic">ebcdic</a></li>
+            
+                <li><a href="https://github.com/kadler" target="_blank" rel="noopener noreferrer">github</a></li>
+            </ul>
+        </nav>
+    
+    
+        
+    </header>
+    
+
+    <div class="content">
+        
+    <div class="post">
+        
+    <h1 class="post-title"><a href="https://kadler.io/blog/2022-01-07-july-2021-oss-updates/">IBM i Open Source Updates July 2021</a></h1>
+    <div class="post-meta-inline">
+        
+    <span class="post-date">
+            2022-01-07
+        </span>
+
+    </div>
+
+    
+        <span class="post-tags-inline">
+                :: tags:&nbsp;
+                <a class="post-tag" href="https://kadler.io/tags/ibmi-oss-updates/">#ibmi-oss-updates</a></span>
+    
+
+        <div class="post-content">
+            <p>Back with another overdue update, this time for July. Big news this month, which had been hinted at for a while. Did you figure it out ahead of time?</p>
+<span id="continue-reading"></span><h2 id="new-packages">New Packages</h2>
+<h3 id="python-3-9">Python 3.9</h3>
+<p><img src="/assets/images/wild-python-appears.png" alt="Wild Python appeared" /></p>
+<p>In addition to the existing Python 2.7 and 3.6, you can now use Python 3.9 on IBM i. We've spent a significant amount of time running through the Python test suite and fixing issues found so this should be the most stable version of Python on the platform yet! If you're wondering what's new with 3.9, there's the <a href="https://docs.python.org/3/whatsnew/3.9.html">official docs</a> as well as some great summaries like <a href="https://ayushi7rawat.hashnode.dev/python-39-all-you-need-to-know">this one</a>.</p>
+<p>In addition to the Python 3.9 interpreter and runtime, we've ported the following Python 3.6 packages over:</p>
+<ul>
+<li>dateutil</li>
+<li>paramiko</li>
+<li>pytz</li>
+<li>six</li>
+<li>Pillow</li>
+<li>bcrypt</li>
+<li>cffi</li>
+<li>cryptography</li>
+<li>ibm_db</li>
+<li>itoolkit</li>
+<li>psycopg2</li>
+<li>pycparser</li>
+<li>pynacl</li>
+<li>pip</li>
+<li>setuptools</li>
+<li>wheel</li>
+<li>pyodbc</li>
+</ul>
+<p>Some of these packages have been updated to the most recent version. In addition, cython has been packaged for Python 3.9 for dependencies while others like idna2 and asn1crypto were not brought over since they are no longer needed.</p>
+<p>At this point, the only Python 3.6 packages we still have not brought to Python 3.9 are the ML-related packages:</p>
+<ul>
+<li>numpy</li>
+<li>pandas</li>
+<li>scikit-learn</li>
+<li>scipy</li>
+</ul>
+<p>With Python 3.6 going EOL in December, it's recommended to start porting code to 3.9 as soon as possible.</p>
+<p>By default upon installation, it <em>will</em> set /QOpenSys/pkgs/bin/python3 to point to python3.9. For more info on handling Python on IBM i refer to our <a href="https://ibmi-oss-docs.readthedocs.io/en/latest/python/README.html">docs</a>. </p>
+<h2 id="package-updates">Package Updates</h2>
+<h3 id="ncurses">ncurses</h3>
+<p>The ncurses package was updated to ship pkg-config files in ncurses-devel. This can help when building packages which rely on pkg-config to determine the ncurses link and cflags instead of using ncurses' bespoke <code>ncurses6-config</code> script.</p>
+<h3 id="python-rpm-macros">python-rpm-macros</h3>
+<p>The <code>%py_install_wheel</code> macro was updated to adjust the INSTALLER file created by pip to show that the package was installed by rpm.</p>
+<h3 id="other-updates">Other Updates</h3>
+<ul>
+<li>libsodium was updated to 1.0.18</li>
+</ul>
+<h2 id="closing">Closing</h2>
+<p>Another month down, 5 more to go. Come back next Monday for August updates!</p>
+
+        </div>
+
+        
+        <div class="pagination">
+            <div class="pagination__title">
+                <span class="pagination__title-h">Read more</span>
+                <hr />
+            </div>
+            <div class="pagination__buttons">
+                    <span class="button previous">
+                        <a href="https://kadler.io/blog/2022-01-04-jun-2021-oss-updates/">
+                            <span class="button__icon">←</span>&nbsp;
+                            <span class="button__text">IBM i Open Source Updates June 2021</span>
+                        </a>
+                    </span>
+                
+                
+                    <span class="button next">
+                        <a href="https://kadler.io/blog/2022-01-10-aug-2021-oss-updates/">
+                            <span class="button__text">IBM i Open Source Updates August 2021</span>&nbsp;
+                            <span class="button__icon">→</span>
+                        </a>
+                    </span>
+                </div>
+        </div>
+    
+    </div>
+
+    </div>
+
+    
+    <footer class="footer">
+        <div class="footer__inner">
+                <div class="copyright">
+                        <span>© 
+    2025
+ Korinne Adler</span>
+                    <span class="copyright-theme">
+                        <span class="copyright-theme-sep">:: </span>
+                        Theme: <a href="https://github.com/pawroman/zola-theme-terminimal/">Terminimal</a> by pawroman
+                    </span>
+                </div>
+            </div>
+    </footer>
+    
+
+</div>
+</body>
+
+</html>
