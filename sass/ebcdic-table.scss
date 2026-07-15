@@ -30,34 +30,66 @@
     line-height: 1.6;
 }
 
-.ebcdic-table .ebcdic-control-code {
+.ebcdic-table-legend {
+    text-align: center;
+    align-content: center;
+    font-size: large;
+    color: black;
+    border: 1px solid black;
+    box-sizing: revert;
+    display: inline-block;
+    width: 36px;
+    height: 30px;
+}
+
+.ebcdic-control-code {
     font-variant: small-caps;
     font-family: monospace;
     background-color: #F0FFF0;
 }
 
-.ebcdic-table .ebcdic-space-separator {
+.ebcdic-space-separator {
     font-variant: small-caps;
     font-family: monospace;
     background-color: #F0FFF0;
 }
 
-.ebcdic-table .ebcdic-symbol {
+.ebcdic-symbol {
     background-color: #FFFFD7;
 }
 
-.ebcdic-table .ebcdic-punctuation {
+.ebcdic-punctuation {
     background-color: #F4F4FF;
 }
 
-.ebcdic-table .ebcdic-number {
+.ebcdic-number {
     background-color: #FFF4F4;
 }
 
-.ebcdic-table .ebcdic-normal {
+.ebcdic-normal {
     background-color: #FFFFFF;
 }
 
-.ebcdic-table .ebcdic-invariant {
+.ebcdic-table .ebcdic-invariant, .ebcdic-invariant {
     border: 2px solid black;
+}
+
+#ebcdic-legend {
+  column-count: 2;
+}
+
+#ebcdic-legend li::before {
+  content: "";
+}
+
+#ebcdic-legend .ebcdic-padding-1 {
+    background-color: #EEEEEE;
+    padding: 4px;
+    display: inline-block;
+}
+
+#ebcdic-legend .ebcdic-padding-2 {
+    background-color: #EEEEEE;
+    padding: 3px;
+    display: inline-block;
 }

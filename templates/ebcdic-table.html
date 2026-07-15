@@ -12,5 +12,16 @@
         <div>{{ page.description }}</div>
         {% endif %}
         {{ load_data(path=table) | safe }}
+
+        <span>Legend:</span>
+        <ul id="ebcdic-legend">
+            <li><span class="ebcdic-padding-2"><span class="ebcdic-table-legend ebcdic-invariant">?</span></span> Invariant&nbsp;character</li>
+            <li><span class="ebcdic-padding-1"><span class="ebcdic-table-legend ebcdic-normal">N</span></span> Normal</li>
+            <li><span class="ebcdic-padding-1"><span class="ebcdic-table-legend ebcdic-number">0</span></span> Number</li>
+            <li><span class="ebcdic-padding-1"><span class="ebcdic-table-legend ebcdic-symbol">%</span></span> Symbol</li>
+            <li><span class="ebcdic-padding-1"><span class="ebcdic-table-legend ebcdic-punctuation">!</span></span> Punctuation</li>
+            <li><span class="ebcdic-padding-1"><span class="ebcdic-table-legend ebcdic-control-code">LF</span></span> Control&nbsp;Code</li>
+            <li><span class="ebcdic-padding-1"><span class="ebcdic-table-legend ebcdic-space-separator">SP</span></span> Space&nbsp;Separator</li>
+        </ul>
     </div>
 {% endblock content %}
